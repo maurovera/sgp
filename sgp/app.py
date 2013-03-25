@@ -6,7 +6,7 @@ app = Flask(__name__)
 def hello(name=None):
     return render_template("hello.html", name = name)
 
-
+#Primera linea agregada por Cathe
 #Corremos el servidor
 if __name__ == "__main__":
     app.run()    
