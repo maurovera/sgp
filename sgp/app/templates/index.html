@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="row">
+<div class="span12">
+<center>
+	<img src="{{url_for('static',filename = 'img/logo-sgp.png')}}">
+</center>
+</div>
+</div>
+
+<div class="row">
+<div class="span12">
+
+<div style="background-color:#eee;">
+	<center>
+	
+	<h1> Modulo de Administración </h1>
+	<hr>
+	
+	<a href="{{ url_for('indexUsuario') }}" class="btn"> 
+	<img src="{{ url_for('static', filename = 'img/user.png') }}" >
+	<br/>Administración de Usuarios  
+	</a>
+	
+	<a href="{{ url_for('indexUsuario') }}" class="btn"> 
+	<img src="{{ url_for('static', filename = 'img/rol.png') }}" >
+	<br/>Administración de Roles  
+	</a>
+	
+	<a href="{{ url_for('indexUsuario') }}" class="btn"> 
+	<img src="{{ url_for('static', filename = 'img/project.png') }}" >
+	<br/>Administración de Proyectos  
+	</a>
+	<hr>
+	</center>
+	<br/>
+</div>
+
+</div>
+</div>
+
+
+{% endblock %}

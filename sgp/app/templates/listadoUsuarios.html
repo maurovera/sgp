@@ -1,0 +1,11 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Listado de Usuarios</h1>
+
+{% for u in usuarios %}
+	- {{u.nombre}} {{u.apellido}} - {{u.nombreUsuario}}	
+{% endfor %}
+
+{% endblock %}

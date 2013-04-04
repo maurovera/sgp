@@ -1,0 +1,112 @@
+
+<!doctype html>
+<title>SGP</title>
+<head>
+<!--
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+-->
+<link href="{{ url_for('static', filename = 'bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+	<style type="text/css">
+		body { padding-top: 60px; padding-bottom: 40px; }
+		.botones-cabecera{
+			text-align : right;
+		}
+	</style>
+<link href="{{ url_for('static', filename = 'bootstrap/css/bootstrap-responsive.css') }}" rel="stylesheet">
+
+<script src="{{ url_for('static', filename = 'jquery-1.9.0.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'bootstrap/js/bootstrap.min.js') }}"></script>
+</head>
+
+
+<script type="text/javascript">
+
+function hideModal(){
+	$(".modal").hide();
+}
+
+</script>
+
+<!-- BARRA DE NAVEGACION -->
+<div class="navbar navbar-fixed-top">
+		
+		<div class="navbar-inner">
+			<div class="container">
+				{% if session.logged_in %}	
+				Bienvenido {{session.usuario}}
+				{% endif %}
+			
+				<div class="botones-cabecera">
+					<a href="{{url_for('index')}}"><img src="{{url_for('static',filename = 'img/home.png')}}"></a>
+					
+				{% if session.logged_in %}	
+					<a href="{{url_for('logout')}}" class="btn btn-danger">Salir</a>
+				{% else %}
+					<a class="btn btn-primary" href="#login" data-toggle="modal">Ingresar</a>
+				{% endif %}
+				</div>
+			</div>
+		</div>
+
+</div>
+
+
+<div class="container">
+	
+{%if session.logged_in %}
+
+{% else %}
+	<div class="hero-unit">
+			<h1>SGP!</h1>
+			<p>Bienvenido a SGP, un sistema de gerenciamiento de proyectos. 
+			Ingrese al sistema para realizar modificaciones.
+			Utilice el menu para acceder a las diferentes partes del sistema</p>
+			<p><a class="btn btn-primary" href="#login" data-toggle="modal">Ingresar</a></p>
+	</div>
+{% endif %}
+
+
+<!--- formulario de logueo --->
+
+    <div class="modal hide fade" id="login">
+      <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3>Ingresar</h3>
+      </div>
+      <form action="{{url_for('login')}}" method="post">
+      <div class="modal-body">
+        
+        <p>Complete el formulario para ingresar al sistema</p>
+        <input type="text" placeholder="Nombre de Usuario" id="usuario" name="nombreUsuario">
+        <br/> 
+        <input type="password" placeholder="Contraseña" id="password" name="contrasena">
+        <br/>
+       
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Cerrar</a>
+        <input type="submit" class="btn btn-primary" value="LogIn">
+      </div>
+      </form>
+    </div>
+		
+	
+	{% for message in get_flashed_messages() %}
+		<div class="modal">
+			<div class="modal-header">
+        		<a class="close" data-dismiss="modal">&times;</a>
+        		<h3>Atención</h3>
+      		</div>
+      		<div class="modal-body">
+   				{{ message }}
+      		</div>
+	      	<div class="modal-footer">
+	        	<a href="#" class="btn" data-dismiss="modal" onClick="hideModal();">Cerrar</a>
+	      	</div>				
+		</div>
+	{% endfor %}
+	
+	{%if session.logged_in %}		
+		{% block body %}{% endblock %}
+	{% endif %} 
+</div>

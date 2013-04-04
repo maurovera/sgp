@@ -1,0 +1,8 @@
+
+- PARA EL LOGIN
+
+{% if not session.logged_in %}
+				<a href="{{ url_for('login') }}" class="btn btn-primary">Ingresar</a>
+			{% else %}
+				<a href="{{ url_for('logout') }}" class="btn btn-danger">Salir</a>
+{% endif %}

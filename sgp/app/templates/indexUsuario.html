@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+	function habilitarModificar(idUsuario,nombreUsuario,nombre,apellido,CI,email,contrasena,telefono ){	
+		
+		/*
+			Modificamos el texto del boton, el lugar donde apunto el formulario
+			rellenamos los datos, e incluimos el campo id :)
+		*/
+		$("#formulario").attr('action','{{ url_for('modificarUsuario') }}');
+		$("#formulario").append('<input type="hidden" value="'+idUsuario+'" name="idUsuario" >' );
+		$("#btn-accion").attr('value','Modificar');
+		
+		/* Rellenamos los campos :) */
+		$("#idUsuario").val( idUsuario );
+		$("#nombreUsuario").val( nombreUsuario );
+		$("#nombre").val( nombre );
+		$("#apellido").val( apellido );
+		$("#CI").val( CI );
+		$("#email").val( email );
+		$("#contrasena").val( contrasena );
+		$("#telefono").val( telefono );
+		
+		// SI TODO SALE BIEN Y LAS PUTAS 
+		
+		
+		
+	}
+</script>
+
+<div class="row">
+
+	<div class="span12">
+		<center>
+		<h1> USUARIOS </h1>
+		<!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
+		<hr>
+		
+		<form action="{{ url_for('nuevoUsuario') }}" method="post" class="form-horizontal" id="formulario">
+			<fieldset>
+			
+				<label>Nombre de Usuario:</label>
+				<input type="text" placeholder="Nombre de Usuario" name="nombreUsuario" id="nombreUsuario">
+				<label>Nombre:</label>
+				<input type="text" placeholder="Nombre" name="nombre" id="nombre">
+				<label>Apellido:</label>
+				<input type="text" placeholder="Apellido" name="apellido" id="apellido">
+				<label>CI:</label>
+				<input type="number" placeholder="CI" name="CI" id="CI" >
+				<label>Telefono:</label>
+				<input type="text" placeholder="Telefono" name="telefono" id="telefono">
+				<label>E-mail:</label>
+				<input type="email" placeholder="Email" name="email" id="email" >
+				<label>Contraseña:</label>
+				<input type="text" placeholder="Contraseña" name="contrasena" id="contrasena" >
+				<br/>
+				<br/>
+				
+				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+			
+			</fieldset>
+		</form>
+		</center>
+	</div>
+</div>
+<hr>
+
+<div class="usuarios">
+
+<div class="row">
+      <div class="span12">
+        <h2> Listado de Usuarios </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre Usuario</th>
+            <th>Nombre </th>
+            <th>Apellido</th>
+            <th>Telefono</th>
+            <th>Email</th>
+            <th>CI</th>
+            <th>Contrasena</th>
+            <th>Eliminar</th>
+            <th>Modificar</th>
+          </tr>
+          {% for u in usuarios %}
+          <tr>
+            <td>{{u.idUsuario}}</td>
+            <td>{{u.nombreUsuario}}</td>
+            <td>{{u.nombre}}</td>
+            <td>{{u.apellido}}</td>
+            <td>{{u.telefono}}</td>
+            <td>{{u.email}}</td>
+            <td>{{u.CI}}</td>
+            <td>{{u.contrasena}}</td>
+            <td><a class="btn btn-danger" href="{{ url_for('eliminarUsuario') }}/{{u.idUsuario}}">Eliminar</a></td>
+            <td><a class="btn" onClick="habilitarModificar('{{u.idUsuario}}','{{u.nombreUsuario}}','{{u.nombre}}','{{u.apellido}}','{{u.CI}}','{{u.email}}','{{u.contrasena}}','{{u.telefono}}');">
+            Modificar</a>
+          </tr>
+          
+          {% else %}
+          	<tr>
+          		NO HAY REGISTROS
+          	</tr>
+          {% endfor %}
+          
+        </table>
+      </div>  
+    </div>
+
+</div>
+{% endblock %}
