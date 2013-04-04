@@ -11,5 +11,5 @@ OPENID_PROVIDERS = [
     { 'name': 'Flickr', 'url': 'http://www.flickr.com/<username>' },
     { 'name': 'MyOpenID', 'url': 'https://www.myopenid.com' }]
     
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:pepe@localhost/sgp'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:mauro@localhost/sgp'
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
