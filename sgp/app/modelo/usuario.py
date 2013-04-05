@@ -18,6 +18,10 @@ class Usuario(db.Model):
     #role = db.Column(db.SmallInteger, default = ROLE_USER)
     #posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
 
+
+        
+
+    
     def setnombreUsuario(self,nombre):
         self.nombreUsuario = nombre
 
