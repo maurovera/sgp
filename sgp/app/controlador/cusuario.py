@@ -11,8 +11,19 @@ class ControlUsuario():
         return Usuario.query.all()
     def nuevoUsuario(self, usuario):
         """ funcion nuevoUsuario """
-        db.session.add(usuario)
-        db.session.commit()
+        resultado = {"estado" : True, "mensaje" : "exito"}
+        try:
+            db.session.add(usuario)
+            #print "Hice el add"
+            db.session.commit()
+            #print "Hice el commit"
+        except Exception, error :
+            #print "Capturo exp" + str(error)
+            resultado = {"estado" : False, "mensaje" : str(error)}
+            db.session.rollback()
+        
+        return resultado
+            
     def eliminarUsuario(self, usuario):
         """ funcion eliminarUsuario """
         db.session.delete(usuario)
