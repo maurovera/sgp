@@ -13,11 +13,17 @@ control = ControlUsuario()
 def listadoUsuarios():
     ''' Devuelve un listado de los usuarios '''
     lista = None
-    try:
+    r = True
+    if(r):
         lista = control.getUsuarios()
-    except Exception, error:
-        print "ERROR : " + str(error)
+    else:
+        flash("Error. Lista no devuelta")
     return lista
+    #try:
+     #   lista = control.getUsuarios()
+    #except Exception, error:
+     #   print "ERROR : " + str(error)
+    #return lista
 
 
 @app.route('/usuario')
@@ -32,21 +38,25 @@ def indexUsuario():
 def eliminarUsuario(id=None):
     if(id):
         usuario = control.getUsuarioById(id)
+        
         if(usuario):
-            try:
-                control.eliminarUsuario(usuario)
-                flash("Se elimino con exito el usuario" + usuario.nombre + " " + usuario.apellido)
-            except:
-                flash("Ocurrio un error durante la eliminacion")
+            
+            r= control.eliminarUsuario(usuario)
+            if(r["estado"] == True):
+                flash("Se elimino con exito el usuario: " + usuario.nombre + " " + usuario.apellido)
+            else:
+                flash("Ocurrio un error: "+ r["mensaje"])
         else :
             flash("Ocurrio un error durante la eliminacion")
     
     return redirect(url_for('indexUsuario'))
 
+         
+
+
 @app.route('/usuario/nuevo', methods=['GET','POST'])
 def nuevoUsuario():
     ''' Crea un nuevo Usuario '''
-    hayerror = True
     #Si recibimos algo por post
     
     
@@ -82,30 +92,19 @@ def nuevoUsuario():
             usuario.email = email
             usuario.contrasena = contrasena
             
-            try:
-                control.nuevoUsuario(usuario)
-                print "Guardamos"
-                hayerror = False
-            except Exception, error:
-                print "ERROR" + str(error)
-                hayerror = True
-                
             
-    
-    
-    if (hayerror == True):
-        #OCURRIO UN ERROR ??
-        print "Ocurrio un error"
-        flash("Ocurrio un error. Revise si ha completado correctamente los campos")
-        
+            r = control.nuevoUsuario(usuario)
+            if(r["estado"] == True):
+                flash("Exito, se creo un nuevo usuario")    
+            else :
+                flash("Ocurrio un error : " + r["mensaje"])
+                    
     return redirect(url_for('indexUsuario'))
 
 
 @app.route('/usuario/modificar', methods=['GET','POST'])
 def modificarUsuario():
     ''' Modifica un Usuario '''
-    hayerror = True
-    #Si recibimos algo por post
     
     
     
@@ -141,18 +140,12 @@ def modificarUsuario():
                 usuario.telefono = telefono
                 usuario.email = email
                 usuario.contrasena = contrasena
-                try:
-                    control.modificarUsuario(usuario)
-                    print "mODIFICAMOS PUTO"
-                    hayerror = False
-                    flash("Se ha modificado con exito!")
-                except Exception, error:
-                    print "Error" + str(error)
-                
-    
-    if (hayerror == True):
-        #OCURRIO UN ERROR ??
-        print "Ocurrio un error"
-        flash("Ocurrio un error. Revise si ha completado correctamente los campos")
+                    
+                r = control.modificarUsuario(usuario)
+                if( r["estado"] == True ):
+                    flash("modficamos con exito")
+                else:
+                    flash("Ocurrio un error : " + r["mensaje"])
+                       
         
     return redirect(url_for('indexUsuario'))

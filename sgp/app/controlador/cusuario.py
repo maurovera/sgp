@@ -26,12 +26,37 @@ class ControlUsuario():
             
     def eliminarUsuario(self, usuario):
         """ funcion eliminarUsuario """
-        db.session.delete(usuario)
-        db.session.commit()
+        resultado = {"estado": True, "mensaje" : "exito"}
+        try:
+            """ hacemos un delete de usuario """
+            db.session.delete(usuario)
+            """ se comitea el cambio """
+            db.session.commit()
+        except Exception, error:
+            """ se captura el error con un exception """
+            resultado = {"estado" : False, "mensaje" :  str(error)}
+            db.session.rollback()
+        
+        return resultado
+    
+        
     def modificarUsuario(self, usuario):
         """ funcion modificarUsuario """
-        db.session.merge(usuario)
-        db.session.commit()
+        resultado = {"estado": True, "mensaje" : "exito"}
+        try:
+            """ hacemos un merge de usuario """
+            db.session.merge(usuario)
+            """ se comitea el cambio """
+            db.session.commit()
+        except Exception, error:
+            """ se captura el error con un exception """
+            resultado = {"estado" : False, "mensaje" :  str(error)}
+            db.session.rollback()
+        
+        return resultado
+    
+    
+    
     def comprobarLogin(self, usuario):
         """ funcion comprobar usuario """
         retorno = db.session.query(Usuario).filter_by(nombreUsuario=usuario.nombreUsuario, contrasena=usuario.contrasena).first()
