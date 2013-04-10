@@ -9,6 +9,15 @@ control = ControlUsuario()
 
 
 
+def busquedaPorNombre(nombre):
+    ''' Devuelve un listado de los usuarios que coincidan con un nombre '''
+    lista = None
+    r = True
+    if(r):
+        lista = control.buscarPorNombre(nombre)
+    else:
+        flash("Error. Lista no devuelta")
+    return lista
 
 def listadoUsuarios():
     ''' Devuelve un listado de los usuarios '''
@@ -19,11 +28,7 @@ def listadoUsuarios():
     else:
         flash("Error. Lista no devuelta")
     return lista
-    #try:
-     #   lista = control.getUsuarios()
-    #except Exception, error:
-     #   print "ERROR : " + str(error)
-    #return lista
+
 
 
 @app.route('/usuario')
@@ -149,3 +154,11 @@ def modificarUsuario():
                        
         
     return redirect(url_for('indexUsuario'))
+
+@app.route("/usuarios/buscar")
+@app.route("/usuarios/buscar/<nombrebuscado>")
+def buscarUsuario(nombrebuscado):
+    ''' Devuelve una lista de usuarios que coincidan con el nombre proporcionado '''
+    print "Helloooooowww"
+    usuarios = busquedaPorNombre(nombrebuscado);
+    return render_template('indexUsuario.html', usuarios = usuarios)

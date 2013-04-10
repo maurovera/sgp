@@ -1,19 +1,24 @@
-from app.modelo import Usuario
+'''
+Created on 10/04/2013
+
+@author: cathesanz
+'''
+from app.modelo import Rol
 from app import db
 
-class ControlUsuario():
-    """ clase control usuario """
-    def getUsuarioById(self,id):
-        """ funcion get usuariobyid """
-        return Usuario.query.get(id)
-    def getUsuarios(self):
-        """ funcion getusuario """
-        return Usuario.query.all()
-    def nuevoUsuario(self, usuario):
-        """ funcion nuevoUsuario """
+class ControlRol():
+    """ clase control rol """
+    def getRolById(self,id):
+        """ funcion get rolbyid """
+        return Rol.query.get(id)
+    def getRoles(self):
+        """ funcion getrol """
+        return Rol.query.all()
+    def nuevoRol(self, rol):
+        """ funcion nuevoRol """
         resultado = {"estado" : True, "mensaje" : "exito"}
         try:
-            db.session.add(usuario)
+            db.session.add(rol)
             #print "Hice el add"
             db.session.commit()
             #print "Hice el commit"
@@ -24,12 +29,12 @@ class ControlUsuario():
         
         return resultado
             
-    def eliminarUsuario(self, usuario):
-        """ funcion eliminarUsuario """
+    def eliminarRol(self, rol):
+        """ funcion eliminarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
-            """ hacemos un delete de usuario """
-            db.session.delete(usuario)
+            """ hacemos un delete de rol """
+            db.session.delete(rol)
             """ se comitea el cambio """
             db.session.commit()
         except Exception, error:
@@ -40,12 +45,12 @@ class ControlUsuario():
         return resultado
     
         
-    def modificarUsuario(self, usuario):
-        """ funcion modificarUsuario """
+    def modificarRol(self, rol):
+        """ funcion modificarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
-            """ hacemos un merge de usuario """
-            db.session.merge(usuario)
+            """ hacemos un merge de rol """
+            db.session.merge(rol)
             """ se comitea el cambio """
             db.session.commit()
         except Exception, error:
@@ -57,13 +62,8 @@ class ControlUsuario():
     
     
     
-    def comprobarLogin(self, usuario):
-        """ funcion comprobar usuario """
-        retorno = db.session.query(Usuario).filter_by(nombreUsuario=usuario.nombreUsuario, contrasena=usuario.contrasena).first()
-        print retorno
-        return retorno
         
     def buscarPorNombre(self,nombre):
-        retorno = db.session.query(Usuario).filter(Usuario.nombre.ilike("%"+nombre+"%")).all()
-        #retorno = db.session.query(Usuario).filter_by(nombre=nombre).all()
+        retorno = db.session.query(Rol).filter(Rol.nombre.ilike("%"+nombre+"%")).all()
+        #retorno = db.session.query(rol).filter_by(nombre=nombre).all()
         return retorno
