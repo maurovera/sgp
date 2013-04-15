@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+    function habilitarModificar(idProyecto,nombre,descripcion ){
+
+        /*
+            Modificamos el texto del boton, el lugar donde apunto el formulario
+            rellenamos los datos, e incluimos el campo id :)
+        */
+        $("#formulario").attr('action','{{ url_for('modificarProyecto') }}');
+        $("#formulario").append('<input type="hidden" value="'+idProyecto+'" name="idProyecto" >' );
+
+
+        /* Rellenamos los campos :) */
+        $("#idProyecto").val( idProyecto );
+        $("#nombre").val( nombre );
+        $("#descripcion").val( descripcion );
+
+        // SI TODO SALE BIEN Y LAS PUTAS
+        //Mostramos el formulario
+        mostrarFormulario();
+    }
+
+    function eliminar(id){
+        $("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarProyecto')}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+        +
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+    }
+
+    function mostrarFormulario(){
+        $("#formulario-div").show("slow");
+        $("#boton-mostrar-formulario").hide();
+    }
+    function ocultarFormulario(){
+        $("#formulario-div").hide("slow");
+        $("#boton-mostrar-formulario").show();
+        $("#formulario")[0].reset();
+
+    }
+
+    function buscar(){
+        var nombre = $("#nombreBuscado").val();
+
+        if(nombre.length > 0){
+            window.location = "{{url_for('buscarProyecto')}}/" + nombre;
+        }
+
+
+    }
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Eliminar Usuario</h3>
+    </div>
+    <div class="modal-body">
+      <p>La eliminacion de un proyecto es irreversible.</p>
+      <p>Esta seguro que desea eliminar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+        <!-- placeholder -->
+    </div>
+</div>
+
+<div class="row">
+    <br/>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <center>
+        <h1> PROYECTOS </h1>
+        <!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
+        </center>
+    </div>
+</div>
+
+<hr>
+
+<div class="proyectos">
+
+<div class="row">
+      <div class="span9">
+        <h2> Listado de Proyectos </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Descripcion </th>
+            <th>Fecha Creacion</th>
+            <th>Complejidad Total</th>
+            <th>Estado</th>
+            <th>Eliminar</th>
+            <th>Modificar</th>
+            <th>Iniciar Proyecto</th>
+          </tr>
+          {% for p in proyectos %}
+          <tr>
+            <td>{{p.idProyecto}}</td>
+            <td>{{p.nombre}}</td>
+            <td>{{p.descripcion}}</td>
+            <td>{{p.fechaCreacion}}</td>
+            <td>{{p.complejidadTotal}}</td>
+            <td>{{p.estado}}</td>
+            <td><a class="btn btn-danger" onClick="eliminar({{p.idProyecto}});">Eliminar</a></td>
+            {% if p.estado == 'no iniciado' %}
+            <td><a class="btn" onClick="habilitarModificar('{{p.idProyecto}}','{{p.nombre}}','{{p.descripcion}}','{{p.fechaCreacion}}','{{p.complejidadTotal}}','{{p.estado}}')">
+            Modificar</a>
+            <td><a href="{{url_for('iniciarProyecto')}}/{{p.idProyecto}}" class="btn btn-info"><small>Iniciar Proyecto</small></a></td>
+            {% else %}
+            <td></td>
+            <td></td>
+            {% endif %}
+          </tr>
+
+          {% else %}
+            <tr>
+                NO HAY REGISTROS
+            </tr>
+          {% endfor %}
+
+        </table>
+      </div>
+      <div class="span3">
+
+            <input placeholder="Buscar Proyecto..." id="nombreBuscado" />
+             <a class='btn add-on btn-primary' onClick="buscar();">
+                <i class="icon-search"></i>
+             </a>
+
+      </div>
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+    <div class="span12">
+        <center>
+        <a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Proyecto</a>
+        </center>
+    </div>
+</div>
+
+
+<!---- formulario de usuario nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+    <div class="span12">
+        <center>
+
+        <form action="{{ url_for('nuevoProyecto') }}" method="post" class="form-horizontal" id="formulario">
+            <fieldset>
+
+                <label>Nombre del Proyecto:</label>
+                <input type="text" placeholder="Nombre de Proyecto" name="nombre" id="nombre">
+                <label>Descripcion:</label>
+                <input type="text" placeholder="Descripcion" name="descripcion" id="descripcion">
+                <label>Administrador del Proyecto:</label>
+                <select name="idUsuario">
+                    {% for u in usuarios %}
+                    <option value="{{u.idUsuario}}">({{u.nombreUsuario}}) - {{u.nombre}} {{u.apellido}}</option>
+                    {% endfor %}
+                </select>
+                <!--
+                <label>Fecha Creacion:</label>
+                <input type="date" placeholder="Fecha Creacion" name="fechaCreacion" id="fechaCreacion">
+                <label>Complejidad Total:</label>
+                <input type="number" placeholder="Complejidad Total" name="complejidadTotal" id="complejidadTotal">
+                <label>Estado:</label>
+                <input type="text" placeholder="Estado" name="estado" id="estado">
+                -->
+                <br/>
+                <br/>
+
+                <input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+
+            </fieldset>
+        </form>
+        <a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+        </center>
+
+    </div>
+</div>
+
+
+
+</div>
+{% endblock %}

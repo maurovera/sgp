@@ -3,55 +3,55 @@
 
 
 <script>
-	function habilitarModificar(idRol,nombre,descripcion ){	
-		
+	function habilitarModificar(idRol,nombre,descripcion ){
+
 		/*
 			Modificamos el texto del boton, el lugar donde apunto el formulario
 			rellenamos los datos, e incluimos el campo id :)
 		*/
 		$("#formulario").attr('action','{{ url_for('modificarRol') }}');
 		$("#formulario").append('<input type="hidden" value="'+idRol+'" name="idRol" >' );
-		
-		
+
+
 		/* Rellenamos los campos :) */
 		$("#idRol").val( idRol );
 		$("#nombre").val( nombre );
 		$("#descripcion").val( descripcion );
-		
-		// SI TODO SALE BIEN Y LAS PUTAS 
+
+		// SI TODO SALE BIEN Y LAS PUTAS
 		//Mostramos el formulario
 		mostrarFormulario();
 	}
-	
+
 	function eliminar(id){
 		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarRol')}}/" + id +  "\"  class=\"btn danger\">Si</a>"
 		+
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
 	}
-	
+
 	function mostrarFormulario(){
 		$("#formulario-div").show("slow");
-		$("#boton-mostrar-formulario").hide();	
+		$("#boton-mostrar-formulario").hide();
 	}
 	function ocultarFormulario(){
 		$("#formulario-div").hide("slow");
 		$("#boton-mostrar-formulario").show();
 		$("#formulario")[0].reset();
-		
+
 	}
-	
+
 	function buscar(){
 		var nombre = $("#nombreBuscado").val();
-		
+
 		if(nombre.length > 0){
 			window.location = "{{url_for('buscarRol')}}/" + nombre;
 		}
-		
-	
+
+
 	}
-	
-	
+
+
 </script>
 
 <div id="modal-from-dom" class="modal hide fade">
@@ -95,6 +95,7 @@
             <th>Descripcion </th>
             <th>Eliminar</th>
             <th>Modificar</th>
+            <th>Permisos</th>
           </tr>
           {% for r in roles %}
           <tr>
@@ -104,23 +105,24 @@
             <td><a class="btn btn-danger" onClick="eliminar({{r.idRol}});">Eliminar</a></td>
             <td><a class="btn" onClick="habilitarModificar('{{r.idRol}}','{{r.nombre}}','{{r.descripcion}}');">
             Modificar</a>
+            <td><a class="btn btn-info" ><small>Administrar Permisos</small></a></td>
           </tr>
-          
+
           {% else %}
           	<tr>
           		NO HAY REGISTROS
           	</tr>
           {% endfor %}
-          
+
         </table>
       </div>
       <div class="span4">
-      	
+
 		    <input placeholder="Buscar Rol..." id="nombreBuscado" />
 			 <a class='btn add-on btn-primary' onClick="buscar();">
 		        <i class="icon-search"></i>
 		     </a>
-		
+
       </div>
     </div>
 
@@ -145,24 +147,24 @@
 
 	<div class="span12">
 		<center>
-		
+
 		<form action="{{ url_for('nuevoRol') }}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
-			
+
 				<label>Nombre del Rol:</label>
 				<input type="text" placeholder="Nombre de Rol" name="nombre" id="nombre">
 				<label>Descripcion:</label>
 				<input type="text" placeholder="Descripcion" name="descripcion" id="descripcion">
 				<br/>
 				<br/>
-				
+
 				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
-			
+
 			</fieldset>
 		</form>
 		<a onClick="ocultarFormulario();" class="btn">Cancelar</a>
 		</center>
-		
+
 	</div>
 </div>
 

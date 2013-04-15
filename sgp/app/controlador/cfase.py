@@ -3,22 +3,22 @@ Created on 10/04/2013
 
 @author: cathesanz
 '''
-from app.modelo import Rol
+from app.modelo import Fase
 from app import db
 
-class ControlRol():
-    """ clase control rol """
-    def getRolById(self,id):
-        """ funcion get rolbyid """
-        return Rol.query.get(id)
-    def getRoles(self):
+class ControlFase():
+    """ clase control Fase """
+    def getFaseById(self,id):
+        """ funcion get proyectobyid """
+        return Fase.query.get(id)
+    def getFase(self):
         """ funcion getrol """
-        return Rol.query.all()
-    def nuevoRol(self, rol):
-        """ funcion nuevoRol """
+        return Fase.query.all()
+    def nuevaFase(self, fase):
+        """ funcion nuevoProyecto """
         resultado = {"estado" : True, "mensaje" : "exito"}
         try:
-            db.session.add(rol)
+            db.session.add(fase)
             #print "Hice el add"
             db.session.commit()
             #print "Hice el commit"
@@ -29,12 +29,12 @@ class ControlRol():
 
         return resultado
 
-    def eliminarRol(self, rol):
+    def eliminarFase(self, fase):
         """ funcion eliminarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
             """ hacemos un delete de rol """
-            db.session.delete(rol)
+            db.session.delete(fase)
             """ se comitea el cambio """
             db.session.commit()
         except Exception, error:
@@ -45,12 +45,12 @@ class ControlRol():
         return resultado
 
 
-    def modificarRol(self, rol):
+    def modificarProyecto(self, fase):
         """ funcion modificarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
             """ hacemos un merge de rol """
-            db.session.merge(rol)
+            db.session.merge(fase)
             """ se comitea el cambio """
             db.session.commit()
         except Exception, error:
@@ -64,8 +64,6 @@ class ControlRol():
 
 
     def buscarPorNombre(self,nombre):
-        retorno = db.session.query(Rol).filter(Rol.nombre.ilike("%"+nombre+"%")).all()
+        retorno = db.session.query(Fase).filter(Fase.nombre.ilike("%"+nombre+"%")).all()
         #retorno = db.session.query(rol).filter_by(nombre=nombre).all()
         return retorno
-
-

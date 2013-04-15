@@ -3,22 +3,22 @@ Created on 10/04/2013
 
 @author: cathesanz
 '''
-from app.modelo import Rol
+from app.modelo import Proyecto
 from app import db
 
-class ControlRol():
-    """ clase control rol """
-    def getRolById(self,id):
-        """ funcion get rolbyid """
-        return Rol.query.get(id)
-    def getRoles(self):
+class ControlProyecto():
+    """ clase control Proyecto """
+    def getProyectoById(self,id):
+        """ funcion get proyectobyid """
+        return Proyecto.query.get(id)
+    def getProyectos(self):
         """ funcion getrol """
-        return Rol.query.all()
-    def nuevoRol(self, rol):
-        """ funcion nuevoRol """
+        return Proyecto.query.all()
+    def nuevoProyecto(self, proyecto):
+        """ funcion nuevoProyecto """
         resultado = {"estado" : True, "mensaje" : "exito"}
         try:
-            db.session.add(rol)
+            db.session.add(proyecto)
             #print "Hice el add"
             db.session.commit()
             #print "Hice el commit"
@@ -29,12 +29,12 @@ class ControlRol():
 
         return resultado
 
-    def eliminarRol(self, rol):
+    def eliminarProyecto(self, proyecto):
         """ funcion eliminarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
             """ hacemos un delete de rol """
-            db.session.delete(rol)
+            db.session.delete(proyecto)
             """ se comitea el cambio """
             db.session.commit()
         except Exception, error:
@@ -45,12 +45,12 @@ class ControlRol():
         return resultado
 
 
-    def modificarRol(self, rol):
+    def modificarProyecto(self, proyecto):
         """ funcion modificarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
             """ hacemos un merge de rol """
-            db.session.merge(rol)
+            db.session.merge(proyecto)
             """ se comitea el cambio """
             db.session.commit()
         except Exception, error:
@@ -64,8 +64,25 @@ class ControlRol():
 
 
     def buscarPorNombre(self,nombre):
-        retorno = db.session.query(Rol).filter(Rol.nombre.ilike("%"+nombre+"%")).all()
+        retorno = db.session.query(Proyecto).filter(Proyecto.nombre.ilike("%"+nombre+"%")).all()
         #retorno = db.session.query(rol).filter_by(nombre=nombre).all()
         return retorno
 
+    def agregarFase(self,proyecto,fase):
+        nohay = True
+        for f in proyecto.fases :
+            if(fase == f):
+                print "YA HAY ESTA FASE"
+                nohay = False
 
+        if (nohay):
+            print "Agregamos!"
+            proyecto.fases.append(fase)
+            return self.modificarProyecto(proyecto)
+        else :
+            resultado = {"estado" : False, "mensaje" : "El proyecto ya posee esa fase"}
+            return resultado
+
+    def quitarFase(self,proyecto,fase):
+        proyecto.fases.remove(fase)
+        return self.modificarProyecto(proyecto)

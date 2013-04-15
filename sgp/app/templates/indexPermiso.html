@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+    function habilitarModificar(idPermiso,nombre,valor ){
+
+        /*
+            Modificamos el texto del boton, el lugar donde apunto el formulario
+            rellenamos los datos, e incluimos el campo id :)
+        */
+        $("#formulario").attr('action','{{ url_for('modificarPermiso') }}');
+        $("#formulario").append('<input type="hidden" value="'+idPermiso+'" name="idPermiso" >' );
+
+
+        /* Rellenamos los campos :) */
+        $("#idPermiso").val( idPermiso );
+        $("#nombre").val( nombre );
+        $("#valor").val( valor );
+
+        // SI TODO SALE BIEN Y LAS PUTAS
+        //Mostramos el formulario
+        mostrarFormulario();
+    }
+
+    function eliminar(id){
+        $("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarPermiso')}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+        +
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+    }
+
+    function mostrarFormulario(){
+        $("#formulario-div").show("slow");
+        $("#boton-mostrar-formulario").hide();
+    }
+    function ocultarFormulario(){
+        $("#formulario-div").hide("slow");
+        $("#boton-mostrar-formulario").show();
+        $("#formulario")[0].reset();
+
+    }
+
+    function buscar(){
+        var nombre = $("#nombreBuscado").val();
+
+        if(nombre.length > 0){
+            window.location = "{{url_for('buscarPermiso')}}/" + nombre;
+        }
+
+
+    }
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Eliminar Permiso</h3>
+    </div>
+    <div class="modal-body">
+      <p>La eliminacion de un permiso es irreversible.</p>
+      <p>Esta seguro que desea eliminar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+        <!-- placeholder -->
+    </div>
+</div>
+
+<div class="row">
+    <br/>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <center>
+        <h1> PERMISOS </h1>
+        <!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
+        </center>
+    </div>
+</div>
+
+<hr>
+
+<div class="roles">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de Permisos </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Cod. Accion </th>
+            <th>Eliminar</th>
+            <th>Modificar</th>
+          </tr>
+          {% for p in permisos %}
+          <tr>
+            <td>{{p.idPermiso}}</td>
+            <td>{{r.nombre}}</td>
+            <td>{{r.valor}}</td>
+            <td><a class="btn btn-danger" onClick="eliminar({{p.idPermiso}});">Eliminar</a></td>
+            <td><a class="btn" onClick="habilitarModificar('{{p.idPermiso}}','{{p.nombre}}','{{p.valor}}');">
+            Modificar</a>
+          </tr>
+
+          {% else %}
+            <tr>
+                NO HAY REGISTROS
+            </tr>
+          {% endfor %}
+
+        </table>
+      </div>
+      <div class="span4">
+
+            <input placeholder="Buscar Permiso..." id="nombreBuscado" />
+             <a class='btn add-on btn-primary' onClick="buscar();">
+                <i class="icon-search"></i>
+             </a>
+
+      </div>
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+    <div class="span12">
+        <center>
+        <a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Rol</a>
+        </center>
+    </div>
+</div>
+
+
+<!---- formulario de usuario nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+    <div class="span12">
+        <center>
+
+        <form action="{{ url_for('nuevoPermiso') }}" method="post" class="form-horizontal" id="formulario">
+            <fieldset>
+
+                <label>Nombre del Permiso:</label>
+                <input type="text" placeholder="Nombre del Permiso" name="nombre" id="nombre">
+                <label>Accion:</label>
+
+                <select name="valor">
+
+                    <option value="1"> Crear Usuario </option>
+                    <option value="2"> Modificar Usuario </option>
+                    <option value="3"> Eliminar Usuario </option>
+
+                    <option value="4"> Crear Roles </option>
+                    <option value="5"> Modificar Roles </option>
+                    <option value="6"> Eliminar Roles </option>
+
+                    <option value="7"> Crear Proyectos </option>
+                    <option value="8"> Modificar Proyectos </option>
+                    <option value="9"> Configurar Proyectos </option>
+                    <option value="10"> Eliminar Proyectos </option>
+
+                    <option value="11"> Crear Fases </option>
+                    <option value="12"> Ver Fases </option>
+
+                    <option value="13"> Crear Item </option>
+                    <option value="14"> Modificar Item </option>
+                    <option value="15"> Configurar Item </option>
+                    <option value="16"> Aprobar-Rechazar Item </option>
+                    <option value="17"> Eliminar Item </option>
+
+                    <option value="18"> Crear Tipo Item </option>
+                    <option value="19"> Modificar Tipo Item </option>
+                    <option value="20"> Eliminar Tipo Item </option>
+
+                    <option value="21"> Crear Linea Base </option>
+                    <option value="22"> Liberar-Cerrar Linea Base </option>
+                    <option value="23"> Eliminar Linea Base </option>
+
+                    <option value="24"> Informes Solicitar </option>
+                    <option value="25">ADMINISTRADOR ROOT </option>
+                    </select>
+                <br/>
+                <br/>
+
+                <input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+
+            </fieldset>
+        </form>
+        <a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+        </center>
+
+    </div>
+</div>
+
+
+
+</div>
+{% endblock %}
