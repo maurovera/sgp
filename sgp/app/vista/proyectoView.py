@@ -179,7 +179,8 @@ def buscarProyecto(nombrebuscado):
     ''' Devuelve una lista de proyectos que coincidan con el nombre proporcionado '''
     print "Helloooooowww"
     proyectos = busquedaPorNombre(nombrebuscado);
-    return render_template('indexProyecto.html', proyectos = proyectos)
+    permisos = listadoPermisosPorProyecto()
+    return render_template('indexProyecto.html', proyectos = proyectos, permisos = permisos)
 
 @app.route("/proyecto/iniciar")
 @app.route("/proyecto/iniciar/<idProyecto>")
