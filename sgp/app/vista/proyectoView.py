@@ -14,6 +14,7 @@ from app.modelo import Rol
 from app.controlador import ControlUsuario
 from app.controlador import ControlPermiso
 from app.controlador import ControlFase
+from app.controlador import ControlRol
 from app.modelo import Fase
 from app.modelo import Usuario
 from contextlib import closing
@@ -21,6 +22,7 @@ from contextlib import closing
 controlador = ControlProyecto()
 controladorusuario = ControlUsuario()
 controladorfase = ControlFase()
+controladorrol = ControlRol()
 
 def busquedaPorNombre(nombre):
     ''' Devuelve un listado de los proyectos que coincidan con un nombre '''
@@ -153,6 +155,7 @@ def modificarProyecto():
         id = request.form['idProyecto']
         nombre = request.form['nombre']
         descripcion = request.form['descripcion']
+        idUsuario = request.form['idUsuario']
 
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente
@@ -165,7 +168,23 @@ def modificarProyecto():
                 proyecto.descripcion = descripcion
 
                 r = controlador.modificarProyecto(proyecto)
+                
+                
                 if( r["estado"] == True ):
+                    rolProyecto = controladorrol.getRolByIdProyecto(id)
+                    uAnterior = controladorusuario.getUsuarioByRol(rolProyecto)
+                    r2 = controladorusuario.quitarRol(uAnterior, rolProyecto)
+                    if(r2["estado"] == True ):
+                        uNuevo = controladorusuario.getUsuarioById(idUsuario)
+                        r3 = controladorusuario.agregarRol(uNuevo, rolProyecto)
+                        if(r3["estado"] == True ):
+                            flash("Exito, se modifico el proyecto")
+                        else:
+                            flash("Ocurrio un error : " + r3["mensaje"])
+                    
+                    else:
+                        flash("Ocurrio un error : " + r2["mensaje"])
+            
                     flash("modficamos con exito")
                 else:
                     flash("Ocurrio un error : " + r["mensaje"])

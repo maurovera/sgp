@@ -124,3 +124,15 @@ class ControlUsuario():
             valorpermisos.append(p.valor)
         return valorpermisos
 
+    def getUsuarioByRol(self, rol):
+        print ">>>>>>>>>>>>,,,,,,,"
+        print rol
+        usuarios = self.getUsuarios()
+        print usuarios
+        for usuario in usuarios:
+            print usuario
+            print usuario.roles
+            if rol in usuario.roles :
+                print "Entro"
+                return usuario
+        

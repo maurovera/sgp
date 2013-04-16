@@ -34,7 +34,8 @@ class ControlProyecto():
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
             """ hacemos un delete de rol """
-            db.session.delete(proyecto)
+            proyecto.estado = 'eliminado'
+            db.session.merge(proyecto)
             """ se comitea el cambio """
             db.session.commit()
         except Exception, error:

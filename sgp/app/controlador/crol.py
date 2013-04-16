@@ -5,7 +5,7 @@ Created on 10/04/2013
 '''
 from app.modelo import Rol
 from app import db
-
+from cproyecto import ControlProyecto
 class ControlRol():
     """ clase control rol """
     def getRolById(self,id):
@@ -33,6 +33,14 @@ class ControlRol():
         """ funcion eliminarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
+            """Comprobamos que el rol no tenga asociado un proyecto"""
+            if (rol.idProyecto ):
+                cp = ControlProyecto()
+                p = cp.getProyectoById(rol.idProyecto)
+                if(not p.estado == "eliminado"):
+                    """Si esta asociado pasamos avisamos que no es posible eliminar"""
+                    resultado = {"estado" : False, "mensaje" : "No se puede eliminar un rol asociado a un proyecto no eliminado"}
+                    return resultado
             """ hacemos un delete de rol """
             db.session.delete(rol)
             """ se comitea el cambio """
@@ -89,3 +97,13 @@ class ControlRol():
         else :
             resultado = {"estado" : False, "mensaje" : "El rol ya posee este permiso"}
             return resultado
+    
+    def getRolByIdProyecto(self,idProyecto):
+        lista = self.getRoles()
+        for r in lista :
+            print str(r.idProyecto) + " - " + idProyecto
+            if str(r.idProyecto) == str(idProyecto) :
+                print "--------ENTRO Y RETORNA EL PROYECTO " + r.nombre
+                return r
+        
+        
