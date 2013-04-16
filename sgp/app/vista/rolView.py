@@ -9,12 +9,13 @@ from app import app
 from app.controlador import ControlRol
 from app.modelo import Rol
 from app.controlador import ControlUsuario
+from app.controlador import ControlPermiso
 from app.modelo import Usuario
 from contextlib import closing
 
 control = ControlRol()
 controlusuario = ControlUsuario()
-
+controlpermisos = ControlPermiso()
 
 def busquedaPorNombre(nombre):
     ''' Devuelve un listado de los rols que coincidan con un nombre '''
@@ -200,3 +201,61 @@ def eliminarRolUsuario(idUsuario,idRol):
         flash("Ocurrio un error, intente de nuevo")
 
     return redirect(url_for('rolesUsuario', idUsuario= idUsuario))
+
+
+@app.route("/permisos/rol")
+@app.route("/permisos/rol/<idRol>")
+def permisosRol(idRol):
+    '''Administra los roles de un usuario en especifico'''
+
+    r = control.getRolById(idRol)
+    permisos = controlpermisos.getPermisos()
+
+    return render_template('permisosRol.html', permisos= permisos, rol = r)
+
+@app.route("/permisos/rol/eliminar")
+@app.route("/permisos/rol/eliminar/<idRol>/<idPermiso>")
+def eliminarPermisoRol(idRol,idPermiso):
+    print idPermiso
+    print idRol
+
+    if ( idRol and idPermiso):
+        rol = control.getRolById(idRol)
+        pRemover = controlpermisos.getPermisoById(idPermiso)
+        r = control.quitarPermiso(rol,pRemover)
+        print rol.permisos
+        if( r["estado"] == True ):
+            flash("Se ha removido el permiso con exito")
+        else:
+            flash("Ocurrio un error : " + r["mensaje"])
+    else:
+        flash("Ocurrio un error, intente de nuevo")
+
+    return redirect(url_for('permisosRol', idRol= idRol))
+
+@app.route("/permisos/rol/nuevo", methods=['GET', 'POST'])
+def nuevoRolUsuario():
+    print request.form['idPermiso']
+    print request.form['idRol']
+
+    idPermiso = request.form['idPermiso']
+    idRol = request.form['idRol']
+
+    if(idPermiso and idRol):
+        rol = control.getRolById(idRol)
+        pNuevo = controlpermisos.getPermisoById(idPermiso)
+
+        r = control.agregarPermiso(rol,pNuevo)
+        print rol.permisos
+        if( r["estado"] == True ):
+            flash("Se agrego el permiso con exito")
+        else:
+            flash("Ocurrio un error : " + r["mensaje"])
+
+
+    else :
+        flash("Ocurrio un error, debe completar correctamente el formulario")
+
+
+
+    return redirect(url_for('permisosRol', idRol= idRol))

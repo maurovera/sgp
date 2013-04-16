@@ -42,14 +42,27 @@ def listadoProyectos():
         flash("Error. Lista no devuelta")
     return lista
 
+def listadoPermisosPorProyecto():
+    '''Devuelve un diccionario que contiene una lista de permisos
+        que posee el usuario logueado ordenados por proyectos'''
 
+    user = controladorusuario.getUsuarioById(session['idUsuario'])
+    permisos = {}
+    proyectos = listadoProyectos()
+    for p in proyectos :
+        listadoPermisosPorProyecto = controladorusuario.getPermisosByIdProyecto(user,p.idProyecto)
+        permisos.update( {p.idProyecto : listadoPermisosPorProyecto } )
+    permisos.update ( {'todos' : controladorusuario.getPermisos(user) } )
+    print permisos
+    return permisos
 
 @app.route('/proyecto')
 def indexProyecto():
     ''' Devuelve los datos de un proyecto en Concreto '''
+    permisos = listadoPermisosPorProyecto()
     proyectos = listadoProyectos();
     usuarios = controladorusuario.getUsuarios()
-    return render_template('indexProyecto.html', proyectos = proyectos, usuarios = usuarios)
+    return render_template('indexProyecto.html', proyectos = proyectos, usuarios = usuarios, permisos = permisos)
 
 
 @app.route('/proyecto/eliminar')

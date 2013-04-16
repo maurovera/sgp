@@ -19,23 +19,30 @@
 	<h1> Modulo de Administración </h1>
 	<hr>
 
-	<a href="{{ url_for('indexUsuario') }}" class="btn">
-	<img src="{{ url_for('static', filename = 'img/user.png') }}" >
-	<br/>Administración de Usuarios
-	</a>
+	{% if (1 or 2 or 3) in session['permisos'] %}
+		<a href="{{ url_for('indexUsuario') }}" class="btn">
+		<img src="{{ url_for('static', filename = 'img/user.png') }}" >
+		<br/>Administración de Usuarios
+		</a>
+	{% endif %}
 
-	<a href="{{ url_for('indexRol') }}" class="btn">
-	<img src="{{ url_for('static', filename = 'img/rol.png') }}" >
-	<br/>Administración de Roles
-	</a>
+	{% if (4 or 5 or 6) in session['permisos'] %}
+		<a href="{{ url_for('indexRol') }}" class="btn">
+		<img src="{{ url_for('static', filename = 'img/rol.png') }}" >
+		<br/>Administración de Roles
+		</a>
+	{% endif %}
 
-	<a href="{{ url_for('indexProyecto') }}" class="btn">
-	<img src="{{ url_for('static', filename = 'img/project.png') }}" >
-	<br/>Administración de Proyectos
-	</a>
+	{% if (7 or 8 or 9 or 10) in session['permisos'] %}
+		<a href="{{ url_for('indexProyecto') }}" class="btn">
+		<img src="{{ url_for('static', filename = 'img/project.png') }}" >
+		<br/>Administración de Proyectos
+		</a>
+	{% endif %}
 	<hr>
 	</center>
 	<br/>
+
 </div>
 
 </div>

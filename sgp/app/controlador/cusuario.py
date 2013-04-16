@@ -88,5 +88,39 @@ class ControlUsuario():
         usuario.roles.remove(rol)
         return self.modificarUsuario(usuario)
 
-    def obtenerPermisos(self,usuario) :
-        return list(usuario.roles.permisos)
+    def getPermisos(self,usuario) :
+        ''' Retorna una lista con todos los "valores/codigo"
+            de permisos que posee un usuari '''
+        permisos = []
+        r = usuario.roles
+        for rol in r :
+             permisos += rol.permisos
+        valorpermisos = []
+        for p in permisos:
+            valorpermisos.append(p.valor)
+        return valorpermisos
+
+    def getPermisosByIdProyecto(self,usuario,idProyecto):
+        ''' Retorna la lista de permisos que posee un usuario en un Proyecto'''
+        permisos = []
+        r = usuario.roles
+        for rol in r :
+            if ( rol.idProyecto == idProyecto):
+                permisos += rol.permisos
+        valorpermisos = []
+        for p in permisos:
+            valorpermisos.append(p.valor)
+        return valorpermisos
+
+    def getPermisosByIdFase(self,usuario,idFase):
+        ''' Retorna la lista de permisos que posee un usuario en un Proyecto'''
+        permisos = []
+        r = usuario.roles
+        for rol in r :
+            if ( rol.idFase == idFase):
+                permisos += rol.permisos
+        valorpermisos = []
+        for p in permisos:
+            valorpermisos.append(p.valor)
+        return valorpermisos
+

@@ -108,11 +108,31 @@
             <td>{{p.fechaCreacion}}</td>
             <td>{{p.complejidadTotal}}</td>
             <td>{{p.estado}}</td>
-            <td><a class="btn btn-danger" onClick="eliminar({{p.idProyecto}});">Eliminar</a></td>
+
+            {% if 10 in permisos[p.idProyecto] %}
+                <td><a class="btn btn-danger" onClick="eliminar({{p.idProyecto}});">Eliminar</a></td>
+            {%else%}
+            <td></td>
+            {% endif %}
+
             {% if p.estado == 'no iniciado' %}
+
+
+
+            {% if 8 in permisos[p.idProyecto] %}
             <td><a class="btn" onClick="habilitarModificar('{{p.idProyecto}}','{{p.nombre}}','{{p.descripcion}}','{{p.fechaCreacion}}','{{p.complejidadTotal}}','{{p.estado}}')">
             Modificar</a>
+            {%else%}
+            <td></td>
+            {% endif %}
+
+            {% if 9 in permisos[p.idProyecto] %}
             <td><a href="{{url_for('iniciarProyecto')}}/{{p.idProyecto}}" class="btn btn-info"><small>Iniciar Proyecto</small></a></td>
+            {%else%}
+            <td></td>
+            {% endif %}
+
+
             {% else %}
             <td></td>
             <td></td>
@@ -144,7 +164,11 @@
 
     <div class="span12">
         <center>
-        <a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Proyecto</a>
+
+            {% if 7 in permisos['todos'] %}
+                <a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Proyecto</a>
+            {% endif %}
+
         </center>
     </div>
 </div>

@@ -68,4 +68,24 @@ class ControlRol():
         #retorno = db.session.query(rol).filter_by(nombre=nombre).all()
         return retorno
 
+    def permisosPorRol(self,rol):
+        return list(rol.permisos)
 
+    def quitarPermiso(self,rol,permiso):
+        rol.permisos.remove(permiso)
+        return self.modificarRol(rol)
+
+    def agregarPermiso(self,rol,permiso):
+        nohay = True
+        for p in rol.permisos :
+            if(permiso == p):
+                print "YA HAY ESTE! PERMISO"
+                nohay = False
+
+        if (nohay):
+            print "Agregamos!"
+            rol.permisos.append(permiso)
+            return self.modificarRol(rol)
+        else :
+            resultado = {"estado" : False, "mensaje" : "El rol ya posee este permiso"}
+            return resultado

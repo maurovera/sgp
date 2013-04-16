@@ -105,7 +105,7 @@
             <td><a class="btn btn-danger" onClick="eliminar({{r.idRol}});">Eliminar</a></td>
             <td><a class="btn" onClick="habilitarModificar('{{r.idRol}}','{{r.nombre}}','{{r.descripcion}}');">
             Modificar</a>
-            <td><a class="btn btn-info" ><small>Administrar Permisos</small></a></td>
+            <td><a class="btn btn-info" href="{{url_for('permisosRol')}}/{{r.idRol}}"><small>Administrar Permisos</small></a></td>
           </tr>
 
           {% else %}

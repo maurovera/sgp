@@ -28,27 +28,33 @@ def index():
 #    print "Luego de eliminar"
 #    users = control.getUsuarios()
 #    print users
+#
+    permisos = None
+    if 'permisos' in session :
+        permisos = session['permisos']
 
-    return render_template('index.html')
+    return render_template('index.html', permisos = permisos )
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
-        
+
         user = comprobarLogueo(request.form['nombreUsuario'],request.form['contrasena'])
-        
+
         if (not user):
-            error = "Usuario o Contrasena incorrectos, intente de nuevo"        
+            error = "Usuario o Contrasena incorrectos, intente de nuevo"
         else:
             usuario = user.nombre
             session['logged_in'] = True
             session['usuario'] = usuario
+            session['idUsuario'] = user.idUsuario
+            session['permisos'] = control.getPermisos(user)
             flash('Estas logueado')
-    
+
     if (error):
         flash("Ha ocurrido un error : " + error)
-            
+
     return redirect( url_for('index') )
 
 
@@ -56,17 +62,17 @@ def comprobarLogueo(user, password):
     usuarioFormulario = Usuario()
     usuarioFormulario.nombreUsuario = user
     usuarioFormulario.contrasena = password
-    
+
     usuario = control.comprobarLogin(usuarioFormulario)
-    
+
     print usuario
-    
+
     return usuario
-    
-    
-    
-    
-    
+
+
+
+
+
 
 @app.route('/logout')
 def logout():
