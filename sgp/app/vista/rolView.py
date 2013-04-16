@@ -234,7 +234,7 @@ def eliminarPermisoRol(idRol,idPermiso):
     return redirect(url_for('permisosRol', idRol= idRol))
 
 @app.route("/permisos/rol/nuevo", methods=['GET', 'POST'])
-def nuevoRolUsuario():
+def nuevoPermisoRol():
     print request.form['idPermiso']
     print request.form['idRol']
 
