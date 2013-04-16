@@ -212,7 +212,7 @@ def permisosRol(idRol):
     permisos = controlpermisos.getPermisos()
 
     return render_template('permisosRol.html', permisos= permisos, rol = r)
-
+#s
 @app.route("/permisos/rol/eliminar")
 @app.route("/permisos/rol/eliminar/<idRol>/<idPermiso>")
 def eliminarPermisoRol(idRol,idPermiso):
