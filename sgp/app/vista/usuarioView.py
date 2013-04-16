@@ -148,7 +148,7 @@ def modificarUsuario():
                     
                 r = control.modificarUsuario(usuario)
                 if( r["estado"] == True ):
-                    flash("modficamos con exito")
+                    flash("Modficado con exito")
                 else:
                     flash("Ocurrio un error : " + r["mensaje"])
                        

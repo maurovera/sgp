@@ -45,7 +45,7 @@ class ControlFase():
         return resultado
 
 
-    def modificarProyecto(self, fase):
+    def modificarFase(self, fase):
         """ funcion modificarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:

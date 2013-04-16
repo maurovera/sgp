@@ -3,18 +3,18 @@
 
 
 <script>
-    function habilitarModificar(idRol,nombre,descripcion ){
+    function habilitarModificar(idFase,nombre,descripcion ){
 
         /*
             Modificamos el texto del boton, el lugar donde apunto el formulario
             rellenamos los datos, e incluimos el campo id :)
         */
-        $("#formulario").attr('action','{{ url_for('modificarRol') }}');
-        $("#formulario").append('<input type="hidden" value="'+idRol+'" name="idRol" >' );
+        $("#formulario").attr('action','{{ url_for('modificarFaseProyecto') }}');
+        $("#formulario").append('<input type="hidden" value="'+idFase+'" name="idFase" >' );
 
 
         /* Rellenamos los campos :) */
-        $("#idRol").val( idRol );
+        $("#idFase").val( idFase );
         $("#nombre").val( nombre );
         $("#descripcion").val( descripcion );
 
@@ -97,6 +97,7 @@
             <th>Descripcion </th>
             <th>Estado</th>
             <th>Eliminar</th>
+            <th>Modificar</th>
           </tr>
           {% for f in proyecto.fases %}
           <tr>
@@ -104,7 +105,12 @@
             <td>{{f.nombre}}</td>
             <td>{{f.descripcion}}</td>
             <td>{{f.estado}}
+          	{% if proyecto.estado == 'no iniciado' %}
             <td><a class="btn btn-danger" onClick="eliminar({{f.idFase}});">Eliminar</a></td>
+          	
+          	<td><a class="btn" onClick="habilitarModificar('{{f.idFase}}','{{f.nombre}}','{{f.descripcion}}');">
+            Modificar</a></td>
+          	{% endif %}
           </tr>
 
           {% else %}
@@ -160,7 +166,7 @@
                 <br/>
                 <br/>
 
-                <input type="submit" value="Agregar" class="btn btn-primary" id="btn-accion">
+                <input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
 
             </fieldset>
         </form>

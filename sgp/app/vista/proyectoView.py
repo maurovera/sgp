@@ -217,6 +217,30 @@ def nuevaFaseProyecto():
 
     return redirect(url_for('iniciarProyecto',idProyecto = idProyecto))
 
+@app.route("/fase/proyecto/modificar", methods=['GET','POST'])
+def modificarFaseProyecto():
+    '''Se encarga de Agregar nuevas Fases a un Proyecto'''
+    nombre = request.form['nombre']
+    descripcion = request.form['descripcion']
+    idFase = request.form['idFase']
+    idProyecto = request.form['idProyecto']
+    if(nombre and descripcion and idFase and idProyecto):
+        #anga
+        
+        fase = controladorfase.getFaseById(idFase)
+        fase.nombre = nombre
+        fase.descripcion = descripcion
+        r = controladorfase.modificarFase(fase)
+        if( r["estado"] == True ):
+            flash("Se modifico la fase con exito")
+        else:
+            flash("Ocurrio un error : " + r["mensaje"])
+
+
+    else :
+        flash("Ocurrio un error, debe completar correctamente el formulario")
+
+    return redirect(url_for('iniciarProyecto',idProyecto = idProyecto))
 
 @app.route("/proyecto/fase/eliminar")
 @app.route("/proyecto/fase/eliminar/<idProyecto>/<idFase>")

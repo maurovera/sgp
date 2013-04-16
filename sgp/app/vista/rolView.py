@@ -181,6 +181,8 @@ def nuevoRolUsuario():
 
     return redirect(url_for('rolesUsuario', idUsuario= idUsuario))
 
+
+
 @app.route("/roles/usuario/eliminar")
 @app.route("/roles/usuario/eliminar/<idUsuario>/<idRol>")
 def eliminarRolUsuario(idUsuario,idRol):
