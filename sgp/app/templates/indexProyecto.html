@@ -110,7 +110,9 @@
             <td>{{p.estado}}</td>
 
             {% if 10 in permisos[p.idProyecto] %}
-                <td><a class="btn btn-danger" onClick="eliminar({{p.idProyecto}});">Eliminar</a></td>
+            	{% if not p.estado == 'eliminado' %}
+                	<td><a class="btn btn-danger" onClick="eliminar({{p.idProyecto}});">Eliminar</a></td>
+            	{% endif %}
             {%else%}
             <td></td>
             {% endif %}
