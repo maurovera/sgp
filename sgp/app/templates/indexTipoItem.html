@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+	function habilitarModificar(idTipoItem,nombre,codigo,descripcion ){
+
+		/*
+			Modificamos el texto del boton, el lugar donde apunto el formulario
+			rellenamos los datos, e incluimos el campo id :)
+		*/
+		$("#formulario").attr('action','{{ url_for('modificarTipoItem') }}');
+		$("#formulario").append('<input type="hidden" value="'+idTipoItem+'" name="idTipoItem" >' );
+
+
+		/* Rellenamos los campos :) */
+		$("#idTipoItem").val( idTipoItem );
+		$("#nombre").val( nombre );
+		$("#codigo").val( codigo );
+		$("#descripcion").val( descripcion );
+		
+		// SI TODO SALE BIEN Y LAS PUTAS
+		//Mostramos el formulario
+		mostrarFormulario();
+	}
+
+	function eliminar(id){
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarTipoItem')}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+		+
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+	}
+
+	function mostrarFormulario(){
+		$("#formulario-div").show("slow");
+		$("#boton-mostrar-formulario").hide();
+	}
+	function ocultarFormulario(){
+		$("#formulario-div").hide("slow");
+		$("#boton-mostrar-formulario").show();
+		$("#formulario")[0].reset();
+
+	}
+
+	function buscarTipoItem(){
+		var nombre = $("#nombreBuscado").val();
+
+		if(nombre.length > 0){
+			window.location = "{{url_for('buscarTipoItem')}}/" + nombre;
+		}
+
+
+	}
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Eliminar Tipo Item</h3>
+    </div>
+    <div class="modal-body">
+      <p>La eliminacion de un tipo de item es irreversible.</p>
+      <p>Esta seguro que desea eliminar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+    	<!-- placeholder -->
+    </div>
+</div>
+
+<div class="row">
+    <br>
+</div>
+
+<div class="row">
+	<div class="span12">
+		<center>
+		<h1> TIPO ITEM </h1>
+		<!-- nombre, codigo, descripcion -->
+		</center>
+	</div>
+</div>
+
+<hr>
+
+<div class="usuarios">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de Tipo de Items </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre </th>
+            <th>Codigo</th>
+            <th>Descripcion</th>
+            <th>Eliminar</th>
+            <th>Modificar</th>    
+          </tr>
+          {% for u in tipoItems %}
+          <tr>
+            <td>{{u.idTipoItem}}</td>
+            <td>{{u.nombre}}</td>
+            <td>{{u.codigo}}</td>
+            <td>{{u.descripcion}}</td>
+            <td><a class="btn btn-danger" onClick="eliminar({{u.idTipoItem}});">Eliminar</a></td>
+            <td><a class="btn" onClick="habilitarModificar('{{u.idTipoItem}}','{{u.nombre}}','{{u.codigo}}','{{u.descripcion}}');">
+            Modificar</a></td>
+          </tr>
+
+          {% else %}
+          	<tr>
+          		NO HAY REGISTROS
+          	</tr>
+          {% endfor %}
+
+        </table>
+      </div>
+      <div class="span4">
+
+		    <input placeholder="Buscar Tipo Item..." id="nombreBuscado" />
+			 <a class='btn add-on btn-primary' onClick="buscarTipoItem();">
+		        <i class="icon-search"></i>
+		     </a>
+
+      </div>
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+	<div class="span12">
+		<center>
+		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo TipoItem</a>
+		</center>
+	</div>
+</div>
+
+
+<!---- formulario de TipoItem nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+	<div class="span12">
+		<center>
+
+		<form action="{{ url_for('nuevoTipoItem') }}" method="post" class="form-horizontal" id="formulario">
+			<fieldset>
+
+				<label>Nombre de Tipo Item:</label>
+				<input type="text" placeholder="Nombre de tipo item" name="nombre" id="nombre">
+				<label>Codigo:</label>
+				<input type="text" placeholder="Codigo" name="codigo" id="codigo">
+				<label>Descripcion:</label>
+				<input type="text" placeholder="Descripcion" name="descripcion" id="descripcion" >
+				<br/>
+				<br/>
+
+				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+
+			</fieldset>
+		</form>
+		<a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+		</center>
+
+	</div>
+</div>
+
+
+
+</div>
+{% endblock %}

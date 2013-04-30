@@ -39,6 +39,13 @@
 		<br/>Administración de Proyectos
 		</a>
 	{% endif %}
+	
+	{% if (19 or 18 or 29) in session['permisos'] %}
+		<a href="{{ url_for('indexTipoItem') }}" class="btn">
+		<img src="{{ url_for('static', filename = 'img/tipoItem.png') }}" >
+		<br/>Administración de Tipo de Item
+		</a>
+	{% endif %}
 	<hr>
 	</center>
 	<br/>

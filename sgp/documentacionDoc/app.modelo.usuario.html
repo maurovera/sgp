@@ -71,11 +71,13 @@ Data descriptors defined here:<br>
 </dl>
 <dl><dt><strong>nombreUsuario</strong></dt>
 </dl>
+<dl><dt><strong>roles</strong></dt>
+</dl>
 <dl><dt><strong>telefono</strong></dt>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0xaab308c; Usuario&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0xa39a78c; Usuario&gt;</dl>
 
 <dl><dt><strong>__table__</strong> = Table('usuario', MetaData(bind=None), Column('id...String(length=45), table=&lt;usuario&gt;), schema=None)</dl>
 
@@ -114,5 +116,6 @@ standard&nbsp;query&nbsp;as&nbsp;well.</tt></dl>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>db</strong> = &lt;SQLAlchemy engine='postgresql://postgres:mauro@localhost/sgp'&gt;</td></tr></table>
+<td width="100%"><strong>db</strong> = &lt;SQLAlchemy engine='postgresql://postgres:sgp@localhost/sgp'&gt;<br>
+<strong>rolesxusuario</strong> = Table('roles_x_usuario', MetaData(bind=None), Co...l.idRol'), table=&lt;roles_x_usuario&gt;), schema=None)</td></tr></table>
 </body></html>

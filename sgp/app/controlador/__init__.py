@@ -3,3 +3,5 @@ from crol import ControlRol
 from cpermiso import ControlPermiso
 from cproyecto import ControlProyecto
 from cfase import ControlFase
+from ctipoitem import ControlTipoItem
+

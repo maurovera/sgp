@@ -28,7 +28,9 @@ class TestProyectos(unittest.TestCase):
             self.assertEqual(r["estado"], True)
             print "Creamos un proyecto nuevo:" + self.proyectoigual.nombre 
             r = self.controlador.nuevoProyecto(self.proyectoigual)
-            #
+            # para la prueba se dice que estado sea true, osea el correcto. y 
+            # tirara una excepcion porque el nombre es unique
+            
             self.assertEqual(r["estado"], False)
             print "No deberia guardar porque son iguales" 
             self.contador = 2

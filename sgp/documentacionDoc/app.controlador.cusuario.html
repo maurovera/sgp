@@ -30,17 +30,32 @@
 <td colspan=2><tt>clase&nbsp;control&nbsp;usuario<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
+<dl><dt><a name="ControlUsuario-agregarRol"><strong>agregarRol</strong></a>(self, usuario, rol)</dt></dl>
+
+<dl><dt><a name="ControlUsuario-buscarPorNombre"><strong>buscarPorNombre</strong></a>(self, nombre)</dt></dl>
+
 <dl><dt><a name="ControlUsuario-comprobarLogin"><strong>comprobarLogin</strong></a>(self, usuario)</dt><dd><tt>funcion&nbsp;comprobar&nbsp;usuario</tt></dd></dl>
 
 <dl><dt><a name="ControlUsuario-eliminarUsuario"><strong>eliminarUsuario</strong></a>(self, usuario)</dt><dd><tt>funcion&nbsp;eliminarUsuario</tt></dd></dl>
 
+<dl><dt><a name="ControlUsuario-getPermisos"><strong>getPermisos</strong></a>(self, usuario)</dt><dd><tt>Retorna&nbsp;una&nbsp;lista&nbsp;con&nbsp;todos&nbsp;los&nbsp;"valores/codigo"<br>
+de&nbsp;permisos&nbsp;que&nbsp;posee&nbsp;un&nbsp;usuari</tt></dd></dl>
+
+<dl><dt><a name="ControlUsuario-getPermisosByIdFase"><strong>getPermisosByIdFase</strong></a>(self, usuario, idFase)</dt><dd><tt>Retorna&nbsp;la&nbsp;lista&nbsp;de&nbsp;permisos&nbsp;que&nbsp;posee&nbsp;un&nbsp;usuario&nbsp;en&nbsp;un&nbsp;Proyecto</tt></dd></dl>
+
+<dl><dt><a name="ControlUsuario-getPermisosByIdProyecto"><strong>getPermisosByIdProyecto</strong></a>(self, usuario, idProyecto)</dt><dd><tt>Retorna&nbsp;la&nbsp;lista&nbsp;de&nbsp;permisos&nbsp;que&nbsp;posee&nbsp;un&nbsp;usuario&nbsp;en&nbsp;un&nbsp;Proyecto</tt></dd></dl>
+
 <dl><dt><a name="ControlUsuario-getUsuarioById"><strong>getUsuarioById</strong></a>(self, id)</dt><dd><tt>funcion&nbsp;get&nbsp;usuariobyid</tt></dd></dl>
+
+<dl><dt><a name="ControlUsuario-getUsuarioByRol"><strong>getUsuarioByRol</strong></a>(self, rol)</dt></dl>
 
 <dl><dt><a name="ControlUsuario-getUsuarios"><strong>getUsuarios</strong></a>(self)</dt><dd><tt>funcion&nbsp;getusuario</tt></dd></dl>
 
 <dl><dt><a name="ControlUsuario-modificarUsuario"><strong>modificarUsuario</strong></a>(self, usuario)</dt><dd><tt>funcion&nbsp;modificarUsuario</tt></dd></dl>
 
 <dl><dt><a name="ControlUsuario-nuevoUsuario"><strong>nuevoUsuario</strong></a>(self, usuario)</dt><dd><tt>funcion&nbsp;nuevoUsuario</tt></dd></dl>
+
+<dl><dt><a name="ControlUsuario-quitarRol"><strong>quitarRol</strong></a>(self, usuario, rol)</dt></dl>
 
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -49,5 +64,5 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>db</strong> = &lt;SQLAlchemy engine='postgresql://postgres:mauro@localhost/sgp'&gt;</td></tr></table>
+<td width="100%"><strong>db</strong> = &lt;SQLAlchemy engine='postgresql://postgres:sgp@localhost/sgp'&gt;</td></tr></table>
 </body></html>
