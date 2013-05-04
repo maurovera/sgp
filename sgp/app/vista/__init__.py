@@ -4,3 +4,5 @@ from rolView import *
 from proyectoView import *
 from faq import faq
 from tipoItemView import *
+from fasesView import *
+from itemView import *

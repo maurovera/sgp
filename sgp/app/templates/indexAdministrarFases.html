@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+    
+
+    function mostrarFormulario(){
+        $("#formulario-div").show("slow");
+        $("#boton-mostrar-formulario").hide();
+    }
+    function ocultarFormulario(){
+        $("#formulario-div").hide("slow");
+        $("#boton-mostrar-formulario").show();
+        $("#formulario")[0].reset();
+
+    }
+
+</script>
+
+
+<div class="row">
+    <div class="span12">
+        <center>
+        <hr>
+        <h1> Administracion de fases del {{proyecto.nombre}}</h1>
+        <hr>
+        <b>Administrar fases, tipo items e items </b> 
+      
+        </center>
+    </div>
+</div>
+
+<hr>
+
+<div class="roles">
+
+<div class="row">
+      <div class="span10">
+        <h2> Listado de Administracion Fases del {{proyecto.nombre}} </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Descripcion </th>
+            <th>Estado</th>
+            <th>Administrar Tipo Item</th>
+            <th>Administrar Item</th>
+            
+          </tr>
+          {% for f in proyecto.fases %}
+          <tr>
+            <td>{{f.idFase}}</td>
+            <td>{{f.nombre}}</td>
+            <td>{{f.descripcion}}</td>
+            <td>{{f.estado}}
+          	<td><a href="{{url_for('indexTipoItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Tipo Item</a></td>
+          	<td><a href="{{url_for('indexItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Item</a></td>
+          </tr>
+
+          {% else %}
+            <tr>
+                NO HAY REGISTROS
+            </tr>
+          {% endfor %}
+
+        </table>
+      </div>
+
+    </div>
+
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <a href="{{url_for('indexFase')}}" class="btn btn-large btn-success">Atras!</a>
+        </center>
+    </div>
+</div>
+
+
+</div>
+{% endblock %}

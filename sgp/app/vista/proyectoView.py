@@ -201,6 +201,8 @@ def buscarProyecto(nombrebuscado):
     permisos = listadoPermisosPorProyecto()
     return render_template('indexProyecto.html', proyectos = proyectos, permisos = permisos)
 
+
+#-------------- aqui inicia la parte de fases jajaja.....................
 @app.route("/proyecto/iniciar")
 @app.route("/proyecto/iniciar/<idProyecto>")
 def iniciarProyecto(idProyecto):
@@ -272,6 +274,8 @@ def eliminarFaseProyecto(idProyecto,idFase):
         p = controlador.getProyectoById(idProyecto)
         faseRemover = controladorfase.getFaseById(idFase)
         r = controlador.quitarFase(p,faseRemover)
+        #----- aqui con q se elimina completamente la fase. verificar si esta bien 
+        q = controladorfase.eliminarFase(faseRemover)
         print p.fases
         if( r["estado"] == True ):
             flash("Se ha removido la fase con exito")

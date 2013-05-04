@@ -5,12 +5,6 @@ Created on 03/04/2013
 '''
 
 from app import db
-"""
-rolesxusuario = db.Table('roles_x_usuario',
-    db.Column('id', db.Integer, primary_key = True),
-    db.Column('idUsuario', db.Integer, db.ForeignKey('usuario.idUsuario')),
-    db.Column('idRol', db.Integer, db.ForeignKey('rol.idRol'))
-)"""
 
 
 class TipoItem(db.Model):
@@ -23,8 +17,16 @@ class TipoItem(db.Model):
     #    backref=db.backref('usuarios', lazy='dynamic'))
     #role = db.Column(db.SmallInteger, default = ROLE_USER)
     #posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
-
-
+    #Relaciones
+    idProyecto = db.Column(db.Integer, db.ForeignKey('proyecto.idProyecto'))
+    # se le agrega tambien un id fase fecha 02052013
+    idFase = db.Column(db.Integer, db.ForeignKey('fase.idFase')) 
+    #************************
+    
+    # Referencias a relaciones
+    # se agrego esto a prueba 
+    atributosPorTipoItem= db.relationship('AtributoPorTipoItem', backref='tipoItem',
+                                lazy='dynamic')
 
 
 
@@ -32,4 +34,4 @@ class TipoItem(db.Model):
         self.nombreTipoItem = nombre
 
     def __repr__(self):
-        return '<Tipo item %r>' % (self.nombreTipoItem)
+        return '<Tipo item %r>' % (self.nombre)

@@ -1,3 +1,9 @@
+'''
+Created on 01/05/2013
+
+@author: cathesanz
+'''
+
 from app.modelo import TipoItem
 from app import db
 
@@ -9,6 +15,10 @@ class ControlTipoItem():
     def getTipoItems(self):
         """ funcion getTipoItem """
         return TipoItem.query.all()
+    def getTipoItemByFase(self,idFase):
+        """ funcion que filtra solo por las fases """
+        retorno = db.session.query(TipoItem).filter(TipoItem.idFase == idFase ).all()
+        return retorno
     def nuevoTipoItem(self, tipoItem):
         """ funcion nuevoTipoItem """
         resultado = {"estado" : True, "mensaje" : "exito"}
@@ -62,3 +72,28 @@ class ControlTipoItem():
         #retorno = db.session.query(Usuario).filter_by(nombre=nombre).all()
         return retorno
 
+#-------- 01052013-------------------
+# luego se agrega los atributos por tipo item 
+
+    def agregarAtributoPorTipoItem(self,tipoItem,atributoPorTipoItem):
+        ''' agrega atributos por tipo de item '''
+        nohay = True
+        for f in tipoItem.atributosPorTipoItem:
+            if(atributoPorTipoItem == f):
+                print "YA HAY ESte atributo de tipo de item"
+                nohay = False
+
+        if (nohay):
+            print "Agregamos!"
+            tipoItem.atributosPorTipoItem.append(atributoPorTipoItem)
+            return self.modificarTipoItem(tipoItem)
+        else :
+            resultado = {"estado" : False, "mensaje" : "El tipo de item ya posee este atributo"}
+            return resultado
+
+    def quitarAtributoPorTipoItem(self,tipoItem,atributoPorTipoItem):
+        ''' quitar atributos por tipo de item '''
+        tipoItem.atributosPorTipoItem.remove(atributoPorTipoItem)
+        return self.modificarTipoItem(tipoItem)
+    
+    

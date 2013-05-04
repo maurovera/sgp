@@ -40,12 +40,16 @@
 		</a>
 	{% endif %}
 	
+	
 	{% if (19 or 18 or 29) in session['permisos'] %}
-		<a href="{{ url_for('indexTipoItem') }}" class="btn">
-		<img src="{{ url_for('static', filename = 'img/tipoItem.png') }}" >
-		<br/>Administración de Tipo de Item
+		<a href="{{ url_for('indexFase') }}" class="btn">
+		<img src="{{ url_for('static', filename = 'img/project.png') }}" >
+		<br/>Administración de fases
 		</a>
 	{% endif %}
+	
+
+
 	<hr>
 	</center>
 	<br/>

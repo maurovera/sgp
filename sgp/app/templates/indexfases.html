@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+
+    function mostrarFormulario(){
+        $("#formulario-div").show("slow");
+        $("#boton-mostrar-formulario").hide();
+    }
+    function ocultarFormulario(){
+        $("#formulario-div").hide("slow");
+        $("#boton-mostrar-formulario").show();
+        $("#formulario")[0].reset();
+
+    }
+
+	
+</script>
+
+
+<div class="row">
+    <br/>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <center>
+        <h1> Administracion de las Fases de<br> un Proyecto </h1>
+        <hr>
+        <b> Elija un proyecto para ir a sus fases </b>
+        <!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
+        </center>
+    </div>
+</div>
+
+<hr>
+
+
+
+
+
+
+<!---- formulario de usuario nuevo o modificar -->
+
+
+
+<div class="row" id="formulario-div">
+
+    <div class="span12">
+        <center>
+
+        <form action="{{ url_for('mostrarProyecto') }}" method="post" class="form-horizontal" id="formulario">
+            <fieldset>
+                <label>Proyectos:</label>
+
+                <select name="idProyecto">
+                
+                	{% for p in proyectos %}
+          				     
+            			<option value="{{p.idProyecto}}">{{p.nombre}}</option>
+            		
+          			{% endfor %}
+
+            		
+            	
+          		</select>
+                <br/>
+                <br/>
+
+                <input type="submit" value="Ir a fases" class="btn btn-primary" id="btn-accion">
+
+            </fieldset>
+        </form>
+        <a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+        </center>
+
+    </div>
+</div>
+
+
+
+</div>
+{% endblock %}

@@ -3,21 +3,21 @@
 
 
 <script>
-	function habilitarModificar(idTipoItem,nombre,codigo,descripcion, idProyecto, idFase ){
+	function habilitarModificar(idItemActual,numero,eliminado,ultimaVersion, idProyecto, idFase ){
 
 		/*
 			Modificamos el texto del boton, el lugar donde apunto el formulario
 			rellenamos los datos, e incluimos el campo id :)
 		*/
-		$("#formulario").attr('action','{{ url_for('modificarTipoItem') }}');
-		$("#formulario").append('<input type="hidden" value="'+idTipoItem+'" name="idTipoItem" >' );
+		$("#formulario").attr('action','{{ url_for('modificarItem') }}');
+		$("#formulario").append('<input type="hidden" value="'+idItemActual+'" name="idItemActual" >' );
 
 
 		/* Rellenamos los campos :) */
-		$("#idTipoItem").val( idTipoItem );
-		$("#nombre").val( nombre );
-		$("#codigo").val( codigo );
-		$("#descripcion").val( descripcion );
+		$("#idItemActual").val( idItemActual );
+		$("#numero").val( numero );
+		$("#eliminado").val( eliminado );
+		$("#ultimaVersion").val( ultimaVersion );
 		
 		// SI TODO SALE BIEN Y LAS PUTAS
 		//Mostramos el formulario
@@ -25,7 +25,7 @@
 	}
 
 	function eliminar(id){
-		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarTipoItem')}}/{{idProyecto}}/{{idFase}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarItem')}}/{{idProyecto}}/{{idFase}}/" + id +  "\"  class=\"btn danger\">Si</a>"
 		+
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
@@ -42,15 +42,6 @@
 
 	}
 
-	function buscarTipoItem(){
-		var nombre = $("#nombreBuscado").val();
-
-		if(nombre.length > 0){
-			window.location = "{{url_for('buscarTipoItem')}}/" + nombre;
-		}
-
-
-	}
 
 
 </script>
@@ -58,10 +49,10 @@
 <div id="modal-from-dom" class="modal hide fade">
     <div class="modal-header">
       <a href="#" class="close" data-dismiss="modal">&times;</a>
-      <h3>Eliminar Tipo Item</h3>
+      <h3>Eliminar Item</h3>
     </div>
     <div class="modal-body">
-      <p>La eliminacion de un tipo de item es irreversible.</p>
+      <p>La eliminacion de un item es irreversible.</p>
       <p>Esta seguro que desea eliminar?</p>
     </div>
     <div class="modal-footer" id="botones-eliminar">
@@ -76,7 +67,7 @@
 <div class="row">
 	<div class="span12">
 		<center>
-		<h1> tipo Item de fase <br> {{idFase.nombre}}</h1>
+		<h1> Item de fase <br> {{idFase.nombre}}</h1>
 		<!-- nombre, codigo, descripcion -->
 		</center>
 	</div>
@@ -88,29 +79,29 @@
 
 <div class="row">
       <div class="span8">
-        <h2> Listado de Tipo de Items </h2>
+        <h2> Listado de Items </h2>
         <table class="table table-striped">
           <tr>
             <th>Id</th>
-            <th>Nombre </th>
-            <th>Codigo</th>
-            <th>Descripcion</th>
+            <th>numero </th>
+            <th>eliminado</th>
+            <th>ultimaVersion</th>
             <th>Eliminar</th>
             <th>Modificar</th>
-            <th>Atributos</th>    
+            <th>Datos</th>    
           </tr>
-          {% for u in tipoItems %}
+          {% for u in items %}
           <tr>
-            <td>{{u.idTipoItem}}</td>
-            <td>{{u.nombre}}</td>
-            <td>{{u.codigo}}</td>
-            <td>{{u.descripcion}}</td>
+            <td>{{u.idItemActual}}</td>
+            <td>{{u.numero}}</td>
+            <td>{{u.eliminado}}</td>
+            <td>{{u.ultimaVersion}}</td>
             
-            <td><a class="btn btn-danger" onClick="eliminar({{u.idTipoItem}});">Eliminar</a></td>
-            <td><a class="btn" onClick="habilitarModificar('{{u.idTipoItem}}','{{u.nombre}}','{{u.codigo}}','{{u.descripcion}}','{{idProyecto}}','{{idFase}}');">
+            <td><a class="btn btn-danger" onClick="eliminar({{u.idItemActual}});">Eliminar</a></td>
+            <td><a class="btn" onClick="habilitarModificar('{{u.idItemActual}}','{{u.numero}}','{{u.eliminado}}','{{u.ultimaVersion}}','{{idProyecto}}','{{idFase}}');">
             Modificar</a></td>
             
-           <td><a href="{{url_for('atributo')}}/{{u.idTipoItem}}" class="btn btn-info"><small>Atributos Tipo Item</small></a></td>
+           <td><a href="{{url_for('datos')}}/{{u.idItemActual}}" class="btn btn-info"><small>Datos Item</small></a></td>
             
           </tr>
 
@@ -122,14 +113,7 @@
 
         </table>
       </div>
-      <div class="span4">
 
-		    <input placeholder="Buscar Tipo Item..." id="nombreBuscado" />
-			 <a class='btn add-on btn-primary' onClick="buscarTipoItem();">
-		        <i class="icon-search"></i>
-		     </a>
-
-      </div>
     </div>
 
 
@@ -139,13 +123,13 @@
 
 	<div class="span12">
 		<center>
-		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo TipoItem</a>
+		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Item</a>
 		</center>
 	</div>
 </div>
 
 
-<!---- formulario de TipoItem nuevo o modificar -->
+<!---- formulario de Item nuevo o modificar -->
 
 
 
@@ -154,15 +138,20 @@
 	<div class="span12">
 		<center>
 
-		<form action="{{ url_for('nuevoTipoItem') }}" method="post" class="form-horizontal" id="formulario">
+		<form action="{{ url_for('nuevoItem') }}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
 
-				<label>Nombre de Tipo Item:</label>
-				<input type="text" placeholder="Nombre de tipo item" name="nombre" id="nombre">
-				<label>Codigo:</label>
-				<input type="text" placeholder="Codigo" name="codigo" id="codigo">
-				<label>Descripcion:</label>
-				<input type="text" placeholder="Descripcion" name="descripcion" id="descripcion" >
+				<label>Numero de Item:</label>
+				<input type="number" placeholder="Numero de item" name="numero" id="numero">
+                <label>Eliminado:</label>
+                
+                <select name="eliminado">
+                	<option value="1"> Si </option>
+                	<option value="0"> No </option>
+                </select>
+                
+				<label>Ultima Version:</label>
+				<input type="number" placeholder="UltimaVersion" name="ultimaVersion" id="ultimaVersion" >
 				<input type="hidden"  name="idProyecto" id="idProyecto" value={{idProyecto}} >
 				<input type="hidden"  name="idFase" id="idFase" value="{{idFase}}" >
 				<br/>

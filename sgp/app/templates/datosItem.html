@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+    function habilitarModificar(idItem,version,complejidad,prioridad, estado ){
+
+        /*
+            Modificamos el texto del boton, el lugar donde apunto el formulario
+            rellenamos los datos, e incluimos el campo id :)
+        */
+        $("#formulario").attr('action','{{ url_for('modificarDatosItem') }}');
+        $("#formulario").append('<input type="hidden" value="'+idItem+'" name="idItem" >' );
+
+
+        /* Rellenamos los campos :) */
+        $("#idItem").val( idItem );
+        $("#version").val( version );
+        $("#complejidad").val( complejidad );
+        $("#prioridad").val( prioridad );
+		$("#estado").val( estado );
+		
+        // SI TODO SALE BIEN Y LAS PUTAS
+        //Mostramos el formulario
+        mostrarFormulario();
+    }
+
+    function eliminar(idItem){
+        $("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarDatosItem')}}/" +{{item.idItemActual}}+ "/" + idItem +  "\"  class=\"btn danger\">Si</a>"
+        +
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+    }
+
+    function mostrarFormulario(){
+        $("#formulario-div").show("slow");
+        $("#boton-mostrar-formulario").hide();
+    }
+    function ocultarFormulario(){
+        $("#formulario-div").hide("slow");
+        $("#boton-mostrar-formulario").show();
+        $("#formulario")[0].reset();
+
+    }
+
+
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Eliminar datos de Tipo Item</h3>
+    </div>
+    <div class="modal-body">
+      <p>Esta seguro que desea eliminar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+        <!-- placeholder -->
+    </div>
+</div>
+
+<div class="row">
+    <br/>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <center>
+        <h1> datos de <br> {{item.numero}}</h1>
+        <hr>
+        Complete el formulario para agregar datos al item
+        <hr>
+        </center>
+    </div>
+</div>
+
+<hr>
+
+<div class="roles">
+
+<div class="row">
+      <div class="span10">
+        <h2> Listado de datos de {{item.numero}} </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>version</th>
+            <th>complejidad </th>
+            <th>prioridad</th>
+            <th>estado</th>
+            <th>Eliminar</th>
+            <th>Modificar</th>
+          </tr>
+          {% for f in item.datos %}
+          <tr>
+            <td>{{f.idItem}}</td>
+            <td>{{f.version}}</td>
+            <td>{{f.complejidad}}</td>
+            <td>{{f.prioridad}}</td>
+            <td>{{f.estado}}
+          
+            <td><a class="btn btn-danger" onClick="eliminar({{f.idItem}});">Eliminar</a></td>
+          	
+          	<td><a class="btn" onClick="habilitarModificar('{{f.idItem}}','{{f.version}}','{{f.complejidad}}','{{f.prioridad}}','{{f.estado}}');">
+            Modificar</a></td>
+          	
+          </tr>
+
+          {% else %}
+            <tr>
+                NO HAY REGISTROS
+            </tr>
+          {% endfor %}
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+    <div class="span12">
+        <center>
+        <a class="btn btn-primary" onClick="mostrarFormulario();">Asignar datos al item {{item.numero}} </a>
+        </center>
+    </div>
+</div>
+
+
+<!---- formulario de usuario nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+    <div class="span12">
+        <center>
+
+        <form action="{{ url_for('nuevaDatosItem') }}" method="post" class="form-horizontal" id="formulario">
+            <fieldset>
+
+                <label>Version:</label>
+                <input type="number" name="version" id="version" placeholder="Version del dato">
+                <label>Complejidad:</label>
+                <input type="number" name="complejidad" id="complejidad" placeholder="Complejidad del dato">
+                <label>Prioridad:</label>
+                <input type="number" name="prioridad" id="prioridad" placeholder="Prioridad del dato">
+                <label>Estado del dato:</label>
+                
+                <select name="estado">
+                	<option value="actual"> Actual </option>
+                	<option value="Caducado"> Caducado </option>
+                </select>
+                
+                
+                
+                <!--<input type="text" name="tipo" id="tipo" placeholder="tipo atributo">-->
+                
+                <input type="hidden" value="{{item.idItemActual}}" name="idItemActual">
+                <br/>
+                <br/>
+
+                <input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+
+            </fieldset>
+        </form>
+        <a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+        </center>
+
+    </div>
+</div>
+<hr>
+
+</div>
+{% endblock %}
