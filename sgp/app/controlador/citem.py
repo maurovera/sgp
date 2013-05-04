@@ -38,14 +38,22 @@ class ControlItem():
         """ funcion eliminarItem """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
-            """ hacemos un delete de Item """
-            db.session.delete(item)
+#           db.session.delete(item)
+#            db.session.commit()
+#---------------------------------------
+            """ hacemos un delete de item, que lo unico que cambia sera su eliminado """
+            item.eliminado = True
+            db.session.merge(item)
             """ se comitea el cambio """
             db.session.commit()
+
+#----------------------------------------        
         except Exception, error:
             """ se captura el error con un exception """
             resultado = {"estado" : False, "mensaje" :  str(error)}
             db.session.rollback()
+            
+            
 
         return resultado
 

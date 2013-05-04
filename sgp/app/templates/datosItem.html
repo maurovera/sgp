@@ -24,6 +24,29 @@
         //Mostramos el formulario
         mostrarFormulario();
     }
+    
+    function habilitarReversion(idItem,version,complejidad,prioridad, estado ){
+
+        /*
+            Modificamos el texto del boton, el lugar donde apunto el formulario
+            rellenamos los datos, e incluimos el campo id :)
+        */
+        $("#formulario").attr('action','{{ url_for('volverDatosItem') }}');
+        $("#formulario").append('<input type="hidden" value="'+idItem+'" name="idItem" >' );
+
+
+        /* Rellenamos los campos :) */
+        $("#idItem").val( idItem );
+        $("#version").val( version );
+        $("#complejidad").val( complejidad );
+        $("#prioridad").val( prioridad );
+		$("#estado").val( estado );
+		
+        // SI TODO SALE BIEN Y LAS PUTAS
+        //Mostramos el formulario
+        mostrarFormulario();
+    }
+    
 
     function eliminar(idItem){
         $("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarDatosItem')}}/" +{{item.idItemActual}}+ "/" + idItem +  "\"  class=\"btn danger\">Si</a>"
@@ -92,6 +115,7 @@
             <th>estado</th>
             <th>Eliminar</th>
             <th>Modificar</th>
+            <th>Volver A esta Version</th>
           </tr>
           {% for f in item.datos %}
           <tr>
@@ -105,6 +129,9 @@
           	
           	<td><a class="btn" onClick="habilitarModificar('{{f.idItem}}','{{f.version}}','{{f.complejidad}}','{{f.prioridad}}','{{f.estado}}');">
             Modificar</a></td>
+          	
+          	<td><a class="btn" onClick="habilitarReversion('{{f.idItem}}','{{f.version}}','{{f.complejidad}}','{{f.prioridad}}','{{f.estado}}');">
+            Reversion</a></td>
           	
           </tr>
 
@@ -126,10 +153,13 @@
 
     <div class="span12">
         <center>
-        <a class="btn btn-primary" onClick="mostrarFormulario();">Asignar datos al item {{item.numero}} </a>
+        	<a class="btn btn-primary" onClick="mostrarFormulario();">Asignar datos al item {{item.numero}} </a>
         </center>
     </div>
 </div>
+
+
+
 
 
 <!---- formulario de usuario nuevo o modificar -->
@@ -140,7 +170,7 @@
 
     <div class="span12">
         <center>
-
+	
         <form action="{{ url_for('nuevaDatosItem') }}" method="post" class="form-horizontal" id="formulario">
             <fieldset>
 
@@ -150,12 +180,7 @@
                 <input type="number" name="complejidad" id="complejidad" placeholder="Complejidad del dato">
                 <label>Prioridad:</label>
                 <input type="number" name="prioridad" id="prioridad" placeholder="Prioridad del dato">
-                <label>Estado del dato:</label>
                 
-                <select name="estado">
-                	<option value="actual"> Actual </option>
-                	<option value="Caducado"> Caducado </option>
-                </select>
                 
                 
                 
@@ -175,6 +200,9 @@
     </div>
 </div>
 <hr>
+
+
+
 
 </div>
 {% endblock %}

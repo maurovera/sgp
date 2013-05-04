@@ -23,7 +23,7 @@ controladorDatosItem = ControlDatosItem()
 controladorusuario = ControlUsuario()
 #controladorrol = ControlRol()
 #----------------------------------------------
-
+valorGlobal = 0
 #def busquedaPorNombre(nombre):
 #    ''' Devuelve un listado de los tipo de item que coincidan con un nombre '''
 #    lista = None
@@ -89,14 +89,14 @@ def nuevoItem():
         
         
         numero = request.form['numero']
-        eliminado = request.form['eliminado']
-        if eliminado == 1:
-            eliminado= True
-        elif eliminado == 0:
-            eliminado = False
+        #eliminado = request.form['eliminado']
+        #if eliminado == 1:
+        #    eliminado= True
+        #elif eliminado == 0:
+        #    eliminado = False
             
                 
-        ultimaVersion = request.form['ultimaVersion']
+        #ultimaVersion = request.form['ultimaVersion']
         idProyecto = request.form['idProyecto']
         #aca tiene que ser idTipoItem jajajaja
         idFase = request.form['idFase']
@@ -104,11 +104,11 @@ def nuevoItem():
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente 
         #con un metodo kachiai
-        if(numero and ultimaVersion and idFase):
+        if(numero and idFase):
             item = Item()
             item.numero = numero
-            item.eliminado = eliminado
-            item.ultimaVersion = ultimaVersion
+            item.eliminado = False
+            item.ultimaVersion = 0
             item.idFase = idFase
             #tipoItem.idProyecto = idProyecto
             
@@ -138,13 +138,13 @@ def modificarItem():
         id = request.form['idItemActual']
         
         numero = request.form['numero']
-        eliminado = request.form['eliminado']
-        if eliminado == 1:
-            eliminado= True
-        elif eliminado == 0:
-            eliminado = False
+        #eliminado = request.form['eliminado']
+        #if eliminado == 1:
+        #    eliminado= True
+        #elif eliminado == 0:
+        #    eliminado = False
 
-        ultimaVersion = request.form['ultimaVersion']
+        #ultimaVersion = request.form['ultimaVersion']
         
         idProyecto = request.form['idProyecto']
         idFase = request.form['idFase']
@@ -152,12 +152,12 @@ def modificarItem():
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente 
         #con un metodo kachiai
-        if(id and numero and ultimaVersion):
+        if(id and numero):
             item = control.getItemById(id)
             if (item):
                 item.numero = numero
-                item.eliminado = eliminado
-                item.ultimaVersion = ultimaVersion
+                #item.eliminado = eliminado
+                #item.ultimaVersion = ultimaVersion
                 
                 
                     
@@ -196,20 +196,22 @@ def nuevaDatosItem():
     version = request.form['version']
     complejidad = request.form['complejidad']
     prioridad = request.form['prioridad']
-    estado = request.form['estado']
+    #estado = request.form['estado']
     
     idItemActual = request.form['idItemActual']
 
-    if(version and complejidad and prioridad and estado and idItemActual):
+    if(version and complejidad and prioridad and idItemActual):
         #anga
         item = control.getItemById(idItemActual)
         datos = DatosItem()
         datos.version = version
         datos.complejidad = complejidad
         datos.prioridad = prioridad
-        datos.estado = estado
+        datos.estado = "actual"
         datos.idItemActual = idItemActual
         
+#------------------------------- modificamos la version = ultversion en item
+        item.ultimaVersion = version
         #aqui se utiliza el controlador para agregar el dato
         r = control.agregarDatosItem(item,datos)
         #print tipoItem.atributo
@@ -221,6 +223,8 @@ def nuevaDatosItem():
 
     else :
         flash("Ocurrio un error, debe completar correctamente el formulario")
+        
+        
 
     return redirect(url_for('datos',idItemActual = idItemActual))
 
@@ -229,25 +233,30 @@ def nuevaDatosItem():
 @app.route("/item/datos/modificar", methods=['GET','POST'])
 def modificarDatosItem():
     '''Se encarga de modificar datos de un  item'''
-    version = request.form['version']
-    complejidad = request.form['complejidad']
-    prioridad = request.form['prioridad']
-    estado = request.form['estado']
+    #version = request.form['version']
+    
+    
+    #complejidad = request.form['complejidad']
+    #prioridad = request.form['prioridad']
+    #estado = request.form['estado']
     idItemActual = request.form['idItemActual']
     idDatosItem = request.form['idItem']
     
-    if(version and complejidad and prioridad and estado and idItemActual and idDatosItem):
+    
+    if(idItemActual and idDatosItem):
         #anga
         
         datos = controladorDatosItem.getDatosItemById(idDatosItem)
-        datos.version = version
-        datos.complejidad = complejidad
-        datos.prioridad = prioridad
-        datos.estado = estado
+        #datos.version = version
+        #datos.complejidad = complejidad
+        #datos.prioridad = prioridad
+        datos.estado = "caducado"
         
-        
-        
+        #Aca Modifica los datos viejos 
         r = controladorDatosItem.modificarDatosItem(datos)
+        #aca carga un nuevo dato
+        
+        
         if( r["estado"] == True ):
             flash("Se modifico los datos con exito")
         else:
@@ -257,7 +266,48 @@ def modificarDatosItem():
     else :
         flash("Ocurrio un error, debe completar correctamente el formulario")
 
+    
     return redirect(url_for('datos',idItemActual = idItemActual))
+
+
+@app.route("/item/datos/volver", methods=['GET','POST'])
+def volverDatosItem():
+    '''Se encarga de modificar datos de un  item'''
+    version = request.form['version']
+    #complejidad = request.form['complejidad']
+    #prioridad = request.form['prioridad']
+    #estado = request.form['estado']
+    idItemActual = request.form['idItemActual']
+    idDatosItem = request.form['idItem']
+    
+    if(version and idItemActual and idDatosItem):
+        #anga
+        item = control.getItemById(idItemActual)
+        item.ultimaVersion = version
+        p = control.modificarItem(item)
+        
+        #datos.version = version
+        #datos.complejidad = complejidad
+        #datos.prioridad = prioridad
+        datos = controladorDatosItem.getDatosItemById(idDatosItem)
+        datos.estado = "actual"
+        
+        controladorDatosItem.modificarDatosItem(datos)
+        
+        if( p["estado"] == True ):
+            flash("Se volvio a esta version de item")
+        else:
+            flash("Ocurrio un error : " + p["mensaje"])
+
+
+    else :
+        flash("Ocurrio un error, debe completar correctamente el formulario")
+
+    return redirect(url_for('datos',idItemActual = idItemActual))
+
+
+
+
 
 @app.route("/item/datos/eliminar")
 @app.route("/item/datos/eliminar/<idItemActual>/<idItem>")

@@ -97,12 +97,24 @@
             <td>{{u.eliminado}}</td>
             <td>{{u.ultimaVersion}}</td>
             
-            <td><a class="btn btn-danger" onClick="eliminar({{u.idItemActual}});">Eliminar</a></td>
+            {% if not u.eliminado == True %}
+            	<td><a class="btn btn-danger" onClick="eliminar({{u.idItemActual}});">Eliminar</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            
+            {% if not u.eliminado == True %}
             <td><a class="btn" onClick="habilitarModificar('{{u.idItemActual}}','{{u.numero}}','{{u.eliminado}}','{{u.ultimaVersion}}','{{idProyecto}}','{{idFase}}');">
             Modificar</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}
             
+            {% if not u.eliminado == True %}
            <td><a href="{{url_for('datos')}}/{{u.idItemActual}}" class="btn btn-info"><small>Datos Item</small></a></td>
-            
+            {% else %}
+            <td></td>
+            {% endif %}
           </tr>
 
           {% else %}
@@ -143,15 +155,10 @@
 
 				<label>Numero de Item:</label>
 				<input type="number" placeholder="Numero de item" name="numero" id="numero">
-                <label>Eliminado:</label>
+               
                 
-                <select name="eliminado">
-                	<option value="1"> Si </option>
-                	<option value="0"> No </option>
-                </select>
-                
-				<label>Ultima Version:</label>
-				<input type="number" placeholder="UltimaVersion" name="ultimaVersion" id="ultimaVersion" >
+				
+				<input type="hidden" placeholder="UltimaVersion" name="ultimaVersion" id="ultimaVersion" >
 				<input type="hidden"  name="idProyecto" id="idProyecto" value={{idProyecto}} >
 				<input type="hidden"  name="idFase" id="idFase" value="{{idFase}}" >
 				<br/>

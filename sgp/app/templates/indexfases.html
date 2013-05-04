@@ -57,9 +57,9 @@
                 <select name="idProyecto">
                 
                 	{% for p in proyectos %}
-          				     
-            			<option value="{{p.idProyecto}}">{{p.nombre}}</option>
-            		
+          				{% if not p.estado == 'eliminado' %}     
+            				<option value="{{p.idProyecto}}">{{p.nombre}}</option>
+            			{% endif %}
           			{% endfor %}
 
             		
@@ -67,9 +67,12 @@
           		</select>
                 <br/>
                 <br/>
-
-                <input type="submit" value="Ir a fases" class="btn btn-primary" id="btn-accion">
-
+				{% for p in proyectos %}
+          				{% if not p.estado == 'eliminado' %}   
+                			<input type="submit" value="Ir a fases" class="btn btn-primary" id="btn-accion">
+						{% endif %}
+          		{% endfor %}
+          		
             </fieldset>
         </form>
         
