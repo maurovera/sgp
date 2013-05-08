@@ -1,0 +1,55 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module app.vista.tipoItemView</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="app.html"><font color="#ffffff">app</font></a>.<a href="app.vista.html"><font color="#ffffff">vista</font></a>.tipoItemView</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/mauro/git/sgp/sgp/app/vista/tipoItemView.py">/home/mauro/git/sgp/sgp/app/vista/tipoItemView.py</a></font></td></tr></table>
+    <p><tt>#INDEX</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="datetime.html">datetime</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-atributo"><strong>atributo</strong></a>(idTipoItem)</dt><dd><tt>Se&nbsp;encarga&nbsp;render&nbsp;a&nbsp;un&nbsp;pantalla&nbsp;para&nbsp;cargar&nbsp;atributos&nbsp;por&nbsp;tipo&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-buscarTipoItem"><strong>buscarTipoItem</strong></a>(nombrebuscado)</dt><dd><tt>Devuelve&nbsp;una&nbsp;lista&nbsp;de&nbsp;tipo&nbsp;de&nbsp;items&nbsp;que&nbsp;coincidan&nbsp;con&nbsp;el&nbsp;nombre&nbsp;proporcionado</tt></dd></dl>
+ <dl><dt><a name="-busquedaPorNombre"><strong>busquedaPorNombre</strong></a>(nombre)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;de&nbsp;item&nbsp;que&nbsp;coincidan&nbsp;con&nbsp;un&nbsp;nombre</tt></dd></dl>
+ <dl><dt><a name="-eliminarAtributoTipoItem"><strong>eliminarAtributoTipoItem</strong></a>(idTipoItem, idAtributoPorTipoItem)</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;eliminar&nbsp;un&nbsp;atributo&nbsp;de&nbsp;un&nbsp;tipo&nbsp;de&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-eliminarTipoItem"><strong>eliminarTipoItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, id<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-indexTipoItem"><strong>indexTipoItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>)</dt><dd><tt>Devuelve&nbsp;los&nbsp;datos&nbsp;de&nbsp;un&nbsp;Tipo&nbsp;item&nbsp;en&nbsp;Concreto</tt></dd></dl>
+ <dl><dt><a name="-listadoTipoItem"><strong>listadoTipoItem</strong></a>(idFase)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-modificarAtributoTipoItem"><strong>modificarAtributoTipoItem</strong></a>()</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;modificar&nbsp;atributos&nbsp;de&nbsp;un&nbsp;tipo&nbsp;de&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-modificarTipoItem"><strong>modificarTipoItem</strong></a>()</dt><dd><tt>Modifica&nbsp;un&nbsp;tipo&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-nuevaAtributoTipoItem"><strong>nuevaAtributoTipoItem</strong></a>()</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;Agregar&nbsp;nuevos&nbsp;atributos&nbsp;a&nbsp;un&nbsp;tipo&nbsp;de&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-nuevoTipoItem"><strong>nuevoTipoItem</strong></a>()</dt><dd><tt>Crea&nbsp;un&nbsp;nuevo&nbsp;Tipo&nbsp;Item</tt></dd></dl>
+ <dl><dt><a name="-returnTipoItem"><strong>returnTipoItem</strong></a>(idTipoItem, idProyecto, idFase)</dt></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
+<strong>app</strong> = &lt;flask.app.Flask object&gt;<br>
+<strong>control</strong> = &lt;app.controlador.ctipoitem.ControlTipoItem instance&gt;<br>
+<strong>controladorAtributoPorTipoItem</strong> = &lt;app.controlador.catributoPorTipoItem.ControlAtributoPorTipoItem instance&gt;<br>
+<strong>controladorusuario</strong> = &lt;app.controlador.cusuario.ControlUsuario instance&gt;<br>
+<strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>session</strong> = &lt;LocalProxy unbound&gt;</td></tr></table>
+</body></html>

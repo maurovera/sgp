@@ -1,17 +1,17 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>Python: module app.modelo.permiso</title>
+<html><head><title>Python: module app.modelo.atributosPorItem</title>
 </head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="app.html"><font color="#ffffff">app</font></a>.<a href="app.modelo.html"><font color="#ffffff">modelo</font></a>.permiso</strong></big></big></font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="app.html"><font color="#ffffff">app</font></a>.<a href="app.modelo.html"><font color="#ffffff">modelo</font></a>.atributosPorItem</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/mauro/git/sgp/sgp/app/modelo/permiso.py">/home/mauro/git/sgp/sgp/app/modelo/permiso.py</a></font></td></tr></table>
-    <p><tt>Created&nbsp;on&nbsp;10/04/2013<br>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/mauro/git/sgp/sgp/app/modelo/atributosPorItem.py">/home/mauro/git/sgp/sgp/app/modelo/atributosPorItem.py</a></font></td></tr></table>
+    <p><tt>Created&nbsp;on&nbsp;01/05/2013<br>
 &nbsp;<br>
-@author:&nbsp;cathesanz</tt></p>
+@author:&nbsp;mauren</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -23,7 +23,7 @@
 <dt><font face="helvetica, arial">flask_sqlalchemy.Model(<a href="flask_sqlalchemy.html#Model">flask_sqlalchemy.Model</a>)
 </font></dt><dd>
 <dl>
-<dt><font face="helvetica, arial"><a href="app.modelo.permiso.html#Permiso">Permiso</a>
+<dt><font face="helvetica, arial"><a href="app.modelo.atributosPorItem.html#AtributosPorItem">AtributosPorItem</a>
 </font></dt></dl>
 </dd>
 </dl>
@@ -31,18 +31,18 @@
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Permiso">class <strong>Permiso</strong></a>(flask_sqlalchemy.Model)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="AtributosPorItem">class <strong>AtributosPorItem</strong></a>(flask_sqlalchemy.Model)</font></td></tr>
     
 <tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
-<dd><a href="app.modelo.permiso.html#Permiso">Permiso</a></dd>
+<dd><a href="app.modelo.atributosPorItem.html#AtributosPorItem">AtributosPorItem</a></dd>
 <dd>flask_sqlalchemy.Model</dd>
 <dd><a href="flask_sqlalchemy.html#Model">flask_sqlalchemy.Model</a></dd>
 <dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="Permiso-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>A&nbsp;simple&nbsp;constructor&nbsp;that&nbsp;allows&nbsp;initialization&nbsp;from&nbsp;kwargs.<br>
+<dl><dt><a name="AtributosPorItem-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>A&nbsp;simple&nbsp;constructor&nbsp;that&nbsp;allows&nbsp;initialization&nbsp;from&nbsp;kwargs.<br>
 &nbsp;<br>
 Sets&nbsp;attributes&nbsp;on&nbsp;the&nbsp;constructed&nbsp;instance&nbsp;using&nbsp;the&nbsp;names&nbsp;and<br>
 values&nbsp;in&nbsp;``kwargs``.<br>
@@ -51,29 +51,25 @@ Only&nbsp;keys&nbsp;that&nbsp;are&nbsp;present&nbsp;as<br>
 attributes&nbsp;of&nbsp;the&nbsp;instance's&nbsp;class&nbsp;are&nbsp;allowed.&nbsp;These&nbsp;could&nbsp;be,<br>
 for&nbsp;example,&nbsp;any&nbsp;mapped&nbsp;columns&nbsp;or&nbsp;relationships.</tt></dd></dl>
 
-<dl><dt><a name="Permiso-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
-
 <hr>
 Data descriptors defined here:<br>
-<dl><dt><strong>idPermiso</strong></dt>
+<dl><dt><strong>idAtributosDeItem</strong></dt>
 </dl>
-<dl><dt><strong>nombre</strong></dt>
+<dl><dt><strong>idAtributosPorItem</strong></dt>
 </dl>
-<dl><dt><strong>roles</strong></dt>
-</dl>
-<dl><dt><strong>valor</strong></dt>
+<dl><dt><strong>idItem</strong></dt>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x8d20a6c; Permiso&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0x8d3baec; AtributosPorItem&gt;</dl>
 
-<dl><dt><strong>__table__</strong> = Table('permiso', MetaData(bind=None), Column('id...), table=&lt;permiso&gt;, nullable=False), schema=None)</dl>
+<dl><dt><strong>__table__</strong> = Table('atributos_por_item', MetaData(bind=None),...Item'), table=&lt;atributos_por_item&gt;), schema=None)</dl>
 
-<dl><dt><strong>__tablename__</strong> = 'permiso'</dl>
+<dl><dt><strong>__tablename__</strong> = 'atributos_por_item'</dl>
 
 <hr>
 Methods inherited from flask_sqlalchemy.Model:<br>
-<dl><dt><a name="Permiso-__mapper_cls__"><strong>__mapper_cls__</strong></a> = signalling_mapper(*args, **kwargs)</dt><dd><tt>Replacement&nbsp;for&nbsp;mapper&nbsp;that&nbsp;injects&nbsp;some&nbsp;extra&nbsp;extensions</tt></dd></dl>
+<dl><dt><a name="AtributosPorItem-__mapper_cls__"><strong>__mapper_cls__</strong></a> = signalling_mapper(*args, **kwargs)</dt><dd><tt>Replacement&nbsp;for&nbsp;mapper&nbsp;that&nbsp;injects&nbsp;some&nbsp;extra&nbsp;extensions</tt></dd></dl>
 
 <strong>query</strong> = &lt;flask_sqlalchemy.BaseQuery object&gt;
 <hr>

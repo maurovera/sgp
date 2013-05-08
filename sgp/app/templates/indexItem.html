@@ -111,7 +111,7 @@
             {% endif %}
             
             {% if not u.eliminado == True %}
-           <td><a href="{{url_for('datos')}}/{{u.idItemActual}}" class="btn btn-info"><small>Datos Item</small></a></td>
+           <td><a href="{{url_for('datos')}}/{{u.idItemActual}}/{{idProyecto}}" class="btn btn-info"><small>Datos Item</small></a></td>
             {% else %}
             <td></td>
             {% endif %}
