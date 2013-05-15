@@ -10,7 +10,7 @@ from app import db
 
 class Relacion(db.Model):
     idRelacion = db.Column(db.Integer, primary_key = True)
-    tipo = db.Column( db.String(45), index = True, unique = True, nullable = False)
+    tipo = db.Column( db.String(45), index = True, nullable = False)
 
     #corroborar si un archivo binario se representa asi 
     #Relaciones

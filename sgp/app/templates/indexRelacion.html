@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+	function habilitarModificar(idRelacion,tipo ,idSucesor,idAntecesor ){
+
+		/*
+			Modificamos el texto del boton, el lugar donde apunto el formulario
+			rellenamos los datos, e incluimos el campo id :)
+		*/
+		$("#formulario").attr('action','{{ url_for('modificarRelacion') }}');
+		$("#formulario").append('<input type="hidden" value="'+idRelacion+'" name="idRelacion" >' );
+
+
+		/* Rellenamos los campos :) */
+		$("#idRelacion").val( idRelacion );
+		$("#tipo").val( tipo );
+		$("#idSucesor").val( idSucesor );
+		$("#idAntecesor").val( idAntecesor );
+		
+		// SI TODO SALE BIEN Y LAS PUTAS
+		//Mostramos el formulario
+		mostrarFormulario();
+	}
+
+	function eliminar(id){
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarRelacion')}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+		+
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+	}
+
+	function mostrarFormulario(){
+		$("#formulario-div").show("slow");
+		$("#boton-mostrar-formulario").hide();
+	}
+	function ocultarFormulario(){
+		$("#formulario-div").hide("slow");
+		$("#boton-mostrar-formulario").show();
+		$("#formulario")[0].reset();
+
+	}
+
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Eliminar relacion</h3>
+    </div>
+    <div class="modal-body">
+      <p>La eliminacion de una Relacion es irreversible.</p>
+      <p>Esta seguro que desea eliminar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+    	<!-- placeholder -->
+    </div>
+</div>
+
+<div class="row">
+    <br>
+</div>
+
+<div class="row">
+	<div class="span12">
+		<center>
+		<h1> Relaciones </h1>
+		<!-- Tipo, idSucesor, idAntecesor -->
+		</center>
+	</div>
+</div>
+
+<hr>
+
+<div class="usuarios">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de Relaciones </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>tipo</th>
+            <th>IdSucesor </th>
+            <th>IdAntecesor</th>
+            <th>Eliminar</th>
+            <th>Modificar</th>
+          </tr>
+          {% for r in relaciones %}
+          <tr>
+            <td>{{r.idRelacion}}</td>
+            <td>{{r.tipo}}</td>
+            <td>{{r.idSucesor}}</td>
+            <td>{{r.idAntecesor}}</td>
+            
+            <td><a class="btn btn-danger" onClick="eliminar({{r.idRelacion}});">Eliminar</a></td>
+            <td><a class="btn" onClick="habilitarModificar('{{r.idRelacion}}','{{r.tipo}}','{{r.idSucesor}}','{{r.idAntecesor}}');">
+            Modificar</a></td>
+          </tr>
+          {% else %}
+          <tr>
+          	NO HAY REGISTROS
+          </tr>
+          {% endfor %}
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+	<div class="span12">
+		<center>
+		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nueva Relacion</a>
+		</center>
+	</div>
+</div>
+
+
+<!---- formulario de usuario nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+	<div class="span12">
+		<center>
+
+		<form action="{{ url_for('nuevaRelacion') }}" method="post" class="form-horizontal" id="formulario">
+			<fieldset>
+				<!----<label>Tipo:</label>
+				<select name="tipo">
+                	<option value="Padre-Hijo"> Padre-Hijo </option>
+                	<option value="Antecesor-Sucesor"> Antecesor-Sucesor </option>
+                </select>-->
+				
+				<label>Sucesor:</label>
+				<select name="idSucesor">
+                	{% for i in items %}
+          				<option value="{{i.idItemActual}}">{{i.numero}}</option>
+            		{% endfor %}
+            	</select>
+            	
+				<label>Antecesor:</label>
+				<select name="idAntecesor">
+                	{% for i in items %}
+          				<option value="{{i.idItemActual}}">{{i.numero}}</option>
+            		{% endfor %}
+            	</select>
+            	 
+				<br/>
+				<br/>
+
+				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+
+			</fieldset>
+		</form>
+		<a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+		</center>
+
+	</div>
+</div>
+
+
+
+</div>
+{% endblock %}
