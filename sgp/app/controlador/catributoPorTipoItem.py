@@ -14,6 +14,12 @@ class ControlAtributoPorTipoItem():
     def getAtributoPorTipoItem(self):
         """ funcion getrol """
         return AtributoPorTipoItem.query.all()
+    
+    def getAtributoPorTipoItemByTipoItem(self,idTipoItem):
+        """ funcion que filtra solo por las fases """
+        retorno = db.session.query(AtributoPorTipoItem).filter(AtributoPorTipoItem.idTipoItem == idTipoItem ).all()
+        return retorno
+    
     def nuevaAtributoPorTipoItem(self, atributoPorTipoItem):
         """ funcion nuevoProyecto """
         resultado = {"estado" : True, "mensaje" : "exito"}

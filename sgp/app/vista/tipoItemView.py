@@ -44,12 +44,24 @@ def listadoTipoItem(idFase):
         flash("Error. Lista no devuelta")
     return lista
 
+def listadoTipoItemTodos():
+    ''' Devuelve un listado de los tipo item '''
+    lista = None
+    r = True
+    if(r):
+        lista = control.getTipoItems()
+    else:
+        flash("Error. Lista no devuelta")
+    return lista
+
 @app.route('/tipoItem')
 @app.route('/tipoItem/<idProyecto>/<idFase>')
 def indexTipoItem(idProyecto=None,idFase=None):
     ''' Devuelve los datos de un Tipo item en Concreto '''
     tipoItems = listadoTipoItem(idFase);
-    return render_template('indexTipoItem.html', tipoItems = tipoItems, idProyecto = idProyecto, idFase = idFase)
+    tipoItemsTodo = listadoTipoItemTodos();
+    
+    return render_template('indexTipoItem.html', tipoItems = tipoItems, idProyecto = idProyecto, idFase = idFase, tipoItemsTodo = tipoItemsTodo)
 
 
 @app.route('/tipoItem/eliminar')
@@ -167,6 +179,58 @@ def buscarTipoItem(nombrebuscado):
     return render_template('indexTipoItem.html', tipoItems = tipoItems)
 
 
+
+
+@app.route("/tipoItem/mostrarTipo")
+@app.route("/tipoItem/mostrarTipo/<idProyecto>/<idFase>", methods=['GET','POST'])
+def mostrarTipo(idProyecto, idFase):
+    
+    id = request.form["idTipoItem"]
+    print id
+    print "este el tipo item seleccionadoooooooooooooooooooooooooo "
+    print request.form['nombre']
+    print request.form['codigo']
+    print request.form['descripcion']
+    nombre = request.form['nombre']
+    codigo = request.form['codigo']
+    descripcion = request.form['descripcion']
+    idPro = idProyecto
+    idFas = idFase
+    
+    id1 =  control.getTipoItemById(id)
+    
+    
+    if(nombre and codigo and descripcion and idFas and idPro):
+            tipoItem = TipoItem()
+            tipoItem.nombre = nombre
+            tipoItem.codigo = codigo
+            tipoItem.descripcion = descripcion
+            tipoItem.idFase = idFas
+            tipoItem.idProyecto = idPro
+            
+            r = control.nuevoTipoItem(tipoItem)
+            if(r["estado"] == True):
+                flash("Exito, se creo un nuevo tipo item")    
+            else :
+                flash("Ocurrio un error : " + r["mensaje"])
+    
+    #se encarga de los atributos de item
+    listadoDeAtributos = controladorAtributoPorTipoItem.getAtributoPorTipoItemByTipoItem(id)
+    for unAtributo in listadoDeAtributos:
+        nuevo = AtributoPorTipoItem()
+        nuevo.idTipoItem = tipoItem.idTipoItem
+        nuevo.nombre = unAtributo.nombre
+        nuevo.tipo = unAtributo.tipo
+        nuevo.valorPorDefecto = unAtributo.valorPorDefecto
+        #aqui se utiliza el controlador para agregar el atributo
+        control.agregarAtributoPorTipoItem(tipoItem,nuevo)
+    
+    
+    #idProyecto = request.form['idProyecto']
+    #idFase = request.form['idFase']
+         
+    #nombre de la funcion y los parametros
+    return redirect(url_for('indexTipoItem', idProyecto = idProyecto, idFase = idFase))
 #---------Esta parte es en donde se crean los atributos del item---------------
 
 
@@ -270,4 +334,5 @@ def eliminarAtributoTipoItem(idTipoItem,idAtributoPorTipoItem):
 def returnTipoItem(idTipoItem,idProyecto,idFase):
     return redirect(url_for('indexTipoItem', idProyecto=idProyecto, idFase=idFase ))
 
+# se agrego importar tipoItem entre fases 
 

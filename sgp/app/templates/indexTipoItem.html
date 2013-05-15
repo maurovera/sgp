@@ -42,6 +42,20 @@
 
 	}
 
+	function mostrarFormulario1(){
+		$("#formulario1-div").show("slow");
+		$("#boton-mostrar-formulario1").hide();
+	}
+	
+	
+	function ocultarFormulario1(){
+		$("#formulario1-div").hide("slow");
+		$("#boton-mostrar-formulario1").show();
+		$("#formulario1")[0].reset();
+
+	}
+	
+	
 	function buscarTipoItem(){
 		var nombre = $("#nombreBuscado").val();
 
@@ -111,7 +125,8 @@
             Modificar</a></td>
             
            <td><a href="{{url_for('atributo')}}/{{u.idTipoItem}}" class="btn btn-info"><small>Atributos Tipo Item</small></a></td>
-            
+		   
+		   	            
           </tr>
 
           {% else %}
@@ -144,11 +159,24 @@
 	</div>
 </div>
 
+<br>
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario1">
+
+	<div class="span12">
+		<center>
+		<a class="btn btn-primary" onClick="mostrarFormulario1();">Importar</a>
+		</center>
+	</div>
+</div>
+
+
+
 
 <!---- formulario de TipoItem nuevo o modificar -->
 
 
-
+<br>
 <div class="row hide" id="formulario-div">
 
 	<div class="span12">
@@ -178,6 +206,39 @@
 	</div>
 </div>
 
+<br>
+<div class="row hide" id="formulario1-div">
+
+    <div class="span12">
+        <center>
+
+        <form action="{{ url_for('mostrarTipo') }}/{{idProyecto}}/{{idFase}}" method="post" class="form-horizontal" id="formulario1">
+            <fieldset>
+                <label>Tipo Item:</label>
+				<select name="idTipoItem">
+                	{% for p in tipoItemsTodo %}
+          				<option value="{{p.idTipoItem}}">{{p.nombre}}</option>
+            		{% endfor %}
+            	</select>
+            	<label>Nombre nuevo del Tipo Item:</label>
+				<input type="text" placeholder="Nombre de tipo item" name="nombre" id="nombre">
+				<label>Codigo Nuevo:</label>
+				<input type="text" placeholder="Codigo" name="codigo" id="codigo">
+				<label>Nueva Descripcion:</label>
+				<input type="text" placeholder="Descripcion" name="descripcion" id="descripcion" >
+                <br/>
+                <br/>
+				   
+                <input type="submit" value="Importar" class="btn btn-primary" id="btn-accion">
+				          		
+            </fieldset>
+        </form>
+     	<a onClick="ocultarFormulario1();" class="btn">Cancelar</a>   
+        </center>
+
+    </div>
+</div>
+
 <hr>
 <div class="row">
     <div class="span12">
@@ -186,6 +247,10 @@
         </center>
     </div>
 </div>
+
+
+
+
 
 
 </div>

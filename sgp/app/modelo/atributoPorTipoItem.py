@@ -10,7 +10,7 @@ from app import db
 
 class AtributoPorTipoItem(db.Model):
     idAtributosPorTipoItem = db.Column(db.Integer, primary_key = True)
-    nombre = db.Column( db.String(45), index = True, unique = True, nullable = False)
+    nombre = db.Column( db.String(45), index = True, nullable = False)
     tipo = db.Column( db.String(45), index = True, nullable = False)
     valorPorDefecto = db.Column( db.String(45) , nullable = False)
 
