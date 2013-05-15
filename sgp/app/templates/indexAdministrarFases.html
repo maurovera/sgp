@@ -46,6 +46,7 @@
             <th>Estado</th>
             <th>Administrar Tipo Item</th>
             <th>Administrar Item</th>
+            <th>Administrar Linea Base</th>
             
           </tr>
           {% for f in proyecto.fases %}
@@ -56,6 +57,7 @@
             <td>{{f.estado}}
           	<td><a href="{{url_for('indexTipoItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Tipo Item</a></td>
           	<td><a href="{{url_for('indexItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Item</a></td>
+          	<td><a href="{{url_for('indexLineaBase')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Linea Base</a></td>
           </tr>
 
           {% else %}

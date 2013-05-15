@@ -17,6 +17,7 @@ def busquedaPorNombre(nombre):
         lista = control.buscarPorNombre(nombre)
     else:
         flash("Error. Lista no devuelta")
+    print lista
     return lista
 
 def listadoUsuarios():

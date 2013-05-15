@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+	function habilitarModificar(idLB,numero,estado ){
+
+		/*
+			Modificamos el texto del boton, el lugar donde apunto el formulario
+			rellenamos los datos, e incluimos el campo id :)
+		*/
+		$("#formulario").attr('action',"{{ url_for('modificarLB') }}/{{idProyecto}}/{{idFase}}");
+		$("#formulario").append('<input type="hidden" value="'+idLB+'" name="idLB" >' );
+
+
+		/* Rellenamos los campos :) */
+		$("#idLB").val( idLB );
+		$("#numero").val( numero );
+		$("#estado").val( estado );
+		
+		// SI TODO SALE BIEN
+		//Mostramos el formulario
+		mostrarFormulario();
+	}
+
+	function eliminar(idLB){
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarLineaBase')}}/{{idProyecto}}/{{idFase}}/" + idLB +  "\"  class=\"btn danger\">Si</a>"
+		+
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+	}
+	
+	function cerrar(idLB){
+		
+	}
+	
+	function abrir(idLB){
+	 	<a href="#" class="btn" data-dismiss="modal" onClick="hideModal();">Cerrar</a>
+	 
+	 	}
+	
+	function mostrarFormulario(){
+		$("#formulario-div").show("slow");
+		$("#boton-mostrar-formulario").hide();
+	}
+	function ocultarFormulario(){
+		$("#formulario-div").hide("slow");
+		$("#boton-mostrar-formulario").show();
+		$("#formulario")[0].reset();
+
+	}
+
+	function buscarLB(){
+		var idLB = $("#idBuscado").val();
+
+		if(idLB.length > 0){
+			window.location = "{{url_for('buscarLB')}}/" + idLB;
+		}
+
+
+	}
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Eliminar Linea Base</h3>
+    </div>
+    <div class="modal-body">
+      <p>La eliminacion es irreversible.</p>
+      <p>Esta seguro que desea eliminar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+    	<!-- placeholder -->
+    </div>
+</div>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Abrir Linea Base</h3>
+    </div>
+    <div class="modal-body">
+      <p>Para abrir una LB usted debe realizar</p>
+      <p>una solicitud de cambio al comité correspondiente</p>
+    </div>
+    <div class="modal-footer" id="botones-abrir">
+    	<!-- placeholder -->
+    </div>
+</div>
+
+
+
+<div class="row">
+    <br>
+</div>
+
+<div class="row">
+	<div class="span12">
+		<center>
+		<h1> LINEAS BASE </h1>
+		<!-- idLB, numero, estado -->
+		</center>
+	</div>
+</div>
+
+<hr>
+
+<div class="lineasbase">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de Lineas Base </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>idLB</th>
+            <th>Numero</th>
+            <th>Estado </th>
+            <th>Eliminar</th>
+            <th>Modificar</th>
+            <th>Abrir</th>
+            <th>Cerrar</th>
+          </tr>
+          {% for u in lineaBases %}
+          <tr>
+            <td>{{u.idLB}}</td>
+            <td>{{u.numero}}</td>
+            <td>{{u.estado}}</td>
+            <td><a class="btn btn-danger" onClick="eliminar({{u.idLB}});">Eliminar</a></td>
+            <td><a class="btn" onClick="habilitarModificar('{{u.idLB}}','{{u.Numero}}','{{u.Estado}}');">
+            Modificar</a></td>
+            <td><a class="btn btn-danger" onClick="abrir({{u.idLB}});">Abrir</a></td>
+            <td><a class="btn" onClick="eliminar({{u.idLB}});">Cerrar</a></td>  
+          </tr>
+
+          {% else %}
+          	<tr>
+          		NO HAY REGISTROS
+          	</tr>
+          {% endfor %}
+
+        </table>
+      </div>
+      <div class="span4">
+
+		    <input placeholder="Buscar Linea Base..." id="idBuscado" />
+			 <a class='btn add-on btn-primary' onClick="buscarLB();">
+		        <i class="icon-search"></i>
+		     </a>
+
+      </div>
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+	<div class="span12">
+		<center>
+		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Linea Base</a>
+		</center>
+	</div>
+</div>
+
+
+<!---- formulario de LB nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+	<div class="span12">
+		<center>
+
+		<form action="{{ url_for('nuevaLB') }}/{{idProyecto}}/{{idFase}}" method="post" class="form-horizontal" id="formulario">
+			<fieldset>
+
+				
+				<label>Numero:</label>
+				<input type="text" placeholder="Numero" name="numero" id="numero">
+				<label>Estado:</label>
+				<input type="text" placeholder="Estado" name="estado" id="estado">
+				
+				<br/>
+				<br/>
+
+				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+
+			</fieldset>
+		</form>
+		<a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+		</center>
+
+	</div>
+</div>
+
+
+
+</div>
+{% endblock %}

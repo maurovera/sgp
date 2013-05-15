@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #INDEX
 from flask import render_template, flash, redirect, request, g, session, url_for, abort
 from app import app

@@ -7,6 +7,7 @@ from ctipoitem import ControlTipoItem
 from catributoPorTipoItem import ControlAtributoPorTipoItem
 from citem import ControlItem
 from cdatosItem import ControlDatosItem
+from clineaBase import ControlLineaBase
 
 
 
