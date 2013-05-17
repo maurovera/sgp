@@ -25,16 +25,12 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-datos"><strong>datos</strong></a>(idItemActual)</dt><dd><tt>Se&nbsp;encarga&nbsp;render&nbsp;a&nbsp;un&nbsp;pantalla&nbsp;para&nbsp;cargar&nbsp;datos&nbsp;de&nbsp;item</tt></dd></dl>
- <dl><dt><a name="-eliminarDatosItem"><strong>eliminarDatosItem</strong></a>(idItemActual, idItem)</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;eliminar&nbsp;un&nbsp;atributo&nbsp;de&nbsp;un&nbsp;tipo&nbsp;de&nbsp;item</tt></dd></dl>
- <dl><dt><a name="-eliminarItem"><strong>eliminarItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, id<font color="#909090">=None</font>)</dt></dl>
+<td width="100%"><dl><dt><a name="-eliminarItem"><strong>eliminarItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, id<font color="#909090">=None</font>)</dt></dl>
  <dl><dt><a name="-indexItem"><strong>indexItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>)</dt><dd><tt>Devuelve&nbsp;los&nbsp;datos&nbsp;de&nbsp;un&nbsp;item&nbsp;en&nbsp;Concreto</tt></dd></dl>
  <dl><dt><a name="-listadoItem"><strong>listadoItem</strong></a>(idFase)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;item</tt></dd></dl>
- <dl><dt><a name="-modificarDatosItem"><strong>modificarDatosItem</strong></a>()</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;modificar&nbsp;datos&nbsp;de&nbsp;un&nbsp;&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-listadoTipoItem"><strong>listadoTipoItem</strong></a>(idFase)</dt><dd><tt>Retorna&nbsp;una&nbsp;lista&nbsp;de&nbsp;Tipos&nbsp;de&nbsp;Item&nbsp;que&nbsp;corresponde&nbsp;a&nbsp;la&nbsp;fase</tt></dd></dl>
  <dl><dt><a name="-modificarItem"><strong>modificarItem</strong></a>()</dt><dd><tt>Modifica&nbsp;un&nbsp;item</tt></dd></dl>
- <dl><dt><a name="-nuevaDatosItem"><strong>nuevaDatosItem</strong></a>()</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;Agregar&nbsp;nuevos&nbsp;datos&nbsp;a&nbsp;un&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-nuevoItem"><strong>nuevoItem</strong></a>()</dt><dd><tt>Crea&nbsp;un&nbsp;nuevo&nbsp;Item</tt></dd></dl>
- <dl><dt><a name="-volverDatosItem"><strong>volverDatosItem</strong></a>()</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;modificar&nbsp;datos&nbsp;de&nbsp;un&nbsp;&nbsp;item</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -45,10 +41,11 @@
 <td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
 <strong>app</strong> = &lt;flask.app.Flask object&gt;<br>
 <strong>control</strong> = &lt;app.controlador.citem.ControlItem instance&gt;<br>
+<strong>controlFase</strong> = &lt;app.controlador.cfase.ControlFase instance&gt;<br>
+<strong>controlTipoItem</strong> = &lt;app.controlador.ctipoitem.ControlTipoItem instance&gt;<br>
 <strong>controladorDatosItem</strong> = &lt;app.controlador.cdatosItem.ControlDatosItem instance&gt;<br>
 <strong>controladorusuario</strong> = &lt;app.controlador.cusuario.ControlUsuario instance&gt;<br>
 <strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
-<strong>session</strong> = &lt;LocalProxy unbound&gt;<br>
-<strong>valorGlobal</strong> = 0</td></tr></table>
+<strong>session</strong> = &lt;LocalProxy unbound&gt;</td></tr></table>
 </body></html>

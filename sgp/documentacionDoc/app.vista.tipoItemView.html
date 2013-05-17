@@ -30,8 +30,10 @@
  <dl><dt><a name="-busquedaPorNombre"><strong>busquedaPorNombre</strong></a>(nombre)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;de&nbsp;item&nbsp;que&nbsp;coincidan&nbsp;con&nbsp;un&nbsp;nombre</tt></dd></dl>
  <dl><dt><a name="-eliminarAtributoTipoItem"><strong>eliminarAtributoTipoItem</strong></a>(idTipoItem, idAtributoPorTipoItem)</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;eliminar&nbsp;un&nbsp;atributo&nbsp;de&nbsp;un&nbsp;tipo&nbsp;de&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-eliminarTipoItem"><strong>eliminarTipoItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, id<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-importarTipoItem"><strong>importarTipoItem</strong></a>(idProyecto, idFase)</dt></dl>
  <dl><dt><a name="-indexTipoItem"><strong>indexTipoItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>)</dt><dd><tt>Devuelve&nbsp;los&nbsp;datos&nbsp;de&nbsp;un&nbsp;Tipo&nbsp;item&nbsp;en&nbsp;Concreto</tt></dd></dl>
  <dl><dt><a name="-listadoTipoItem"><strong>listadoTipoItem</strong></a>(idFase)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;item</tt></dd></dl>
+ <dl><dt><a name="-listadoTipoItemTodos"><strong>listadoTipoItemTodos</strong></a>()</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-modificarAtributoTipoItem"><strong>modificarAtributoTipoItem</strong></a>()</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;modificar&nbsp;atributos&nbsp;de&nbsp;un&nbsp;tipo&nbsp;de&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-modificarTipoItem"><strong>modificarTipoItem</strong></a>()</dt><dd><tt>Modifica&nbsp;un&nbsp;tipo&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-nuevaAtributoTipoItem"><strong>nuevaAtributoTipoItem</strong></a>()</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;Agregar&nbsp;nuevos&nbsp;atributos&nbsp;a&nbsp;un&nbsp;tipo&nbsp;de&nbsp;item</tt></dd></dl>
@@ -47,6 +49,7 @@
 <td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
 <strong>app</strong> = &lt;flask.app.Flask object&gt;<br>
 <strong>control</strong> = &lt;app.controlador.ctipoitem.ControlTipoItem instance&gt;<br>
+<strong>controlFase</strong> = &lt;app.controlador.cfase.ControlFase instance&gt;<br>
 <strong>controladorAtributoPorTipoItem</strong> = &lt;app.controlador.catributoPorTipoItem.ControlAtributoPorTipoItem instance&gt;<br>
 <strong>controladorusuario</strong> = &lt;app.controlador.cusuario.ControlUsuario instance&gt;<br>
 <strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
