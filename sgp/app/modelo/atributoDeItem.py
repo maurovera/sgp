@@ -10,7 +10,7 @@ from app import db
 
 class AtributoDeItem(db.Model):
     idAtributosDeItem = db.Column(db.Integer, primary_key = True)
-    valorPorDefecto = db.Column( db.String(100) , nullable = False)
+    valor = db.Column( db.String(100) , nullable = False)
 
     #Relaciones
     idAtributoPorTipoItem = db.Column(db.Integer, db.ForeignKey('atributo_por_tipo_item.idAtributosPorTipoItem'))

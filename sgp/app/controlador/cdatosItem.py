@@ -59,7 +59,20 @@ class ControlDatosItem():
             db.session.rollback()
 
         return resultado
+    def agregarAtributoDeItem(self,item,atributo):
+        nohay = True
+        for a in item.atributosDeItem :
+            if(atributo == a):
+                print "YA HAY ESTE! ATRIBUTO"
+                nohay = False
 
+        if (nohay):
+            print "Agregamos!"
+            item.atributosDeItem.append(atributo)
+            return self.modificarDatosItem(item)
+        else :
+            resultado = {"estado" : False, "mensaje" : "El rol ya posee este permiso"}
+            return resultado
 
 
 #
@@ -67,7 +80,6 @@ class ControlDatosItem():
 #       retorno = db.session.query(AtributoPorTipoItem).filter(AtributoPorTipoItem.nombre.ilike("%"+nombre+"%")).all()
 #        #retorno = db.session.query(rol).filter_by(nombre=nombre).all()
 #        return retorno
-
 
 
 

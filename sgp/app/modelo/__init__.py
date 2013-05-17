@@ -7,7 +7,7 @@ from tipoItem import TipoItem
 from archivosAdjuntosItem import ArchivosAdjuntosItem
 from atributoDeItem import AtributoDeItem
 from atributoPorTipoItem import AtributoPorTipoItem
-from atributosPorItem import AtributosPorItem
+#from atributosPorItem import AtributosPorItem
 from datosItem import DatosItem
 from historialItems import HistorialItems
 from historialLineaBase import HistorialLineaBase

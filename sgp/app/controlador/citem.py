@@ -19,7 +19,6 @@ class ControlItem():
         """ funcion que filtra solo por las fases """
         retorno = db.session.query(Item).filter(Item.idFase == idFase ).all()
         return retorno
-    
     def nuevoItem(self, item):
         """ funcion nuevoItem """
         resultado = {"estado" : True, "mensaje" : "exito"}
@@ -48,13 +47,13 @@ class ControlItem():
             """ se comitea el cambio """
             db.session.commit()
 
-#----------------------------------------        
+#----------------------------------------
         except Exception, error:
             """ se captura el error con un exception """
             resultado = {"estado" : False, "mensaje" :  str(error)}
             db.session.rollback()
-            
-            
+
+
 
         return resultado
 
@@ -76,11 +75,11 @@ class ControlItem():
 
 
 #    def getItemByIdItemActual(self,idItemActual):
-        
+
 #        retorno = db.session.query(Item).filter(Item.idItemActual == idItemActual ).all()
 #        return retorno
 #-------- 03052013-------------------
-# luego se agrega los atributos por tipo item 
+# luego se agrega los atributos por tipo item
 
     def agregarDatosItem(self,item,datosItem):
         ''' agrega datos al item '''
@@ -89,6 +88,7 @@ class ControlItem():
             if(datosItem == f):
                 print "YA HAY eSte dato item"
                 nohay = False
+                break
 
         if (nohay):
             print "Agregamos!"
@@ -102,5 +102,3 @@ class ControlItem():
         ''' quitar datos  '''
         item.datos.remove(datosItem)
         return self.modificarItem(item)
-    
-    

@@ -7,21 +7,21 @@ Created on 03/04/2013
 from app import db
 
 relacionxitem = db.Table('relacion_x_item',
-    db.Column('id', db.Integer, primary_key = True),
+    db.Column('idRelacionPorItem', db.Integer, primary_key = True),
     db.Column('idItem', db.Integer, db.ForeignKey('datos_item.idItem')),
     db.Column('idRelacion', db.Integer, db.ForeignKey('relacion.idRelacion')),
     db.Column('revisar', db.Boolean)
 )
 
-atributoDeItemxitem = db.Table('atributo_de_item_x_item',
-    db.Column('id', db.Integer, primary_key = True),
+atributoDeItemxitem = db.Table('atributos_x_item',
+    db.Column('idAtributosPorItem', db.Integer, primary_key = True),
     db.Column('idItem', db.Integer, db.ForeignKey('datos_item.idItem')),
     db.Column('idAtributosDeItem', db.Integer, db.ForeignKey('atributo_de_item.idAtributosDeItem'))
 )
 
 
 itemxlineaBase = db.Table('item_x_linea_base',
-    db.Column('id', db.Integer, primary_key = True),
+    db.Column('idItemPorLB', db.Integer, primary_key = True),
     db.Column('idItem', db.Integer, db.ForeignKey('datos_item.idItem')),
     db.Column('idLB', db.Integer, db.ForeignKey('linea_base.idLB'))
 )

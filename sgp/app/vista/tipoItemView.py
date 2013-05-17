@@ -6,6 +6,7 @@ from app.controlador import ControlTipoItem
 from app.modelo import TipoItem
 from app.modelo import AtributoPorTipoItem
 from app.controlador import ControlAtributoPorTipoItem
+from app.controlador import ControlFase
 from contextlib import closing
 
 #---------------------------------------------
@@ -15,8 +16,9 @@ from app.controlador import ControlPermiso
 from app.modelo import Usuario
 #----------------------------------------------
 
-control = ControlTipoItem() 
+control = ControlTipoItem()
 # control == controlador
+controlFase = ControlFase()
 controladorAtributoPorTipoItem = ControlAtributoPorTipoItem()
 
 #........... no se si sirve-----------------------------
@@ -60,7 +62,7 @@ def indexTipoItem(idProyecto=None,idFase=None):
     ''' Devuelve los datos de un Tipo item en Concreto '''
     tipoItems = listadoTipoItem(idFase);
     tipoItemsTodo = listadoTipoItemTodos();
-    
+
     return render_template('indexTipoItem.html', tipoItems = tipoItems, idProyecto = idProyecto, idFase = idFase, tipoItemsTodo = tipoItemsTodo)
 
 
@@ -69,9 +71,9 @@ def indexTipoItem(idProyecto=None,idFase=None):
 def eliminarTipoItem(idProyecto=None,idFase=None,id=None):
     if(id):
         tipoItem = control.getTipoItemById(id)
-        
+
         if(tipoItem):
-            
+
             r= control.eliminarTipoItem(tipoItem)
             if(r["estado"] == True):
                 flash("Se elimino con exito el tipo item: " + tipoItem.nombre)
@@ -79,35 +81,35 @@ def eliminarTipoItem(idProyecto=None,idFase=None,id=None):
                 flash("Ocurrio un error: "+ r["mensaje"])
         else :
             flash("Ocurrio un error durante la eliminacion")
-    
+
     return redirect(url_for('indexTipoItem', idProyecto=idProyecto, idFase=idFase))
 
-         
+
 
 
 @app.route('/tipoItem/nuevo', methods=['GET','POST'])
 def nuevoTipoItem():
     ''' Crea un nuevo Tipo Item '''
     #Si recibimos algo por post
-    
-    
-    
+
+
+
     if request.method == 'POST' :
-        
-        
+
+
         print request.form['nombre']
         print request.form['codigo']
         print request.form['descripcion']
-        
-        
+
+
         nombre = request.form['nombre']
         codigo = request.form['codigo']
         descripcion = request.form['descripcion']
         idProyecto = request.form['idProyecto']
         idFase = request.form['idFase']
-        
+
         print "Estoy aca adentro del form..."
-        #Si esta todo completo (Hay que hacer una verificacion probablemente 
+        #Si esta todo completo (Hay que hacer una verificacion probablemente
         #con un metodo kachiai
         if(nombre and codigo and descripcion and idFase and idProyecto):
             tipoItem = TipoItem()
@@ -116,41 +118,45 @@ def nuevoTipoItem():
             tipoItem.descripcion = descripcion
             tipoItem.idFase = idFase
             tipoItem.idProyecto = idProyecto
-            
+
             r = control.nuevoTipoItem(tipoItem)
             if(r["estado"] == True):
-                flash("Exito, se creo un nuevo tipo item")    
+                fase = controlFase.getFaseById(idFase)
+                if (fase.estado != "desarrollo"):
+                    fase.estado = "desarrollo"
+                    controlFase.modificarFase(fase)
+                flash("Exito, se creo un nuevo tipo item")
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
-                    
+
     return redirect(url_for('indexTipoItem', idProyecto=idProyecto, idFase=idFase ))
 
 
 @app.route('/tipoItem/modificar', methods=['GET','POST'])
 def modificarTipoItem():
     ''' Modifica un tipo item '''
-    
-    
-    
+
+
+
     if request.method == 'POST' :
-        
-       
+
+
         print request.form['nombre']
         print request.form['codigo']
         print request.form['descripcion']
         print request.form['idTipoItem']
-        
+
         id = request.form['idTipoItem']
-        
+
         nombre = request.form['nombre']
         codigo = request.form['codigo']
         descripcion = request.form['descripcion']
-        
+
         idProyecto = request.form['idProyecto']
         idFase = request.form['idFase']
-        
+
         print "Estoy aca adentro del form..."
-        #Si esta todo completo (Hay que hacer una verificacion probablemente 
+        #Si esta todo completo (Hay que hacer una verificacion probablemente
         #con un metodo kachiai
         if(id and nombre and codigo and descripcion):
             tipoItem = control.getTipoItemById(id)
@@ -158,16 +164,16 @@ def modificarTipoItem():
                 tipoItem.nombre = nombre
                 tipoItem.codigo = codigo
                 tipoItem.descripcion = descripcion
-                
-                
-                    
+
+
+
                 r = control.modificarTipoItem(tipoItem)
                 if( r["estado"] == True ):
                     flash("Modficado con exito")
                 else:
                     flash("Ocurrio un error : " + r["mensaje"])
-                       
-        
+
+
     return redirect(url_for('indexTipoItem', idProyecto=idProyecto, idFase=idFase))
 
 @app.route("/tipoItem/buscar")
@@ -184,7 +190,7 @@ def buscarTipoItem(nombrebuscado):
 @app.route("/tipoItem/importarTipoItem")
 @app.route("/tipoItem/importarTipoItem/<idProyecto>/<idFase>", methods=['GET','POST'])
 def importarTipoItem(idProyecto, idFase):
-    
+
     id = request.form["idTipoItem"]
     print id
     print "este el tipo item seleccionadoooooooooooooooooooooooooo "
@@ -196,10 +202,10 @@ def importarTipoItem(idProyecto, idFase):
     descripcion = request.form['descripcion']
     idPro = idProyecto
     idFas = idFase
-    
+
     id1 =  control.getTipoItemById(id)
-    
-    
+
+
     if(nombre and codigo and descripcion and idFas and idPro):
             tipoItem = TipoItem()
             tipoItem.nombre = nombre
@@ -207,13 +213,13 @@ def importarTipoItem(idProyecto, idFase):
             tipoItem.descripcion = descripcion
             tipoItem.idFase = idFas
             tipoItem.idProyecto = idPro
-            
+
             r = control.nuevoTipoItem(tipoItem)
             if(r["estado"] == True):
-                flash("Exito, se creo un nuevo tipo item")    
+                flash("Exito, se creo un nuevo tipo item")
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
-    
+
     #se encarga de los atributos de item
     listadoDeAtributos = controladorAtributoPorTipoItem.getAtributoPorTipoItemByTipoItem(id)
     for unAtributo in listadoDeAtributos:
@@ -224,11 +230,11 @@ def importarTipoItem(idProyecto, idFase):
         nuevo.valorPorDefecto = unAtributo.valorPorDefecto
         #aqui se utiliza el controlador para agregar el atributo
         control.agregarAtributoPorTipoItem(tipoItem,nuevo)
-    
-    
+
+
     #idProyecto = request.form['idProyecto']
     #idFase = request.form['idFase']
-         
+
     #nombre de la funcion y los parametros
     return redirect(url_for('indexTipoItem', idProyecto = idProyecto, idFase = idFase))
 #---------Esta parte es en donde se crean los atributos del item---------------
@@ -248,7 +254,7 @@ def nuevaAtributoTipoItem():
     nombre = request.form['nombre']
     tipo = request.form['tipo']
     valorPorDefecto = request.form['valorPorDefecto']
-    
+
     idTipoItem = request.form['idTipoItem']
 
     if(nombre and tipo and valorPorDefecto and idTipoItem):
@@ -259,7 +265,7 @@ def nuevaAtributoTipoItem():
         atributo.tipo = tipo
         atributo.valorPorDefecto = valorPorDefecto
         atributo.idTipoItem = idTipoItem
-        
+
         #aqui se utiliza el controlador para agregar el atributo
         r = control.agregarAtributoPorTipoItem(tipoItem,atributo)
         #print tipoItem.atributo
@@ -286,13 +292,13 @@ def modificarAtributoTipoItem():
     idTipoItem = request.form['idTipoItem']
     if(nombre and tipo and valorPorDefecto and idAtributoPorTipoItem and idTipoItem):
         #anga
-        
+
         atributo = controladorAtributoPorTipoItem.getAtributoPorTipoItemById(idAtributoPorTipoItem)
         atributo.nombre = nombre
         atributo.tipo = tipo
         atributo.valorPorDefecto = valorPorDefecto
-        
-        
+
+
         r = controladorAtributoPorTipoItem.modificarAtributoPorTipoItem(atributo)
         if( r["estado"] == True ):
             flash("Se modifico la fase con exito")
@@ -334,5 +340,4 @@ def eliminarAtributoTipoItem(idTipoItem,idAtributoPorTipoItem):
 def returnTipoItem(idTipoItem,idProyecto,idFase):
     return redirect(url_for('indexTipoItem', idProyecto=idProyecto, idFase=idFase ))
 
-# se agrego importar tipoItem entre fases 
-
+# se agrego importar tipoItem entre fases

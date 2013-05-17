@@ -3,8 +3,8 @@
 
 
 <script>
-        
-        
+
+
 
     function eliminar(idItem, idProyecto){
         $("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarDatosItem')}}/{{item.idItemActual}}/{{idProyecto}}/" + idItem +  "\"class=\"btn danger\">Si</a>"
@@ -54,7 +54,7 @@
         Complete el formulario para agregar datos al item:<br>
         *Para crear un dato por primera ves solo se asigna el dato<br>
         * Para Crear un dato nuevo debe caducar el dato y luego asigna el nuevo dato.<br>
-       	* Para reversion de un dato debe hacer primero caducar el dato de estado actual<br> 
+       	* Para reversion de un dato debe hacer primero caducar el dato de estado actual<br>
         y luego hacer reversion del dato que se quiere reversionar</b>
         <hr>
         </center>
@@ -75,9 +75,13 @@
             <th>complejidad </th>
             <th>prioridad</th>
             <th>estado</th>
+            {% for a in atributos %}
+                <th> {{a.nombre}} </th>
+            {% endfor %}
             <th>Eliminar</th>
-            <th>Caducar dato</th>
+           <!--  <th>Caducar dato</th> -->
             <th>Volver A esta Version</th>
+
           </tr>
           {% for f in item.datos %}
           <tr>
@@ -85,13 +89,28 @@
             <td>{{f.version}}</td>
             <td>{{f.complejidad}}</td>
             <td>{{f.prioridad}}</td>
-            <td>{{f.estado}}
-          
+            <td>{{f.estado}}</td>
+            {% for aDeItem in f.atributosDeItem %}
+                <td>{{aDeItem.valor}}</td>
+            {% endfor %}
             <td><a class="btn btn-danger" onClick="eliminar({{f.idItem}});">Eliminar</a></td>
-          	
-          	<td><a href="{{url_for('caducarDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn">Caducar</a></td>
-          	<td><a href="{{url_for('revertirDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Revertir</a></td>
-          	
+
+          	<!-- <td><a href="{{url_for('caducarDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn">Caducar</a></td> -->
+
+            {% if f.version == item.ultimaVersion %}
+                <td>Version Actual</td>
+                <!--VERSION ACTUAL BOTONES DE CAMBIO DE ESTADO-->
+                {% if f.estado == "inicial" %}
+                    <td><a href="{{url_for('estadoListoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Listo!</a></td>
+                {% endif %}
+
+                {% if f.estado == "listo" %}
+                    <td><a href="{{url_for('estadoAprobadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Aprobado</a></td>
+                    <td><a href="{{url_for('estadoRechazadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Rechazado</a></td>
+                {% endif %}
+            {% else %}
+                <td><a href="{{url_for('revertirDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Reversion</a></td>
+            {% endif %}
           </tr>
 
           {% else %}
@@ -129,24 +148,42 @@
 
     <div class="span12">
         <center>
-	
+
         <form action="{{ url_for('nuevaDatosItem')}}/{{idProyecto}}" method="post" class="form-horizontal" id="formulario">
             <fieldset>
 
                 <label>Version:</label>
-                <input type="number" name="version" id="version" placeholder="Version del dato">
+                <input type="number" name="version" id="version" placeholder="Version del dato" value="{{item.ultimaVersion + 1}}">
                 <label>Complejidad:</label>
                 <input type="number" name="complejidad" id="complejidad" placeholder="Complejidad del dato">
                 <label>Prioridad:</label>
                 <input type="number" name="prioridad" id="prioridad" placeholder="Prioridad del dato">
-                
-                
-                
-                
+
+                {% for a in atributos %}
+                    <label>{{a.nombre}}</label>
+
+                    {% if a.tipo == "texto" %}
+                    <input  type="text" name="{{a.nombre}}" id="{{a.nombre}}" value="{{a.valorPorDefecto}}">
+                    {% endif %}
+
+                    {% if a.tipo == "numerico" %}
+                    <input type="number" name="{{a.nombre}}" id="{{a.nombre}}" value="{{a.valorPorDefecto}}">
+                    {% endif %}
+
+                    {% if a.tipo == "fecha" %}
+                    <input type="date" name="{{a.nombre}}" id="{{a.nombre}}" value="{{a.valorPorDefecto}}">
+                    {% endif %}
+
+
+
+                {% endfor %}
+
+
+
                 <!--<input type="text" name="tipo" id="tipo" placeholder="tipo atributo">-->
-                
+
                 <input type="hidden" value="{{item.idItemActual}}" name="idItemActual">
-                
+                <input type="hidden" value="{{item.idTipoItem}}" name= "idTipoItem">
                 <br/>
                 <br/>
 

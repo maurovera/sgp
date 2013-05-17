@@ -48,14 +48,14 @@ def listadoItemDeFaseActFasAnt(idProyecto, idFase):
     proyecto = controlProyecto.getProyectoById(idProyecto)
     #print "este es el numero de fase" + str(fases.numeroFase)
     if fases.numeroFase == 1:
-        lista = fases.itemsDeFase
+        lista = fases.items
     else:
         #aqui tiene que venir la fase actual tambien 
         for f in proyecto.fases:
             if f.numeroFase == fases.numeroFase - 1:
                 print "esta es la puta fase y se encontro, deberia ser fas1"
                 print str(f.numeroFase) + " " + f.nombre
-                lista =  f.itemsDeFase
+                lista =  f.items
     
     return lista
 
@@ -163,7 +163,7 @@ def modificarRelacion(idProyecto, idFase):
     print "deberia de ser 2"
     print "este es el numero de fase actual: " + str(fasesA.numeroFase)
     print "traigo los items de la fase anterior" + fasesA.nombre
-    for i in fasesA.itemsDeFase:
+    for i in fasesA.items:
         print i.numero
         
         

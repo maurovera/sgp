@@ -9,6 +9,7 @@ from citem import ControlItem
 from cdatosItem import ControlDatosItem
 from clineaBase import ControlLineaBase
 from crelacion import ControlRelacion
+from catributoDeItem import ControlAtributoDeItem
 
 
 

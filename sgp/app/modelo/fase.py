@@ -20,7 +20,7 @@ class Fase(db.Model):
         # Referencias a relaciones se agrego en fecha 16052013
         #autor : mauro
         # para tener todo los items de las fases
-    itemsDeFase = db.relationship('Item', backref='fase',
+    items = db.relationship('Item', backref='fase',
                                 lazy='dynamic')
 
     def __repr__(self):

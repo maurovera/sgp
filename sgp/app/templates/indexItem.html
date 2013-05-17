@@ -18,7 +18,7 @@
 		$("#numero").val( numero );
 		$("#eliminado").val( eliminado );
 		$("#ultimaVersion").val( ultimaVersion );
-		
+
 		// SI TODO SALE BIEN Y LAS PUTAS
 		//Mostramos el formulario
 		mostrarFormulario();
@@ -88,7 +88,7 @@
             <th>ultimaVersion</th>
             <th>Eliminar</th>
             <th>Modificar</th>
-            <th>Datos</th>    
+            <th>Datos</th>
           </tr>
           {% for u in items %}
           <tr>
@@ -96,20 +96,20 @@
             <td>{{u.numero}}</td>
             <td>{{u.eliminado}}</td>
             <td>{{u.ultimaVersion}}</td>
-            
+
             {% if not u.eliminado == True %}
             	<td><a class="btn btn-danger" onClick="eliminar({{u.idItemActual}});">Eliminar</a></td>
             {% else %}
             <td></td>
             {% endif %}
-            
+
             {% if not u.eliminado == True %}
             <td><a class="btn" onClick="habilitarModificar('{{u.idItemActual}}','{{u.numero}}','{{u.eliminado}}','{{u.ultimaVersion}}','{{idProyecto}}','{{idFase}}');">
             Modificar</a></td>
             {% else %}
             <td></td>
             {% endif %}
-            
+
             {% if not u.eliminado == True %}
            <td><a href="{{url_for('datos')}}/{{u.idItemActual}}/{{idProyecto}}" class="btn btn-info"><small>Datos Item</small></a></td>
             {% else %}
@@ -153,11 +153,17 @@
 		<form action="{{ url_for('nuevoItem') }}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
 
+        <!--
 				<label>Numero de Item:</label>
 				<input type="number" placeholder="Numero de item" name="numero" id="numero">
-               
-                
-				
+         -->
+        Seleccione el tipo de Item :<br/>
+				<select name="idTipoItem" id="idTipoItem">
+          {% for tipoItem in tipoItems %}
+          <option value="{{tipoItem.idTipoItem}}"> {{tipoItem.nombre}} </option>
+          {% endfor %}
+        </select>
+
 				<input type="hidden" placeholder="UltimaVersion" name="ultimaVersion" id="ultimaVersion" >
 				<input type="hidden"  name="idProyecto" id="idProyecto" value={{idProyecto}} >
 				<input type="hidden"  name="idFase" id="idFase" value="{{idFase}}" >
