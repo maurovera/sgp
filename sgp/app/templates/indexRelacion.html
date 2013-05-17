@@ -153,14 +153,14 @@
 				<label>Sucesor:</label>
 				<select name="idSucesor">
                 	{% for i in itemsFiltro %}
-          				<option value="{{i.idItemActual}}">{{i.numero}}</option>
+          				<option value="{{i.idItemActual}}">{{i.numero}} - [Fase ID {{i.idFase}}]</option>
             		{% endfor %}
             	</select>
             	
 				<label>Antecesor:</label>
 				<select name="idAntecesor">
                 	{% for i in itemsFiltro %}
-          				<option value="{{i.idItemActual}}">{{i.numero}}</option>
+          				<option value="{{i.idItemActual}}">{{i.numero}} - [Fase ID {{i.idFase}}] </option>
             		{% endfor %}
             	</select>
             	 
@@ -177,7 +177,14 @@
 	</div>
 </div>
 
-
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <a href="{{url_for('indexItem')}}/{{idProyecto}}/{{idFase}}" class="btn btn-large btn-success">Atras!</a>
+        </center>
+    </div>
+</div>
 
 </div>
 {% endblock %}

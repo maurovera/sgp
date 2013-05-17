@@ -4,6 +4,7 @@ Created on 03/05/2013
 @author: mauro
 '''
 from app.modelo import DatosItem
+from crelacion import ControlRelacion
 from app import db
 
 class ControlDatosItem():
@@ -18,6 +19,7 @@ class ControlDatosItem():
         """ funcion nuevodatosItem """
         resultado = {"estado" : True, "mensaje" : "exito"}
         try:
+            verificarRelaciones(datosItem)
             db.session.add(datosItem)
             #print "Hice el add"
             db.session.commit()
@@ -74,7 +76,13 @@ class ControlDatosItem():
             resultado = {"estado" : False, "mensaje" : "El rol ya posee este permiso"}
             return resultado
 
-
+    def verificarRelacion(self,datosItem):
+        idItemActual = datosItem.idItemActual
+        cRelacion = ControlRelacion()
+        relaciones = cRelacion.getRelacionByIdItemActual(idItemActual)
+        datosItem.relaciones.append(relaciones)
+        print datosItem.relaciones
+        
 #
 #    def buscarPorNombre(self,nombre):
 #       retorno = db.session.query(AtributoPorTipoItem).filter(AtributoPorTipoItem.nombre.ilike("%"+nombre+"%")).all()

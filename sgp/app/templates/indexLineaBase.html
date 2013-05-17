@@ -34,10 +34,7 @@
 		
 	}
 	
-	function abrir(idLB){
-	 	<a href="#" class="btn" data-dismiss="modal" onClick="hideModal();">Cerrar</a>
-	 
-	 	}
+	
 	
 	function mostrarFormulario(){
 		$("#formulario-div").show("slow");
@@ -126,7 +123,9 @@
           {% for u in lineaBases %}
           <tr>
             <td>{{u.idLB}}</td>
-            <td>{{u.numero}}</td>
+            {%if u.numero == 0%}	
+            	<td>valido</td>
+            {%endif%}
             <td>{{u.estado}}</td>
             <td><a class="btn btn-danger" onClick="eliminar({{u.idLB}});">Eliminar</a></td>
             <td><a class="btn" onClick="habilitarModificar('{{u.idLB}}','{{u.Numero}}','{{u.Estado}}');">
@@ -180,10 +179,13 @@
 
 				
 				<label>Numero:</label>
-				<input type="text" placeholder="Numero" name="numero" id="numero">
-				<label>Estado:</label>
-				<input type="text" placeholder="Estado" name="estado" id="estado">
-				
+				<input type="text" placeholder="Numero de LB" name="numero" id="numero">
+		<!---		<label>Estado:</label>
+				<input type="text" placeholder="Estado" name="estado" id="estado"> --->
+				<label>Items</label>
+				{% for i in listaItem %}				
+					<input type="checkbox" name="item" value="{{i.idItemActual}}">Item numero : {{i.numero}}<br>
+				{% endfor %}
 				<br/>
 				<br/>
 
@@ -196,6 +198,16 @@
 
 	</div>
 </div>
+
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <a href="{{url_for('indexAdministrarFase')}}/{{idProyecto}}" class="btn btn-large btn-success">Atras!</a>
+        </center>
+    </div>
+</div>
+
 
 
 

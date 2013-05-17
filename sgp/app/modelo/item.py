@@ -22,7 +22,6 @@ class Item(db.Model):
     idTipoItem = db.Column(db.Integer, db.ForeignKey('tipo_item.idTipoItem'))
     datos = db.relationship('DatosItem', backref='item',
                                 lazy='dynamic')
-    
 
 
 
@@ -30,5 +29,5 @@ class Item(db.Model):
     # def setNombreTipoItem(self,nombre):
     #     self.nombre = nombre
 
-    # def __repr__(self):
-    #     return '<Tipo item %r>' % (self.nombre)
+    def __repr__(self):
+         return '<item %r>' % (self.numero)

@@ -1,4 +1,5 @@
 from app.modelo import LineaBase
+from citem import ControlItem
 from app import db
 
 class ControlLineaBase():
@@ -69,3 +70,17 @@ class ControlLineaBase():
         retorno = db.session.query(LineaBase).filter(LineaBase.idFase == idFase ).all()
         return retorno
     
+    def agregarItemLB(self,lineaBase,listaItem):
+        resultado = {"estado": True, "mensaje" : "exito"}
+        citem = ControlItem()
+        for idItemActual in listaItem:
+            item = citem.getItemById(idItemActual)
+            dato = citem.getDatoActualByIdItemActual(idItemActual)
+            dato.itemLB.append(lineaBase)
+            dato.estado = "final"
+            r = citem.modificarItem(item)
+            if(r["estado"] != True):
+                return r
+        return resultado
+        
+            

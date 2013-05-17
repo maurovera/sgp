@@ -3,12 +3,16 @@
 from flask import render_template, flash, redirect, request, session, g, url_for, abort
 from app import app
 from app.controlador import ControlLineaBase
+from app.controlador import ControlItem
 from app.modelo import LineaBase
 from contextlib import closing
 
 control = ControlLineaBase()
+controlItem = ControlItem()
 
-
+def listadoItemAprobado(idFase):
+    lista = controlItem.getItemAprobadoByFase(idFase)
+    return lista
 
 def busquedaPorId(idLB):
     ''' Devuelve un listado de las LB que coincidan con un ID '''
@@ -38,9 +42,12 @@ def listadoLineaBase(idFase):
 def indexLineaBase(idProyecto= None, idFase=None):
     ''' Devuelve los datos de una LB en Concreto '''
     lineaBases = listadoLineaBase(idFase);
+    listaItem = listadoItemAprobado(idFase);
     print idProyecto
     print idFase
-    return render_template('indexLineaBase.html', lineaBases = lineaBases, idProyecto=idProyecto, idFase=idFase)
+    print "listaItem"
+    print listaItem
+    return render_template('indexLineaBase.html', lineaBases = lineaBases, idProyecto=idProyecto, idFase=idFase, listaItem = listaItem)
 
 
 @app.route('/lineaBase/eliminar')
@@ -78,27 +85,34 @@ def nuevaLB(idFase=None, idProyecto = None):
     if request.method == 'POST' :
         
         
-       
+        print "LO QUE SE RECIBE POR POST EN LB"
         print request.form['numero']
         print request.form['estado']
-        
+        print request.form.getlist('item')
+        print "------fin lb post---------"
         #idLB= request.form['idLB']
         numero = request.form['numero']
         estado = request.form['estado']
         idFase = idFase
-        
-        print "Estoy aca adentro del form..."
+        listaItem = request.form.getlist('item')
+        print "Estoy aca adentro del form :D CAGADA DE PATO..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente 
         #con un metodo kachiai
-        if(numero and estado and idFase):
+        if(numero and estado and idFase and listaItem):
             lineaBase = LineaBase()
+            #falta auto incremento de numero de linea base por fase
             lineaBase.numero = numero
-            lineaBase.estado = estado
+            lineaBase.estado = 0
             lineaBase.idFase = idFase
             
             r = control.nuevaLineaBase(lineaBase)
+            
             if(r["estado"] == True):
-                flash("Exito, se creo una nueva LB")    
+                r1 = control.agregarItemLB(lineaBase,listaItem)
+                if(r1["estado"] == True ):
+                    flash("Exito, se creo una nueva LB")
+                else:
+                   flash("Ocurrio un error : " + r1["mensaje"])    
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
                     

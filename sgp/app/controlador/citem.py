@@ -5,7 +5,9 @@ Created on 03/05/2013
 '''
 
 from app.modelo import Item
+from app.modelo import DatosItem
 from app import db
+from crelacion import ControlRelacion
 
 class ControlItem():
     """ clase control  item """
@@ -92,6 +94,7 @@ class ControlItem():
 
         if (nohay):
             print "Agregamos!"
+            self.verificarRelacion(datosItem)
             item.datos.append(datosItem)
             return self.modificarItem(item)
         else :
@@ -102,3 +105,33 @@ class ControlItem():
         ''' quitar datos  '''
         item.datos.remove(datosItem)
         return self.modificarItem(item)
+
+    def verificarRelacion(self,datosItem):
+        idItemActual = datosItem.idItemActual
+        cRelacion = ControlRelacion()
+        relaciones = cRelacion.getRelacionByIdItemActual(idItemActual)
+        datosItem.relaciones = relaciones
+        print datosItem.relaciones
+    def comprobarAprobado(self,item):
+        datos = item.datos
+        for d in datos:
+            if (d.version == item.ultimaVersion):
+                if(d.estado == "aprobado"):
+                    return True
+        
+        return False
+        
+    def getItemAprobadoByFase(self,idFase):
+        listaRetorno = []
+        listaFase = self.getItemByFase(idFase)
+        for i in listaFase:
+            if(self.comprobarAprobado(i)):
+                listaRetorno.append(i)
+        
+        return listaRetorno
+        
+    def getDatoActualByIdItemActual(self,idItemActual):
+        item = self.getItemById(idItemActual)
+        for dato in item.datos:
+            if (dato.version == item.ultimaVersion):
+                return dato

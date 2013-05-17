@@ -57,7 +57,11 @@ class ControlRelacion():
         return resultado
 
 
-
+    def getRelacionByIdItemActual(self,idItem):
+        """ funcion que filtra solo por las fases """
+        retorno = list(db.session.query(Relacion).filter(Relacion.idAntecesor == idItem ).all())
+        retorno += list(db.session.query(Relacion).filter(Relacion.idSucesor == idItem ).all())
+        return retorno
    
 #    def buscarPorNombre(self,nombre):
 #        retorno = db.session.query(Usuario).filter(Usuario.nombre.ilike("%"+nombre+"%")).all()

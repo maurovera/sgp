@@ -55,7 +55,16 @@ def listadoItemDeFaseActFasAnt(idProyecto, idFase):
             if f.numeroFase == fases.numeroFase - 1:
                 print "esta es la puta fase y se encontro, deberia ser fas1"
                 print str(f.numeroFase) + " " + f.nombre
-                lista =  f.items
+                lista =  list(f.items)
+                lista += list(fases.items) 
+                print "Sorete de Lista " + str(lista)
+                print fases.items
+                print f.items
+                
+                #for i in fases.items:
+                    #print i.numero
+                    #lista.append(i)
+                    
     
     return lista
 

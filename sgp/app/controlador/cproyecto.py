@@ -87,3 +87,7 @@ class ControlProyecto():
     def quitarFase(self,proyecto,fase):
         proyecto.fases.remove(fase)
         return self.modificarProyecto(proyecto)
+    
+    
+    
+    
