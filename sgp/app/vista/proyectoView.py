@@ -222,9 +222,12 @@ def nuevaFaseProyecto():
         proyecto = controlador.getProyectoById(idProyecto)
         fase = Fase()
         fase.nombre = nombre
+        # aca hacemos el auto incremento para fases.
+        fase.numeroFase = len( list(proyecto.fases) ) + 1
         fase.descripcion = descripcion
         fase.idProyecto = idProyecto
         fase.estado = "no iniciado"
+        
         r = controlador.agregarFase(proyecto,fase)
         print proyecto.fases
         if( r["estado"] == True ):

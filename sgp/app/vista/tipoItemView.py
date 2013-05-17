@@ -181,9 +181,9 @@ def buscarTipoItem(nombrebuscado):
 
 
 
-@app.route("/tipoItem/mostrarTipo")
-@app.route("/tipoItem/mostrarTipo/<idProyecto>/<idFase>", methods=['GET','POST'])
-def mostrarTipo(idProyecto, idFase):
+@app.route("/tipoItem/importarTipoItem")
+@app.route("/tipoItem/importarTipoItem/<idProyecto>/<idFase>", methods=['GET','POST'])
+def importarTipoItem(idProyecto, idFase):
     
     id = request.form["idTipoItem"]
     print id

@@ -57,7 +57,7 @@
                 <select name="idProyecto">
                 
                 	{% for p in proyectos %}
-          				{% if not p.estado == 'eliminado' %}     
+          				{% if not p.estado == 'eliminado' and not p.estado == 'no iniciado' %}     
             				<option value="{{p.idProyecto}}">{{p.nombre}}</option>
             			{% endif %}
           			{% endfor %}

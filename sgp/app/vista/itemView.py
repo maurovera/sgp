@@ -44,6 +44,8 @@ def listadoItem(idFase):
         flash("Error. Lista no devuelta")
     return lista
 
+
+
 @app.route('/item')
 @app.route('/item/<idProyecto>/<idFase>')
 def indexItem(idProyecto=None,idFase=None):

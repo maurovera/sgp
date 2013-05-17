@@ -9,7 +9,7 @@
 			Modificamos el texto del boton, el lugar donde apunto el formulario
 			rellenamos los datos, e incluimos el campo id :)
 		*/
-		$("#formulario").attr('action','{{ url_for('modificarRelacion') }}');
+		$("#formulario").attr('action','{{ url_for('modificarRelacion') }}/{{idProyecto}}/{{idFase}}');
 		$("#formulario").append('<input type="hidden" value="'+idRelacion+'" name="idRelacion" >' );
 
 
@@ -25,7 +25,7 @@
 	}
 
 	function eliminar(id){
-		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarRelacion')}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarRelacion')}}/{{idProyecto}}/{{idFase}}/" + id +  "\"  class=\"btn danger\">Si</a>"
 		+
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
@@ -93,8 +93,17 @@
           <tr>
             <td>{{r.idRelacion}}</td>
             <td>{{r.tipo}}</td>
-            <td>{{r.idSucesor}}</td>
-            <td>{{r.idAntecesor}}</td>
+            {%for i in items%}
+            	{%if i.idItemActual == r.idSucesor%}
+            		<td>{{i.numero}}</td>
+            	{%endif%}
+            {%endfor%}
+            	
+            {%for i in items%}
+            	{%if i.idItemActual == r.idAntecesor%}
+            		<td>{{i.numero}}</td>
+            	{%endif%}
+            {%endfor%}
             
             <td><a class="btn btn-danger" onClick="eliminar({{r.idRelacion}});">Eliminar</a></td>
             <td><a class="btn" onClick="habilitarModificar('{{r.idRelacion}}','{{r.tipo}}','{{r.idSucesor}}','{{r.idAntecesor}}');">
@@ -133,7 +142,7 @@
 	<div class="span12">
 		<center>
 
-		<form action="{{ url_for('nuevaRelacion') }}" method="post" class="form-horizontal" id="formulario">
+		<form action="{{ url_for('nuevaRelacion') }}/{{idProyecto}}/{{idFase}}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
 				<!----<label>Tipo:</label>
 				<select name="tipo">
@@ -143,14 +152,14 @@
 				
 				<label>Sucesor:</label>
 				<select name="idSucesor">
-                	{% for i in items %}
+                	{% for i in itemsFiltro %}
           				<option value="{{i.idItemActual}}">{{i.numero}}</option>
             		{% endfor %}
             	</select>
             	
 				<label>Antecesor:</label>
 				<select name="idAntecesor">
-                	{% for i in items %}
+                	{% for i in itemsFiltro %}
           				<option value="{{i.idItemActual}}">{{i.numero}}</option>
             		{% endfor %}
             	</select>

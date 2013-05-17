@@ -42,6 +42,7 @@
           <tr>
             <th>Id</th>
             <th>Nombre</th>
+            <th>Numero de Fase</th>
             <th>Descripcion </th>
             <th>Estado</th>
             <th>Administrar Tipo Item</th>
@@ -53,6 +54,7 @@
           <tr>
             <td>{{f.idFase}}</td>
             <td>{{f.nombre}}</td>
+            <td>{{f.numeroFase}}</td>
             <td>{{f.descripcion}}</td>
             <td>{{f.estado}}
           	<td><a href="{{url_for('indexTipoItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Tipo Item</a></td>

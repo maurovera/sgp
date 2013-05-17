@@ -9,6 +9,7 @@ class ControlRelacion():
     def getRelaciones(self):
         """ funcion getRelacion """
         return Relacion.query.all()
+    
     def nuevoRelacion(self, relacion):
         """ funcion nuevoRelacion """
         resultado = {"estado" : True, "mensaje" : "exito"}

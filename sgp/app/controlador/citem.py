@@ -19,6 +19,7 @@ class ControlItem():
         """ funcion que filtra solo por las fases """
         retorno = db.session.query(Item).filter(Item.idFase == idFase ).all()
         return retorno
+    
     def nuevoItem(self, item):
         """ funcion nuevoItem """
         resultado = {"estado" : True, "mensaje" : "exito"}

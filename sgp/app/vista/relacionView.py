@@ -3,12 +3,17 @@ from flask import render_template, flash, redirect, request, session, g, url_for
 from app import app
 from app.controlador import ControlRelacion
 from app.controlador import ControlItem
+from app.controlador import ControlProyecto
+from app.controlador import ControlFase
 from app.modelo import Item
 from app.modelo import Relacion
 from contextlib import closing
 
+
 control = ControlRelacion()
 controlItem = ControlItem()
+controlProyecto =  ControlProyecto()
+controlFase = ControlFase()
 
 
 #def busquedaPorNombre(nombre):
@@ -37,19 +42,38 @@ def listadoItems():
     
     return lista
 
+def listadoItemDeFaseActFasAnt(idProyecto, idFase):
+    ''' lista los items de la fase actual que es idFase y las fase anterior a ella '''
+    fases = controlFase.getFaseById(idFase)
+    proyecto = controlProyecto.getProyectoById(idProyecto)
+    #print "este es el numero de fase" + str(fases.numeroFase)
+    if fases.numeroFase == 1:
+        lista = fases.itemsDeFase
+    else:
+        #aqui tiene que venir la fase actual tambien 
+        for f in proyecto.fases:
+            if f.numeroFase == fases.numeroFase - 1:
+                print "esta es la puta fase y se encontro, deberia ser fas1"
+                print str(f.numeroFase) + " " + f.nombre
+                lista =  f.itemsDeFase
+    
+    return lista
 
-
-@app.route('/relacion')
-def indexRelacion():
+@app.route('/item/relacion')
+@app.route('/item/relacion/<idProyecto>/<idFase>')
+def indexRelacion(idProyecto, idFase):
     ''' Devuelve los datos de una Relacion en Concreto '''
     relaciones = listadoRelaciones();
     items = listadoItems();
-    return render_template('indexRelacion.html', relaciones = relaciones, items = items)
+    itemsFiltro = listadoItemDeFaseActFasAnt(idProyecto, idFase);
+    #print idProyecto
+    #print idFase
+    return render_template('indexRelacion.html', relaciones = relaciones,items = items, itemsFiltro = itemsFiltro, idProyecto= idProyecto, idFase = idFase)
 
 
-@app.route('/relacion/eliminar')
-@app.route('/relacion/eliminar/<id>')
-def eliminarRelacion(id=None):
+@app.route('/item/relacion/eliminar')
+@app.route('/item/relacion/eliminar/<idProyecto>/<idFase>/<id>')
+def eliminarRelacion(idProyecto, idFase, id=None):
     if(id):
         relacion = control.getRelacionById(id)
         
@@ -63,13 +87,13 @@ def eliminarRelacion(id=None):
         else :
             flash("Ocurrio un error durante la eliminacion")
     
-    return redirect(url_for('indexRelacion'))
+    return redirect(url_for('indexRelacion',idProyecto= idProyecto, idFase = idFase))
 
          
 
-
-@app.route('/relacion/nueva', methods=['GET','POST'])
-def nuevaRelacion():
+@app.route('/item/relacion/nueva')
+@app.route('/item/relacion/nueva/<idProyecto>/<idFase>', methods=['GET','POST'])
+def nuevaRelacion(idProyecto, idFase):
     ''' Crea un nueva Relacion '''
     #Si recibimos algo por post
     
@@ -111,13 +135,39 @@ def nuevaRelacion():
         else :
             flash("Ocurrio un error : " + r["mensaje"])
                     
-    return redirect(url_for('indexRelacion'))
+    return redirect(url_for('indexRelacion',idProyecto= idProyecto, idFase = idFase))
 
-
-@app.route('/relacion/modificar', methods=['GET','POST'])
-def modificarRelacion():
-    ''' Modifica una relacion '''
+@app.route('/item/relacion/modificar')
+@app.route('/item/relacion/modificar/<idProyecto>/<idFase>', methods=['GET','POST'])
+def modificarRelacion(idProyecto, idFase):
     
+    print idProyecto
+    print idFase
+    print "Traigo bien carajoooooo"
+#    ''' Modifica una relacion '''
+    proyecto =  controlProyecto.getProyectoById(idProyecto)
+    fasesA = controlFase.getFaseById(idFase)
+    
+    print "traigo los numero de fases y su nombres que tiene el proyecto" + proyecto.nombre
+    for f in proyecto.fases:
+        #print str(f.numeroFase) + " " + f.nombre
+        if f.numeroFase == fasesA.numeroFase - 1:
+            print "esta es la puta fase y se encontro, deberia ser fas1"
+            print str(f.numeroFase) + " " + f.nombre
+            
+            
+    #aca trae una lista de todas las fases del proyecto
+    
+    
+    
+    print "deberia de ser 2"
+    print "este es el numero de fase actual: " + str(fasesA.numeroFase)
+    print "traigo los items de la fase anterior" + fasesA.nombre
+    for i in fasesA.itemsDeFase:
+        print i.numero
+        
+        
+        
     
 #     
 #     if request.method == 'POST' :
@@ -160,6 +210,6 @@ def modificarRelacion():
 #                     flash("Ocurrio un error : " + r["mensaje"])
 #                        
 #         
-    return redirect(url_for('indexRelacion'))
+    return redirect(url_for('indexRelacion',idProyecto= idProyecto, idFase = idFase))
 
 
