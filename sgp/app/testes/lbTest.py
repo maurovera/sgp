@@ -32,7 +32,7 @@ class TestesItCuatro(unittest.TestCase):
             self.assertEqual(r["estado"], True)
             print "Creamos un usuario nuevo:" + str(self.lbIgual.numero) 
             r = self.controlador.nuevaLineaBase(self.lbIgual)
-            self.assertEqual(r["estado"], True) #modifiqué este 
+            self.assertEqual(r["estado"], True) #modifiqu este 
             print "No deberia guardar porque son iguales" 
             self.contador = 2
              

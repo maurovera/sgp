@@ -102,7 +102,7 @@ def nuevaLB(idFase=None, idProyecto = None):
             lineaBase = LineaBase()
             #falta auto incremento de numero de linea base por fase
             lineaBase.numero = numero
-            lineaBase.estado = 0
+            lineaBase.estado = estado
             lineaBase.idFase = idFase
             
             r = control.nuevaLineaBase(lineaBase)

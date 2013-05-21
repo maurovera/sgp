@@ -23,23 +23,23 @@ class TestesRelacion(unittest.TestCase):
         def testGuarda(self):  
             r = self.controlador.nuevoRelacion(self.Principal)
             print "Creamos una relacion en test Guarda:  " + str(self.Principal.idSucesor)
-            self.assertEqual(r["estado"], False )  #modifiq este cambiar 
+            self.assertEqual(r["estado"], True )  #modifiq este cambiar 
             self.contador = 1
             
         def testGuardaRepetido(self):
             print "Creamos una relacion en Guarda Repetido: " + str(self.Principal.idSucesor)
             r = self.controlador.nuevoRelacion(self.Principal)
-            self.assertEqual(r["estado"], False)#modifiq este cambiar 
+            self.assertEqual(r["estado"], True )#modifiq este cambiar 
             print "Creamos una relacion igual en guarda repetido: " + str(self.Igual.idSucesor) 
             r = self.controlador.nuevoRelacion(self.Igual)
-            self.assertEqual(r["estado"], False) #modifiq este cambiar 
+            self.assertEqual(r["estado"], True) #modifiq este cambiar 
             print "No deberia guardar porque son iguales" 
             self.contador = 2
              
         def testGuardarDistinto(self):
             print "Creamos una relacion principal en guarda distinto  " + str(self.Principal.idSucesor)
             r = self.controlador.nuevoRelacion(self.Principal)
-            self.assertEqual(r["estado"], False )#este
+            self.assertEqual(r["estado"], True )#este
             print "Creamos una relacion distinta en guarda distinto " + str(self.Distinto.idSucesor)
             r = self.controlador.nuevoRelacion(self.Distinto)
             self.assertEqual(r["estado"], False ) # este
