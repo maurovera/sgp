@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+	function habilitarModificar(idSolicitud,nombreSolicitud,descripcion,estado){
+
+		/*
+			Modificamos el texto del boton, el lugar donde apunto el formulario
+			rellenamos los datos, e incluimos el campo id :)
+		*/
+		$("#formulario").attr('action','{{ url_for('modificarSolicitud') }}');
+		$("#formulario").append('<input type="hidden" value="'+idSolicitud+'" name="idSolicitud" >' );
+
+
+		/* Rellenamos los campos :) */
+		$("#idSolicitud").val( idSolicitud );
+		$("#nombreSolicitud").val( nombreSolicitud );
+		$("#descripcion").val( descripcion );
+		$("#estado").val( estado );
+		
+
+		// SI TODO SALE BIEN
+		//Mostramos el formulario
+		mostrarFormulario();
+	}
+
+	function eliminar(idSolicitud){
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarSolicitud')}}/" + idSolicitud +  "\"  class=\"btn danger\">Si</a>"
+		+
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+	}
+
+	function mostrarFormulario(){
+		$("#formulario-div").show("slow");
+		$("#boton-mostrar-formulario").hide();
+	}
+	function ocultarFormulario(){
+		$("#formulario-div").hide("slow");
+		$("#boton-mostrar-formulario").show();
+		$("#formulario")[0].reset();
+
+	}
+
+	function buscarSolicitud(){
+		var nombre = $("#nombreBuscado").val();
+
+		if(nombre.length > 0){
+			window.location = "{{url_for('buscarSolicitud')}}/" + nombre;
+		}
+
+
+	}
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Eliminar Solicitud</h3>
+    </div>
+    <div class="modal-body">
+      <p>La eliminacion de una solicitud es irreversible.</p>
+      <p>Esta seguro que desea eliminar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+    	<!-- placeholder -->
+    </div>
+</div>
+
+<div class="row">
+    <br>
+</div>
+
+<div class="row">
+	<div class="span12">
+		<center>
+		<h1> SOLICITUDES </h1>
+		<!-- idSolicitud,nombreSolicitud,Descripcion,Estado -->
+		</center>
+	</div>
+</div>
+
+<hr>
+
+<div class="solicitudes">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de Solicitudes </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre Solicitud </th>
+            <th>Descripcion</th>
+            <th>Estado</th>
+            <th>Eliminar</th>
+            <th>Modificar</th>
+          </tr>
+          {% for u in solicitudes %}
+          <tr>
+            <td>{{u.idSolicitud}}</td>
+            <td>{{u.nombreSolicitud}}</td>
+            <td>{{u.descripcion}}</td>
+            <td>{{u.estado}}</td>
+            
+            <td><a class="btn btn-danger" onClick="eliminar({{u.idSolicitud}});">Eliminar</a></td>
+            <td><a class="btn" onClick="habilitarModificar('{{u.idSolicitud}}','{{u.nombreSolicitud}}','{{u.descripcion}}','{{u.estado}}');">
+            Modificar</a></td>
+          </tr>
+
+          {% else %}
+          	<tr>
+          		NO HAY REGISTROS
+          	</tr>
+          {% endfor %}
+
+        </table>
+      </div>
+      <div class="span4">
+
+		    <input placeholder="Buscar Solicitud..." id="nombreBuscado" />
+			 <a class='btn add-on btn-primary' onClick="buscarSolicitud();">
+		        <i class="icon-search"></i>
+		     </a>
+
+      </div>
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+	<div class="span12">
+		<center>
+		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nueva Solicitud</a>
+		</center>
+	</div>
+</div>
+
+
+<!---- formulario de sol nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+	<div class="span12">
+		<center>
+
+		<form action="{{ url_for('nuevaSolicitud') }}" method="post" class="form-horizontal" id="formulario">
+			<fieldset>
+
+				
+				<label>Nombre de solicitud:</label>
+				<input type="text" placeholder="nombreSolicitud" name="nombreSolicitud" id="nombreSolicitud">
+				<label>Descripcion de solicitud:</label>
+				<input type="text" placeholder="descripcion" name="descripcion" id="descripcion">
+				<label>Estado:</label>
+				<input type="text" placeholder="estado" name="estado" id="estado">
+				<br/>
+				<br/>
+
+				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+
+			</fieldset>
+		</form>
+		<a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+		</center>
+
+	</div>
+</div>
+
+
+
+</div>
+{% endblock %}

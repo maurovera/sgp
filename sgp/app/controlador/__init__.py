@@ -10,6 +10,7 @@ from cdatosItem import ControlDatosItem
 from clineaBase import ControlLineaBase
 from crelacion import ControlRelacion
 from catributoDeItem import ControlAtributoDeItem
+from csolicitud import ControlSolicitud
 
 
 

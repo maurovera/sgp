@@ -11,8 +11,8 @@ from app import db
 class SolicitudDeCambio(db.Model):
     idSolicitud = db.Column(db.Integer, primary_key = True)
     nombreSolicitud = db.Column( db.String(45), index = True, nullable = False)
-    Descripcion = db.Column( db.String(160) , nullable = False)
-    Estado = db.Column( db.String(45) )
+    descripcion = db.Column( db.String(160) , nullable = False)
+    estado = db.Column( db.String(45) )
     costo = db.Column( db.Integer )
     impacto = db.Column( db.Integer )
     idItem = db.Column(db.Integer, db.ForeignKey('item.idItemActual'))
