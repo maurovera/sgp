@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+    function habilitarModificar(idRol,nombre,descripcion ){
+
+        /*
+            Modificamos el texto del boton, el lugar donde apunto el formulario
+            rellenamos los datos, e incluimos el campo id :)
+        */
+        $("#formulario").attr('action','{{ url_for('modificarRol') }}');
+        $("#formulario").append('<input type="hidden" value="'+idRol+'" name="idRol" >' );
+
+
+        /* Rellenamos los campos :) */
+        $("#idRol").val( idRol );
+        $("#nombre").val( nombre );
+        $("#descripcion").val( descripcion );
+
+        // SI TODO SALE BIEN Y LAS PUTAS
+        //Mostramos el formulario
+        mostrarFormulario();
+    }
+
+    function eliminar(idPermiso){
+        $("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarPermisoRolEnProyecto')}}/" +{{rol.idRol}}+ "/" + idPermiso +  "\"  class=\"btn danger\">Si</a>"
+        +
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+    }
+
+    function mostrarFormulario(){
+        $("#formulario-div").show("slow");
+        $("#boton-mostrar-formulario").hide();
+    }
+    function ocultarFormulario(){
+        $("#formulario-div").hide("slow");
+        $("#boton-mostrar-formulario").show();
+        $("#formulario")[0].reset();
+
+    }
+
+    function buscar(){
+        var nombre = $("#nombreBuscado").val();
+
+        if(nombre.length > 0){
+            window.location = "{{url_for('buscarRol')}}/" + nombre;
+        }
+
+
+    }
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Desasignar Permiso al Rol</h3>
+    </div>
+    <div class="modal-body">
+      <p>Esta seguro que desea desasignar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+        <!-- placeholder -->
+    </div>
+</div>
+
+<div class="row">
+    <br/>
+</div>
+
+<hr>
+<div class="row">
+    <div class="span12">
+        <center>
+        <h1> Administracion de Permisos de Rol</h1>
+
+        <hr>
+        <h2>"{{rol.nombre}}"</h2>
+        <!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
+        <hr>
+        </center>
+    </div>
+</div>
+
+<hr>
+
+<div class="permisos">
+
+<div class="row">
+      <div class="span10">
+        <h2> Listado de Permisos de {{rol.nombre}} </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Desasignar</th>
+          </tr>
+          {% for p in rol.permisos %}
+          <tr>
+            <td>{{p.idPermiso}}</td>
+            <td>{{p.nombre}}</td>
+            <td><a class="btn btn-danger" onClick="eliminar({{p.idPermiso}});">Desasignar</a></td>
+          </tr>
+
+          {% else %}
+            <tr>
+                NO HAY REGISTROS
+            </tr>
+          {% endfor %}
+
+        </table>
+      </div>
+      <!--
+      <div class="span4">
+
+            <input placeholder="Buscar Rol..." id="nombreBuscado" />
+             <a class='btn add-on btn-primary' onClick="buscar();">
+                <i class="icon-search"></i>
+             </a>
+
+      </div>
+    -->
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+    <div class="span12">
+        <center>
+        <a class="btn btn-primary" onClick="mostrarFormulario();">Asignar Permiso a {{rol.nombre}}</a>
+        </center>
+    </div>
+</div>
+
+
+<!---- formulario de usuario nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+    <div class="span12">
+        <center>
+
+        <form action="{{ url_for('nuevoPermisoRolEnProyecto') }}" method="post" class="form-horizontal" id="formulario">
+            <fieldset>
+
+                <label>Permiso:</label>
+                <select name="idPermiso">
+                    {% for p in permisos %}
+                    <option value="{{p.idPermiso}}">{{p.nombre}}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" value="{{rol.idRol}}" name="idRol">
+                <br/>
+                <br/>
+
+                <input type="submit" value="Agregar" class="btn btn-primary" id="btn-accion">
+
+            </fieldset>
+        </form>
+        <a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+        </center>
+
+    </div>
+</div>
+
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <a href="{{url_for('indexRolesPorProyecto')}}/{{rol.idProyecto}}" class="btn btn-large btn-success">Atras!</a>
+        </center>
+    </div>
+</div>
+
+
+</div>
+{% endblock %}

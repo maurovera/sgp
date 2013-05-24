@@ -247,6 +247,14 @@ def atributo(idTipoItem):
     t = control.getTipoItemById(idTipoItem)
     return render_template('atributoPorTipoItem.html', tipoItem = t )
 
+@app.route("/tipoItem/lista")
+@app.route("/tipoItem/lista/<idTipoItem>")
+def lista(idTipoItem):
+    '''Se encarga render a un pantalla para cargar atributos por tipo item '''
+    t = control.getTipoItemById(idTipoItem)
+    return render_template('listadoAtributos.html', tipoItem = t )
+
+
 #si no funciona poner atributos/tipoItem/nuevo
 @app.route("/tipoItem/atributos/nuevo", methods=['GET','POST'])
 def nuevaAtributoTipoItem():

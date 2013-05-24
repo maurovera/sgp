@@ -14,6 +14,12 @@ class ControlRol():
     def getRoles(self):
         """ funcion getrol """
         return Rol.query.all()
+    
+    def getRolPorProyecto(self,idProyecto):
+         """ funcion que filtra los roles por el id del Proyecto """
+         retorno = db.session.query(Rol).filter(Rol.idProyecto == idProyecto ).all()
+         return retorno
+    
     def nuevoRol(self, rol):
         """ funcion nuevoRol """
         resultado = {"estado" : True, "mensaje" : "exito"}
@@ -41,6 +47,26 @@ class ControlRol():
                     """Si esta asociado pasamos avisamos que no es posible eliminar"""
                     resultado = {"estado" : False, "mensaje" : "No se puede eliminar un rol asociado a un proyecto no eliminado"}
                     return resultado
+            """ hacemos un delete de rol """
+            db.session.delete(rol)
+            """ se comitea el cambio """
+            db.session.commit()
+        except Exception, error:
+            """ se captura el error con un exception """
+            resultado = {"estado" : False, "mensaje" :  str(error)}
+            db.session.rollback()
+
+        return resultado
+
+    def eliminarRolSinAvisar(self, rol):
+        """ funcion eliminarrol """
+        resultado = {"estado": True, "mensaje" : "exito"}
+        try:
+            """Comprobamos que el rol no tenga asociado un proyecto"""
+            if (rol.idProyecto ):
+                cp = ControlProyecto()
+                p = cp.getProyectoById(rol.idProyecto)
+                
             """ hacemos un delete de rol """
             db.session.delete(rol)
             """ se comitea el cambio """

@@ -324,3 +324,30 @@ def crearRolProyecto(proyecto):
     r.permisos.append(cp.buscarPorValor(10))
 
     return r
+
+# se agrego en fecha 23/05/2013
+# autor: mauro vera. 
+# descripcion: se prueba crear rolxproyecto y que se le asigne los premisos por un chekbox
+@app.route('/proyecto/creaar')
+@app.route('/proyecto/creaar/<idProyecto>')
+def crearRolPorProyecto(idProyecto):
+    print idProyecto
+    print "este el proyecto asignado"
+    
+    return redirect(url_for('indexProyecto'))
+#     ''' Se encarga de la creacion de un Rol con los permisos para administrar
+#         un Proyecto dado @return Rol'''
+#     r = Rol()
+#     r.nombre = "Administrador Proyecto " + proyecto.nombre
+#     r.descripcion = "Administrar el Proyecto " + proyecto.nombre
+#     r.idProyecto = proyecto.idProyecto
+#     #Agregamos los permisos en duro
+#     #Primero instanciamos el controlador
+#     cp = ControlPermiso()
+#     #Y vamos agregando los permisos respectivos a proyectos
+#     r.permisos.append(cp.buscarPorValor(7))
+#     r.permisos.append(cp.buscarPorValor(8))
+#     r.permisos.append(cp.buscarPorValor(9))
+#     r.permisos.append(cp.buscarPorValor(10))
+# 
+#     return r

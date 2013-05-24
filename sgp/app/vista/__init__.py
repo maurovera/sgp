@@ -10,4 +10,5 @@ from datosItemView import *
 from lineaBaseView import *
 from relacionView import * 
 from solicitudView import *
-
+from miembroProyectoFaseView import *
+from rolesPorProyectoView import *

@@ -14,6 +14,8 @@ class ControlFase():
     def getFase(self):
         """ funcion getrol """
         return Fase.query.all()
+   
+    
     def nuevaFase(self, fase):
         """ funcion nuevoProyecto """
         resultado = {"estado" : True, "mensaje" : "exito"}

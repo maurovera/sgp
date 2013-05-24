@@ -65,6 +65,20 @@
 
 
 	}
+	function mostrarAtributos(){
+	var itemid = $("#selAtributo").val();
+	
+	
+	$.ajax({url:"{{url_for('lista')}}/"+itemid ,success:function(result){
+    $("#dlista").html(result);
+  	}});
+	
+	
+	//$.ajax({url:"http://127.0.0.1:5000/tipoItem/lista/"+itemid ,success:function(result){
+    //$("#dlista").html(result);
+  	//}});
+	
+}
 
 
 </script>
@@ -209,17 +223,19 @@
 <br>
 <div class="row hide" id="formulario1-div">
 
-    <div class="span12">
+    <div class="span12" >
         <center>
 
         <form action="{{ url_for('importarTipoItem') }}/{{idProyecto}}/{{idFase}}" method="post" class="form-horizontal" id="formulario1">
             <fieldset>
                 <label>Tipo Item:</label>
-				<select name="idTipoItem">
+				<select id="selAtributo" name="idTipoItem" onchange="mostrarAtributos()">
                 	{% for p in tipoItemsTodo %}
           				<option value="{{p.idTipoItem}}">{{p.nombre}}</option>
             		{% endfor %}
             	</select>
+            	// esta es la funcion que ayuda a que salga alado el from de sus atributos
+            	<span class="help-inline" id="dlista" style="width:40%; float:rigth; position:absolute; "></span>
             	<label>Nombre nuevo del Tipo Item:</label>
 				<input type="text" placeholder="Nombre de tipo item" name="nombre" id="nombre">
 				<label>Codigo Nuevo:</label>
@@ -227,15 +243,17 @@
 				<label>Nueva Descripcion:</label>
 				<input type="text" placeholder="Descripcion" name="descripcion" id="descripcion" >
                 <br/>
-                <br/>
-				   
+                <br/>   
                 <input type="submit" value="Importar" class="btn btn-primary" id="btn-accion">
 				          		
             </fieldset>
         </form>
+        
+        
+        
      	<a onClick="ocultarFormulario1();" class="btn">Cancelar</a>   
         </center>
-
+		 
     </div>
 </div>
 

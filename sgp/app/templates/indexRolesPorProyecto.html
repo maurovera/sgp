@@ -3,13 +3,13 @@
 
 
 <script>
-	function habilitarModificar(idRol,nombre,descripcion ){
+	function habilitarModificar(idRol,nombre,descripcion, idFase ){
 
 		/*
 			Modificamos el texto del boton, el lugar donde apunto el formulario
 			rellenamos los datos, e incluimos el campo id :)
 		*/
-		$("#formulario").attr('action','{{ url_for('modificarRol') }}');
+		$("#formulario").attr('action','{{ url_for('modificarRolesPorProyecto') }}/{{idProyecto}}');
 		$("#formulario").append('<input type="hidden" value="'+idRol+'" name="idRol" >' );
 
 
@@ -24,7 +24,7 @@
 	}
 
 	function eliminar(id){
-		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarRol')}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarRolesPorProyecto')}}/{{idProyecto}}/" + id +  "\"  class=\"btn danger\">Si</a>"
 		+
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
@@ -40,17 +40,6 @@
 		$("#formulario")[0].reset();
 
 	}
-
-	function buscar(){
-		var nombre = $("#nombreBuscado").val();
-
-		if(nombre.length > 0){
-			window.location = "{{url_for('buscarRol')}}/" + nombre;
-		}
-
-
-	}
-
 
 </script>
 
@@ -75,7 +64,8 @@
 <div class="row">
 	<div class="span12">
 		<center>
-		<h1> ROL </h1>
+		<h1> Roles del proyecto </h1>
+		 <h2>"{{proy.nombre}}"</h2>
 		<!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
 		</center>
 	</div>
@@ -94,6 +84,7 @@
             <th>Nombre</th>
             <th>Descripcion </th>
             <th>Proyecto</th>
+            <th>Fase</th>
             <th>Eliminar</th>
             <th>Modificar</th>
             <th>Permisos</th>
@@ -104,10 +95,12 @@
             <td>{{r.nombre}}</td>
             <td>{{r.descripcion}}</td>
             <td>{{r.idProyecto}}</td>
+            <td>{{r.idFase}}</td>
+            	
             <td><a class="btn btn-danger" onClick="eliminar({{r.idRol}});">Eliminar</a></td>
             <td><a class="btn" onClick="habilitarModificar('{{r.idRol}}','{{r.nombre}}','{{r.descripcion}}');">
             Modificar</a>
-            <td><a class="btn btn-info" href="{{url_for('permisosRol')}}/{{r.idRol}}"><small>Administrar Permisos</small></a></td>
+			<td><a class="btn btn-info" href="{{url_for('permisosRolEnProyecto')}}/{{r.idRol}}"><small>Administrar Permisos</small></a></td>          
           </tr>
 
           {% else %}
@@ -117,16 +110,6 @@
           {% endfor %}
 
         </table>
-      </div>
-      <div class="span4">
-
-		    <input placeholder="Buscar Rol..." id="nombreBuscado" />
-			 <a class='btn add-on btn-primary' onClick="buscar();">
-		        <i class="icon-search"></i>
-		     </a>
-
-      </div>
-    </div>
 
 
 
@@ -135,7 +118,7 @@
 
 	<div class="span12">
 		<center>
-		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Rol</a>
+		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Rol al Proyecto</a>
 		</center>
 	</div>
 </div>
@@ -150,22 +133,20 @@
 	<div class="span12">
 		<center>
 
-		<form action="{{ url_for('nuevoRol') }}" method="post" class="form-horizontal" id="formulario">
+		<form action="{{ url_for('agregar')}}/{{idProyecto}}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
-
-				<label>Nombre del Rol:</label>
-				<input type="text" placeholder="Nombre de Rol" name="nombre" id="nombre">
-				<label>Descripcion:</label>
-				<input type="text" placeholder="Descripcion" name="descripcion" id="descripcion">
-				<label>Proyectos:</label>
-                <select name="idProyecto">
-                    {% for u in proyectos %}
-                    <option value="{{u.idProyecto}}">{{u.nombre}}</option>
-            		{% endfor %}
-       
-            		
+				
+				<label>Fase:</label>
+                <select name="idFase">
+                    {% for f in proyectos.fases %}
+                    <option value="{{f.idFase}}">{{f.nombre}}</option>
+                    {% endfor %}
                 </select>
-                <br/>
+                <label>Nombre de su rol:</label>
+                <input type="text" placeholder="Nombre del rol" name="nombre" id="nombre">
+                <label>Descripcion del rol:</label>
+                <input type="text" placeholder="Descripcion del rol" name="descripcion" id="descripcion">
+				<br/>
 				<br/>
 
 				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
@@ -178,6 +159,14 @@
 	</div>
 </div>
 
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <a href="{{url_for('indexProyecto')}}" class="btn btn-large btn-success">Atras!</a>
+        </center>
+    </div>
+</div>
 
 
 </div>

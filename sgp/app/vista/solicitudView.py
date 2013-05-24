@@ -2,11 +2,12 @@
 from flask import render_template, flash, redirect, request, session, g, url_for, abort
 from app import app
 from app.controlador import ControlSolicitud
+from app.controlador import ControlItem
 from app.modelo import SolicitudDeCambio
 from contextlib import closing
 
 control = ControlSolicitud()
-
+controlItem =  ControlItem()
 
 
 def busquedaPorNombre(nombre):
@@ -30,13 +31,23 @@ def listadoSolicitudes():
         flash("Error. Lista no devuelta")
     return lista
 
+def listadoItem():
+    ''' Devuelve un listado de los tipo item '''
+    lista = None
+    r = True
+    if(r):
+        lista = controlItem.getItemFinal()
+    else:
+        flash("Error. Lista no devuelta")
+    return lista
 
 
 @app.route('/solicitud')
 def indexSolicitud():
     ''' Devuelve los datos de una sol en Concreto '''
     solicitudes = listadoSolicitudes();
-    return render_template('indexSolicitud.html', solicitudes = solicitudes)
+    items = listadoItem();
+    return render_template('indexSolicitud.html', solicitudes = solicitudes, items =  items)
 
 
 @app.route('/solicitud/eliminar')
@@ -86,19 +97,23 @@ def nuevaSolicitud():
         #idSolicitud = request.form['idSolicitud']
         nombreSolicitud = request.form['nombreSolicitud']
         descripcion1 = request.form['descripcion']
-        estado1 = request.form['estado']
+        #estado1 = request.form['estado']
+        item  =  request.form['idItem']
         #Descripcion = request.form['descripcion']
         #Estado = request.form['estado']
           
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente 
         #con un metodo kachiai
-        if(nombreSolicitud and descripcion1 and estado1):
+        if(nombreSolicitud and descripcion1):
             solicitud = SolicitudDeCambio()
             #solicitud.idSolicitud = idSolicitud
             solicitud.nombreSolicitud = nombreSolicitud
             solicitud.descripcion = descripcion1
-            solicitud.estado = estado1
+            solicitud.estado = "creado"
+            solicitud.costo = 0
+            solicitud.impacto = 0
+            solicitud.idItem = item
             
             r = control.nuevaSolicitud(solicitud)
             if(r["estado"] == True):
@@ -155,3 +170,21 @@ def buscarSolicitud(nombrebuscado):
     print "Helloooooowww"
     solicitudes = busquedaPorNombre(nombrebuscado);
     return render_template('indexSolicitud.html', solicitudes = solicitudes)
+
+
+@app.route('/solicitud/enviarSol')
+@app.route('/solicitud/enviarSol/<idSolicitud>')
+def enviarSol(idSolicitud):
+    print "este es el id de solicitud"
+    print idSolicitud
+    solicitud = control.getSolicitudById(idSolicitud)
+    if(solicitud):
+        solicitud.estado = "pendiente"
+        r = control.modificarSolicitud(solicitud)
+        if( r["estado"] == True ):
+            flash("Solicitud Enviada")
+        else:
+            flash("Ocurrio un error : " + r["mensaje"])
+        
+
+    return redirect(url_for('indexSolicitud'))

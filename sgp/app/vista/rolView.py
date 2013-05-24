@@ -10,12 +10,17 @@ from app.controlador import ControlRol
 from app.modelo import Rol
 from app.controlador import ControlUsuario
 from app.controlador import ControlPermiso
+from app.controlador import ControlProyecto
+from app.controlador import ControlFase
+
 from app.modelo import Usuario
 from contextlib import closing
 
 control = ControlRol()
 controlusuario = ControlUsuario()
 controlpermisos = ControlPermiso()
+controlProyecto = ControlProyecto()
+controlFase = ControlFase()
 
 def busquedaPorNombre(nombre):
     ''' Devuelve un listado de los rols que coincidan con un nombre '''
@@ -37,13 +42,23 @@ def listadoRoles():
         flash("Error. Lista no devuelta")
     return lista
 
+def listadoProyectos():
+    lista = controlProyecto.getProyectos()
+    return lista
+
+#def listadoFases(proyecto):
+#    lista = controlFase.getFaseByProyecto(proyecto)
+#    return lista
+
 
 
 @app.route('/rol')
 def indexRol():
     ''' Devuelve los datos de un rol en Concreto '''
     roles = listadoRoles();
-    return render_template('indexRol.html', roles = roles)
+    proyectos = listadoProyectos();
+#    Faseslista = listadoFases();
+    return render_template('indexRol.html', roles = roles, proyectos = proyectos)
 
 
 @app.route('/rol/eliminar')
@@ -81,7 +96,12 @@ def nuevoRol():
 
         nombre = request.form['nombre']
         descripcion = request.form['descripcion']
-
+        print "hoooooooooooooooo esto es el id del proyecto"
+        print request.form['idProyecto']
+        pro = request.form['idProyecto']
+        
+   
+            
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente
         #con un metodo kachiai
@@ -89,8 +109,8 @@ def nuevoRol():
             rol = Rol()
             rol.nombre = nombre
             rol.descripcion = descripcion
-
-
+            rol.idProyecto = pro
+            #else: sino no carga nadaaaaaaaaaaaaaaaaaaaaaaaaa carajo    
             r = control.nuevoRol(rol)
             if(r["estado"] == True):
                 flash("Exito, se creo un nuevo rol")
@@ -144,6 +164,7 @@ def buscarRol(nombrebuscado):
     return render_template('indexRol.html', roles = roles)
 
 
+# esta seccion es para asignar roles a usuarios 
 @app.route("/roles/usuario")
 @app.route("/roles/usuario/<idUsuario>")
 def rolesUsuario(idUsuario):
@@ -203,8 +224,10 @@ def eliminarRolUsuario(idUsuario,idRol):
         flash("Ocurrio un error, intente de nuevo")
 
     return redirect(url_for('rolesUsuario', idUsuario= idUsuario))
+#------------------------------Fin de asignacion  de roles a usuarios------------------
 
 
+#----------inicio de permisos a roles----------------------------------------------------
 @app.route("/permisos/rol")
 @app.route("/permisos/rol/<idRol>")
 def permisosRol(idRol):
@@ -261,3 +284,5 @@ def nuevoPermisoRol():
 
 
     return redirect(url_for('permisosRol', idRol= idRol))
+
+#----------------------------------------------------------------------------------------

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+	
+    function mostrarFormulario(){
+        $("#formulario-div").show("slow");
+        $("#boton-mostrar-formulario").hide();
+    }
+    function ocultarFormulario(){
+        $("#formulario-div").hide("slow");
+        $("#boton-mostrar-formulario").show();
+        $("#formulario")[0].reset();
+
+    }
+
+	function buscarUsuario(){
+		var nombre = $("#nombreBuscado").val();
+
+		if(nombre.length > 0){
+			window.location = "{{url_for('buscarUsuario')}}/" + nombre;
+		}
+
+
+	}
+	
+	function usuarioElegido(){
+		alert($("#selectorUsuario").val());
+		$().post("roles/"+$("#selectorUsuario").val();
+		
+	}
+
+</script>
+
+<div class="row">
+    <br>
+</div>
+
+<div class="row">
+	<div class="span12">
+		<center>
+		<h1> USUARIOS por proyecto y fase </h1>
+		<!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
+		</center>
+	</div>
+</div>
+
+<hr>
+
+<div class="usuarios">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de Usuarios </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre Usuario</th>
+            <th>Nombre </th>
+            <th>Apellido</th>
+            <th>Telefono</th>
+            <th>Email</th>
+            <th>CI</th>
+            <th>Contrasena</th>
+          </tr>
+          {% for u in usuarios %}
+          <tr>
+            <td>{{u.idUsuario}}</td>
+            <td>{{u.nombreUsuario}}</td>
+            <td>{{u.nombre}}</td>
+            <td>{{u.apellido}}</td>
+            <td>{{u.telefono}}</td>
+            <td>{{u.email}}</td>
+            <td>{{u.CI}}</td>
+            <td>{{u.contrasena}}</td>
+          </tr>
+
+          {% else %}
+          	<tr>
+          		NO HAY REGISTROS
+          	</tr>
+          {% endfor %}
+
+        </table>
+      </div>
+      <div class="span4">
+
+		    <input placeholder="Buscar Usuario..." id="nombreBuscado" />
+			 <a class='btn add-on btn-primary' onClick="buscarUsuario();">
+		        <i class="icon-search"></i>
+		     </a>
+
+      </div>
+    </div>
+
+
+
+<!-- boton para mostrar formulario -->
+<div class="row" id="boton-mostrar-formulario">
+
+	<div class="span12">
+		<center>
+		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar</a>
+		</center>
+	</div>
+</div>
+
+
+<!---- formulario de usuario nuevo o modificar -->
+
+
+
+<div class="row hide" id="formulario-div">
+
+	<div class="span12">
+		<center>
+
+		<form action="{{ url_for('agregarMiembro') }}/{{idProyecto}}" method="post" class="form-horizontal" id="formulario">
+			<fieldset>
+				
+				<label>Usuario:</label>
+                <select id="selectorUsuario" name="idUsuario">
+                    {% for u in usuarios %}
+                    <option onclick="usuarioElegido()" value="{{u.idUsuario}}">({{u.nombreUsuario}}) - {{u.nombre}} {{u.apellido}}</option>
+                    {% endfor %}
+                </select>
+                <label>Nombre de su rol:</label>
+                <input type="text" placeholder="Nombre del rol" name="nombreRol" id="nombreRol">
+                <label>Descripcion del rol:</label>
+                <input type="text" placeholder="Descripcion del rol" name="descripcionRol" id="descripcionRol">
+				<br/>
+				<br/>
+
+				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+
+			</fieldset>
+		</form>
+		<a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+		</center>
+
+	</div>
+</div>
+
+
+
+</div>
+{% endblock %}

@@ -99,6 +99,8 @@
             <th>Eliminar</th>
             <th>Modificar</th>
             <th>Iniciar Proyecto</th>
+          	<th>Integrantes del proyecto</th>
+          	<th>Roles por Proyecto</th>
           </tr>
           {% for p in proyectos %}
           <tr>
@@ -134,7 +136,10 @@
             <td></td>
             {% endif %}
 
-
+						
+			<td><a href="{{url_for('indexMiembroProyectoFase')}}/{{p.idProyecto}}" class="btn btn-success"><small>Usuarios</small></a></td>
+            <td><a href="{{url_for('indexRolesPorProyecto')}}/{{p.idProyecto}}" class="btn btn-success"><small>Roles Del Proyecto</small></a></td>
+            
             {% else %}
             <td></td>
             <td></td>
@@ -218,6 +223,7 @@
 
     </div>
 </div>
+
 
 
 

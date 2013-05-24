@@ -112,6 +112,7 @@ class ControlItem():
         relaciones = cRelacion.getRelacionByIdItemActual(idItemActual)
         datosItem.relaciones = relaciones
         print datosItem.relaciones
+    
     def comprobarAprobado(self,item):
         datos = item.datos
         for d in datos:
@@ -135,3 +136,29 @@ class ControlItem():
         for dato in item.datos:
             if (dato.version == item.ultimaVersion):
                 return dato
+            
+            
+    # esta funcion fue agregada para comprobar todo los items en estado final        
+    def comprobarItemEstadofinal(self,item):
+        ''' item en estado final '''
+        datos = item.datos
+        for d in datos:
+            if (d.version == item.ultimaVersion):
+                if(d.estado == "final"):
+                    return True
+        
+        return False
+    
+    # esto se agrego en fecha 23052013 
+    # por mauro
+    # listado de item con estado final segun esto
+        
+    def getItemFinal(self):
+        ''' listado de item final '''
+        listaRetorno = []
+        listaitem = self.getItems()
+        for i in listaitem:
+            if(self.comprobarItemEstadofinal(i)):
+                listaRetorno.append(i)
+        
+        return listaRetorno

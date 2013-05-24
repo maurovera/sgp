@@ -1,0 +1,31 @@
+{% block body %}
+
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Tipo </th>
+            <th>ValorPorDefecto</th>
+          </tr>
+          {% for f in tipoItem.atributosPorTipoItem %}
+          <tr>
+            <td>{{f.idAtributosPorTipoItem}}</td>
+            <td>{{f.nombre}}</td>
+            <td>{{f.tipo}}</td>
+            <td>{{f.valorPorDefecto}}</td>
+          
+            
+          </tr>
+
+          {% else %}
+            <tr>
+                NO HAY REGISTROS
+            </tr>
+          {% endfor %}
+
+        </table>
+
+
+
+</div>
+{% endblock %}

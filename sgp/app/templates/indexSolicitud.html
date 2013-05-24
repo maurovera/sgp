@@ -31,6 +31,13 @@
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
 	}
+	
+	function enviarSol(idSolicitud){
+		$("#botones-solicitud").empty().append("<a href=\"{{url_for('enviarSol')}}/" + idSolicitud +  "\"  class=\"btn danger\">Si</a>"
+		+
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom1").modal('show');
+	}
 
 	function mostrarFormulario(){
 		$("#formulario-div").show("slow");
@@ -70,6 +77,22 @@
     </div>
 </div>
 
+
+
+<div id="modal-from-dom1" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Enviar la solicitud</h3>
+    </div>
+    <div class="modal-body">
+      <p>Esta seguro que desea enviar la solicitud?</p>
+    </div>
+    <div class="modal-footer" id="botones-solicitud">
+    	<!-- placeholder -->
+    </div>
+</div>
+
+
 <div class="row">
     <br>
 </div>
@@ -96,8 +119,11 @@
             <th>Nombre Solicitud </th>
             <th>Descripcion</th>
             <th>Estado</th>
+            <th>Costo</th>
+            <th>Impacto</th>
             <th>Eliminar</th>
             <th>Modificar</th>
+            <th>Enviar</th>
           </tr>
           {% for u in solicitudes %}
           <tr>
@@ -105,10 +131,16 @@
             <td>{{u.nombreSolicitud}}</td>
             <td>{{u.descripcion}}</td>
             <td>{{u.estado}}</td>
+            <td>{{u.costo}}</td>
+            <td>{{u.impacto}}</td>
             
             <td><a class="btn btn-danger" onClick="eliminar({{u.idSolicitud}});">Eliminar</a></td>
             <td><a class="btn" onClick="habilitarModificar('{{u.idSolicitud}}','{{u.nombreSolicitud}}','{{u.descripcion}}','{{u.estado}}');">
             Modificar</a></td>
+            
+            <td><a class="btn "onClick="enviarSol({{u.idSolicitud}});">Enviar</a></td>
+            
+            
           </tr>
 
           {% else %}
@@ -159,8 +191,14 @@
 				<input type="text" placeholder="nombreSolicitud" name="nombreSolicitud" id="nombreSolicitud">
 				<label>Descripcion de solicitud:</label>
 				<input type="text" placeholder="descripcion" name="descripcion" id="descripcion">
-				<label>Estado:</label>
-				<input type="text" placeholder="estado" name="estado" id="estado">
+				<label>Item a cambiar:</label>
+				<select name="idItem">
+                	{% for p in items %}
+          				<option value="{{p.idItemActual}}">{{p.numero}}</option>
+            		{% endfor %}
+          		</select>
+		<!--- 	<label>Estado:</label>
+				<input type="text" placeholder="estado" name="estado" id="estado"> --->
 				<br/>
 				<br/>
 
