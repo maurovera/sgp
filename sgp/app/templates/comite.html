@@ -59,7 +59,6 @@
             <th>Email</th>
             <th>CI</th>
             <th>Contrasena</th>
-            <th>Roles</th>
             <th>Quitar miembro</th>
           </tr>
           {% for u in usuarios %}
@@ -73,8 +72,7 @@
             <td>{{u.email}}</td>
             <td>{{u.CI}}</td>
             <td>{{u.contrasena}}</td>
-          	<td><a class="btn btn-info" href="{{url_for('rolesUsuarioProyecto')}}/{{idProyecto}}/{{u.idUsuario}}">Roles</a></td>
-          	<td><a class="btn btn-info" href="{{url_for('quitarMiembro')}}/{{idProyecto}}/{{u.idUsuario}}">Quitar</a></td>
+          	<td><a class="btn btn-info" href="{{url_for('quitarMiembroComite')}}/{{idProyecto}}/{{u.idUsuario}}">Quitar</a></td>
           	{%endif%}
           </tr>
 			
@@ -118,7 +116,7 @@
 	<div class="span12">
 		<center>
 
-		<form action="{{ url_for('agregarMiembro') }}/{{idProyecto}}" method="post" class="form-horizontal" id="formulario">
+		<form action="{{ url_for('agregarMiembroComite') }}/{{idProyecto}}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
 				
 				<label>Usuario:</label>
@@ -127,12 +125,7 @@
                     <option value="{{u.idUsuario}}">({{u.nombreUsuario}}) - {{u.nombre}} {{u.apellido}}</option>
                     {% endfor %}
                 </select>
-                <label>Roles:</label>
-                <select name="idRol">
-                    {% for r in roles %}
-                    <option value="{{r.idRol}}">{{r.nombre}}</option>
-                    {% endfor %}
-                </select>
+                
                 <br/>
 				<br/>
 

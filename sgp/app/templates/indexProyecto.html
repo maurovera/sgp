@@ -101,6 +101,7 @@
             <th>Iniciar Proyecto</th>
           	<th>Integrantes del proyecto</th>
           	<th>Roles por Proyecto</th>
+          	<th>Comite</th>
           </tr>
           {% for p in proyectos %}
           <tr>
@@ -139,7 +140,7 @@
 						
 			<td><a href="{{url_for('indexMiembroProyectoFase')}}/{{p.idProyecto}}" class="btn btn-success"><small>Usuarios</small></a></td>
             <td><a href="{{url_for('indexRolesPorProyecto')}}/{{p.idProyecto}}" class="btn btn-success"><small>Roles Del Proyecto</small></a></td>
-            
+            <td><a href="{{url_for('indexComite')}}/{{p.idProyecto}}" class="btn btn-success"><small>Comite</small></a></td>
             {% else %}
             <td></td>
             <td></td>
