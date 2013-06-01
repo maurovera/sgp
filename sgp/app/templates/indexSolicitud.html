@@ -9,7 +9,7 @@
 			Modificamos el texto del boton, el lugar donde apunto el formulario
 			rellenamos los datos, e incluimos el campo id :)
 		*/
-		$("#formulario").attr('action','{{ url_for('modificarSolicitud') }}');
+		$("#formulario").attr('action','{{ url_for('modificarSolicitud') }}/{{idProyecto}}/{{idFase}}');
 		$("#formulario").append('<input type="hidden" value="'+idSolicitud+'" name="idSolicitud" >' );
 
 
@@ -26,14 +26,14 @@
 	}
 
 	function eliminar(idSolicitud){
-		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarSolicitud')}}/" + idSolicitud +  "\"  class=\"btn danger\">Si</a>"
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarSolicitud')}}/{{idProyecto}}/{{idFase}}/" + idSolicitud +  "\"  class=\"btn danger\">Si</a>"
 		+
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
 	}
 	
 	function enviarSol(idSolicitud){
-		$("#botones-solicitud").empty().append("<a href=\"{{url_for('enviarSol')}}/" + idSolicitud +  "\"  class=\"btn danger\">Si</a>"
+		$("#botones-solicitud").empty().append("<a href=\"{{url_for('enviarSol')}}/{{idProyecto}}/{{idFase}}/" + idSolicitud +  "\"  class=\"btn danger\">Si</a>"
 		+
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom1").modal('show');
@@ -54,7 +54,7 @@
 		var nombre = $("#nombreBuscado").val();
 
 		if(nombre.length > 0){
-			window.location = "{{url_for('buscarSolicitud')}}/" + nombre;
+			window.location = "{{url_for('buscarSolicitud')}}/{{idProyecto}}/{{idFase}}/" + nombre;
 		}
 
 
@@ -126,6 +126,7 @@
             <th>Enviar</th>
           </tr>
           {% for u in solicitudes %}
+          {%if u !=""%}
           <tr>
             <td>{{u.idSolicitud}}</td>
             <td>{{u.nombreSolicitud}}</td>
@@ -133,20 +134,32 @@
             <td>{{u.estado}}</td>
             <td>{{u.costo}}</td>
             <td>{{u.impacto}}</td>
+            {%if u.estado != "pendiente"%}
+            	<td><a class="btn btn-danger" onClick="eliminar({{u.idSolicitud}});">Eliminar</a></td>
+            {%else %}
+            <td></td>
+            {%endif%}
             
-            <td><a class="btn btn-danger" onClick="eliminar({{u.idSolicitud}});">Eliminar</a></td>
-            <td><a class="btn" onClick="habilitarModificar('{{u.idSolicitud}}','{{u.nombreSolicitud}}','{{u.descripcion}}','{{u.estado}}');">
+            {%if u.estado != "pendiente"%}
+            	<td><a class="btn" onClick="habilitarModificar('{{u.idSolicitud}}','{{u.nombreSolicitud}}','{{u.descripcion}}','{{u.estado}}');">
             Modificar</a></td>
+            {%else %}
+            <td></td>
+            {%endif%}
             
-            <td><a class="btn "onClick="enviarSol({{u.idSolicitud}});">Enviar</a></td>
-            
+            {%if u.estado != "pendiente"%}
+            	<td><a class="btn "onClick="enviarSol({{u.idSolicitud}});">Enviar</a></td>
+            {%else %}
+            <td></td>
+            {%endif%}
             
           </tr>
-
+		  	
           {% else %}
           	<tr>
           		NO HAY REGISTROS
           	</tr>
+          {%endif%}	
           {% endfor %}
 
         </table>
@@ -183,7 +196,7 @@
 	<div class="span12">
 		<center>
 
-		<form action="{{ url_for('nuevaSolicitud') }}" method="post" class="form-horizontal" id="formulario">
+		<form action="{{ url_for('nuevaSolicitud') }}/{{idProyecto}}/{{idFase}}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
 
 				
@@ -194,7 +207,7 @@
 				<label>Item a cambiar:</label>
 				<select name="idItem">
                 	{% for p in items %}
-          				<option value="{{p.idItemActual}}">{{p.numero}}</option>
+          				<option value="{{p.idItemActual}}">{{p.numero}}-IdFase{{p.idFase}}</option>
             		{% endfor %}
           		</select>
 		<!--- 	<label>Estado:</label>
@@ -211,6 +224,17 @@
 
 	</div>
 </div>
+
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <a href="{{url_for('indexAdministrarFase')}}/{{idProyecto}}" class="btn btn-large btn-success">Atras!</a>
+        </center>
+    </div>
+</div>
+
+
 
 
 

@@ -4,6 +4,7 @@ from app import app
 from app.controlador import ControlSolicitud
 from app.controlador import ControlItem
 from app.modelo import SolicitudDeCambio
+
 from contextlib import closing
 
 control = ControlSolicitud()
@@ -21,6 +22,8 @@ def busquedaPorNombre(nombre):
     print lista
     return lista
 
+
+
 def listadoSolicitudes():
     ''' Devuelve un listado de las sol '''
     lista = None
@@ -30,6 +33,22 @@ def listadoSolicitudes():
     else:
         flash("Error. Lista no devuelta")
     return lista
+
+def listadoSolicitudesByFase(idFase):
+    ''' Devuelve un listado de las sol '''
+   
+    lista =  controlItem.getItemByFase(idFase)
+    listaSol = control.getSolicitudes()
+    listaNueva = []
+    for i in lista:
+        for ls in listaSol:
+            if i.idItemActual == ls.idItem:
+                listaNueva.append(ls)
+    
+            
+    return listaNueva
+
+
 
 def listadoItem():
     ''' Devuelve un listado de los tipo item '''
@@ -41,18 +60,30 @@ def listadoItem():
         flash("Error. Lista no devuelta")
     return lista
 
+def listadoItemFinal(idFase):
+    ''' Devuelve un listado de los tipo item '''
+    lista = None
+    listanueva = []
+    lista = controlItem.getItemByFase(idFase)
+    for i in lista:
+        if(controlItem.comprobarItemEstadofinal(i)):
+            listanueva.append(i)
+        
+    return listanueva
 
 @app.route('/solicitud')
-def indexSolicitud():
+@app.route('/solicitud/<idProyecto>/<idFase>')
+def indexSolicitud(idProyecto, idFase):
     ''' Devuelve los datos de una sol en Concreto '''
-    solicitudes = listadoSolicitudes();
-    items = listadoItem();
-    return render_template('indexSolicitud.html', solicitudes = solicitudes, items =  items)
+    solicitudes = listadoSolicitudesByFase(idFase)
+    #items = listadoItem();
+    items = listadoItemFinal(idFase)
+    return render_template('indexSolicitud.html', solicitudes = solicitudes, items =  items, idProyecto = idProyecto, idFase = idFase)
 
 
 @app.route('/solicitud/eliminar')
-@app.route('/solicitud/eliminar/<idSolicitud>')
-def eliminarSolicitud(idSolicitud=None):
+@app.route('/solicitud/eliminar/<idProyecto>/<idFase>/<idSolicitud>')
+def eliminarSolicitud(idProyecto, idFase, idSolicitud=None):
     if(idSolicitud):
         solicitud = control.getSolicitudById(idSolicitud)
     
@@ -66,13 +97,13 @@ def eliminarSolicitud(idSolicitud=None):
         else :
             flash("Ocurrio un error durante la eliminacion")
     
-    return redirect(url_for('indexSolicitud'))
+    return redirect(url_for('indexSolicitud', idProyecto=idProyecto, idFase=idFase))
 
          
 
-
-@app.route('/solicitud/nuevo', methods=['GET','POST'])
-def nuevaSolicitud():
+@app.route('/solicitud/nuevo')
+@app.route('/solicitud/nuevo/<idProyecto>/<idFase>', methods=['GET','POST'])
+def nuevaSolicitud(idProyecto, idFase):
     ''' Crea una nueva sol '''
     #Si recibimos algo por post
     
@@ -121,11 +152,12 @@ def nuevaSolicitud():
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
                     
-    return redirect(url_for('indexSolicitud'))
+    return redirect(url_for('indexSolicitud', idProyecto= idProyecto, idFase = idFase))
 
 
-@app.route('/solicitud/modificar', methods=['GET','POST'])
-def modificarSolicitud():
+@app.route('/solicitud/modificar')
+@app.route('/solicitud/modificar/<idProyecto>/<idFase>', methods=['GET','POST'])
+def modificarSolicitud(idProyecto, idFase):
     ''' Modifica una sol '''
     
     
@@ -135,24 +167,24 @@ def modificarSolicitud():
         print request.form['idSolicitud']
         print request.form['nombreSolicitud']
         print request.form['descripcion']
-        print request.form['estado']
+        #print request.form['estado']
         
         idSolicitud = request.form['idSolicitud']
         nombreSolicitud = request.form['nombreSolicitud']
         Descripcion = request.form['descripcion']
-        Estado = request.form['estado']
+        #Estado = request.form['estado']
         
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente 
         #con un metodo kachiai
-        if(idSolicitud and nombreSolicitud and Descripcion and Estado):
+        if(idSolicitud and nombreSolicitud and Descripcion ):
             solicitud = control.getSolicitudById(idSolicitud)
             if (solicitud):
                 
                 solicitud.idSolicitud = idSolicitud
                 solicitud.nombreSolicitud = nombreSolicitud
                 solicitud.descripcion = Descripcion
-                solicitud.estado = Estado
+                #solicitud.estado = Estado
                     
                 r = control.modificarSolicitud(solicitud)
                 if( r["estado"] == True ):
@@ -161,11 +193,11 @@ def modificarSolicitud():
                     flash("Ocurrio un error : " + r["mensaje"])
                        
         
-    return redirect(url_for('indexSolicitud'))
+    return redirect(url_for('indexSolicitud', idProyecto = idProyecto, idFase = idFase))
 
 @app.route("/solicitud/buscar")
-@app.route("/solicitud/buscar/<nombrebuscado>")
-def buscarSolicitud(nombrebuscado):
+@app.route("/solicitud/buscar/<idProyecto>/<idFase>/<nombrebuscado>")
+def buscarSolicitud(idProyecto, idFase,nombrebuscado ):
     ''' Devuelve una lista de solicitudes que coincidan con el nombre proporcionado '''
     print "Helloooooowww"
     solicitudes = busquedaPorNombre(nombrebuscado);
@@ -173,8 +205,8 @@ def buscarSolicitud(nombrebuscado):
 
 
 @app.route('/solicitud/enviarSol')
-@app.route('/solicitud/enviarSol/<idSolicitud>')
-def enviarSol(idSolicitud):
+@app.route('/solicitud/enviarSol/<idProyecto>/<idFase>/<idSolicitud>')
+def enviarSol(idProyecto, idFase, idSolicitud):
     print "este es el id de solicitud"
     print idSolicitud
     solicitud = control.getSolicitudById(idSolicitud)
@@ -187,4 +219,4 @@ def enviarSol(idSolicitud):
             flash("Ocurrio un error : " + r["mensaje"])
         
 
-    return redirect(url_for('indexSolicitud'))
+    return redirect(url_for('indexSolicitud', idProyecto = idProyecto, idFase = idFase))

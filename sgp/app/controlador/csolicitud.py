@@ -1,4 +1,6 @@
 from app.modelo import SolicitudDeCambio
+from app.modelo import Item
+
 from app import db
 
 class ControlSolicitud():
@@ -58,4 +60,5 @@ class ControlSolicitud():
     def buscarPorNombre(self,nombre):
         retorno = db.session.query(SolicitudDeCambio).filter(SolicitudDeCambio.nombreSolicitud.ilike("%"+nombre+"%")).all()
         return retorno
+
 
