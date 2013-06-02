@@ -116,7 +116,7 @@
             <th>Numero</th>
             <th>Estado </th>
             <th>Eliminar</th>
-            <th>Modificar</th>
+            <!---<th>Modificar</th>--->
             <th>Abrir</th>
             <th>Cerrar</th>
           </tr>
@@ -127,8 +127,8 @@
             	
             <td>{{u.estado}}</td>
             <td><a class="btn btn-danger" onClick="eliminar({{u.idLB}});">Eliminar</a></td>
-            <td><a class="btn" onClick="habilitarModificar('{{u.idLB}}','{{u.Numero}}','{{u.Estado}}');">
-            Modificar</a></td>
+            <!---<td><a class="btn" onClick="habilitarModificar('{{u.idLB}}','{{u.Numero}}','{{u.Estado}}');">
+            Modificar</a></td>--->
             <td><a class="btn btn-danger" onClick="abrir({{u.idLB}});">Abrir</a></td>
             <td><a class="btn" onClick="eliminar({{u.idLB}});">Cerrar</a></td>  
           </tr>
@@ -178,9 +178,9 @@
 
 				
 				<label>Numero:</label>
-				<input type="text" placeholder="Numero de LB" name="numero" id="numero">
-				<label>Estado:</label>
-				<input type="text" placeholder="Estado" name="estado" id="estado"> 
+				<input type="number" placeholder="Numero de LB" name="numero" id="numero">
+				<!--<label>Estado:</label>--->
+				<input type="hidden" placeholder="Estado" name="estado" id="estado"> 
 				<label>Items</label>
 				{% for i in listaItem %}				
 					<input type="checkbox" name="item" value="{{i.idItemActual}}">Item numero : {{i.numero}}<br>

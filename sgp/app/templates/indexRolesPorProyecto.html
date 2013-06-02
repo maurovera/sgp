@@ -138,9 +138,11 @@
 				
 				<label>Fase:</label>
                 <select name="idFase">
+                    <option value="None">Ninguno</option>
                     {% for f in proyectos.fases %}
                     <option value="{{f.idFase}}">{{f.nombre}}</option>
                     {% endfor %}
+                    
                 </select>
                 <label>Nombre de su rol:</label>
                 <input type="text" placeholder="Nombre del rol" name="nombre" id="nombre">

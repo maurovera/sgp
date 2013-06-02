@@ -91,11 +91,14 @@ def agregar(idProyecto):
 
         print request.form['nombre']
         print request.form['descripcion']
-        print request.form['idFase']
+        #print request.form['idFase']
         nombre = request.form['nombre']
         descripcion = request.form['descripcion']
-        fase = request.form['idFase'] 
-        
+        #fase = request.form['idFase'] 
+        if request.form['idFase'] ==  "None":
+            print "entre acaaaa es noneeeeeeeeeeeeeeeeeeeeeee"
+            fase = None
+            
    
             
         print "Estoy aca adentro del form..."

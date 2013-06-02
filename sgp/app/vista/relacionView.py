@@ -47,6 +47,7 @@ def listadoItemDeFaseActFasAnt(idProyecto, idFase):
     fases = controlFase.getFaseById(idFase)
     proyecto = controlProyecto.getProyectoById(idProyecto)
     #print "este es el numero de fase" + str(fases.numeroFase)
+    retorno = []
     if fases.numeroFase == 1:
         lista = fases.items
     else:
@@ -57,6 +58,9 @@ def listadoItemDeFaseActFasAnt(idProyecto, idFase):
                 print str(f.numeroFase) + " " + f.nombre
                 lista =  list(f.items)
                 lista += list(fases.items) 
+                
+                
+                
                 print "Sorete de Lista " + str(lista)
                 print fases.items
                 print f.items
@@ -66,7 +70,11 @@ def listadoItemDeFaseActFasAnt(idProyecto, idFase):
                     #lista.append(i)
                     
     
-    return lista
+    for i in lista :
+        if(i.eliminado == False):
+            retorno.append(i)
+    
+    return retorno
 
 @app.route('/item/relacion')
 @app.route('/item/relacion/<idProyecto>/<idFase>')

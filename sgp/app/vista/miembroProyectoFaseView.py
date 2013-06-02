@@ -36,12 +36,15 @@ def listadoUsuarios():
 def listadoUsuariosPorRoles(idProyecto):
     retorno = []
     lista = controlRol.getRolPorProyecto(idProyecto)
+    print "ListadoUsuariosPorRoles:"
+    print lista
+    print "ListadoUsuariosPorroles..."
     for rol in lista:
-        usuario = control.getUsuarioByRol(rol)
-            
-        retorno.append(usuario) 
-
-    
+        usuarios = control.getUsuariosByRol(rol)
+        print usuarios
+        for usuario in usuarios :
+            if(not (usuario in retorno) ):    
+                retorno.append(usuario) 
     return retorno
     
 def listadoRoles(idProyecto):

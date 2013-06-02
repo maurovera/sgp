@@ -33,7 +33,7 @@ u = Usuario()
 r = Rol()
 pro = Proyecto()
 f = Fase()
-nombresPermisos = [' Crear Usuario ', ' Modificar Usuario ', ' Eliminar Usuario ', ' Crear Roles ', ' Modificar Roles ',' Eliminar Roles ', ' Crear Proyectos ', ' Modificar Proyectos ', ' Configurar Proyectos ', ' Eliminar Proyectos ', ' Crear Fases ', ' Ver Fases ', ' Crear Item ', ' Modificar Item ', ' Configurar Item ', ' Aprobar-Rechazar Item ', ' Eliminar Item ', ' Crear Tipo Item ', ' Modificar Tipo Item ', ' Eliminar Tipo Item ', ' Crear Linea Base ', ' Liberar-Cerrar Linea Base ', ' Eliminar Linea Base ', ' Informes Solicitar ']
+nombresPermisos = [' Crear Usuario ', ' Modificar Usuario ', ' Eliminar Usuario ', ' Crear Roles ', ' Modificar Roles ',' Eliminar Roles ', ' Crear Proyectos ', ' Modificar Proyectos ', ' Configurar Proyectos ', ' Eliminar Proyectos ', ' Crear Fases ', ' Ver Fases ', ' Crear Item ', ' Modificar Item ', ' Configurar Item ', ' Aprobar-Rechazar Item ', ' Eliminar Item ', ' Crear Tipo Item ', ' Modificar Tipo Item ', ' Eliminar Tipo Item ', ' Crear Linea Base ', ' Liberar-Cerrar Linea Base ', ' Eliminar Linea Base ', ' Informes Solicitar ', 'votar']
 
 print nombresPermisos
 

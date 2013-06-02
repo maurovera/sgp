@@ -37,14 +37,34 @@ def listadoUsuarios():
 
 def listadoUsuariosPorRoles(idProyecto):
     retorno = []
+    pro =  controlProyecto.getProyectoById(idProyecto)
     lista = controlRol.getRolPorProyecto(idProyecto)
-    for rol in lista:
-       usuario = control.getUsuarioByRol(rol)
-       retorno.append(usuario) 
-
     
+    for rol in lista:
+        if (rol.nombre == "MiembroComite "+pro.nombre):
+            usuarios = control.getUsuariosByRol(rol)
+            print usuarios
+            for usuario in usuarios :
+                if(not (usuario in retorno) ):    
+                    retorno.append(usuario) 
     return retorno
     
+def listadoUsuariosSoloPorRoles(idProyecto):
+    retorno = []
+    lista = controlRol.getRolPorProyecto(idProyecto)
+    print "ListadoUsuariosPorRoles:"
+    print lista
+    print "ListadoUsuariosPorroles..."
+    for rol in lista:
+        usuarios = control.getUsuariosByRol(rol)
+        print usuarios
+        for usuario in usuarios :
+            if(not (usuario in retorno) ):    
+                retorno.append(usuario) 
+    return retorno
+
+
+
 def listadoRoles(idProyecto):
     lista = controlRol.getRolPorProyecto(idProyecto)
     return lista
@@ -54,7 +74,7 @@ def listadoRoles(idProyecto):
 def indexComite(idProyecto):
     ''' Devuelve los datos de un Usuario en Concreto '''
     usuarios = listadoUsuariosPorRoles(idProyecto);
-    usu = listadoUsuarios();
+    usu = listadoUsuariosSoloPorRoles(idProyecto);
     roles = listadoRoles(idProyecto);
     proy = controlProyecto.getProyectoById(idProyecto)
     return render_template('comite.html', usu= usu, usuarios = usuarios, idProyecto = idProyecto, roles = roles, proy = proy)
@@ -81,27 +101,35 @@ def agregarMiembroComite(idProyecto):
     pro = controlProyecto.getProyectoById(idProyecto)
     if(idUsuario):
         u = control.getUsuarioById(idUsuario)
-        r = Rol()
-        p= controlPermiso.getPermisoById(19)
-        r.permisos.append(p)
-        r.nombre = "Miembro "+ u.nombre + pro.nombre
-        r.descripcion = "es un miembro del comite"
-        r.idProyecto = idProyecto
-        controlRol.nuevoRol(r)
-
-        #roles = controlRol.getRoles()
-        q = control.agregarRol(u,r)
-        print u.roles
-        if( q["estado"] == True ):
-            flash("Se agrego un usuario miembro al proyecto con el rol con exito")
-        else:
-             flash("Este usuario ya forma parte del comite")   
-            #flash("Ocurrio un error : " + q["mensaje"])
+        
+        roles = controlRol.getRolPorProyecto(idProyecto)
+        for r in roles :
+            if r.nombre == "MiembroComite "+pro.nombre:
+                print "hola VITEH " + r.nombre
+                q = control.agregarRol(u, r)
+                if( q["estado"] == True ):
+                    flash("Se agrego un usuario miembro al proyecto con el rol con exito")
+                else:
+                    flash("Este usuario ya forma parte del comite")   
+                    #flash("Ocurrio un error : " + q["mensaje"])
 
 
     else :
         flash("Ocurrio un error, debe completar correctamente el formulario")
 
+                    
+        #r = Rol()
+        #p= controlPermiso.getPermisoById(19)
+        #r.permisos.append(p)
+        #r.nombre = "Miembro "+ u.nombre + pro.nombre
+        #r.descripcion = "es un miembro del comite"
+        #r.idProyecto = idProyecto
+        #controlRol.nuevoRol(r)
+
+        #roles = controlRol.getRoles()
+        
+        print u.roles
+        
 
 
 
@@ -135,11 +163,11 @@ def quitarMiembroComite(idProyecto, idUsuario):
     print "esto te tiene que traer solo los roles asociados al proyecto"
     for t in usu.roles:
         if str(t.idProyecto) == str(idProyecto):
-            if t.nombre == "Miembro "+usu.nombre+pro.nombre : 
-                print "se removio este rol"
+            if t.nombre == "MiembroComite "+pro.nombre : 
+                print "se removio este rol" + t.nombre
                 print t
                 control.quitarRol(usu,t)
-                controlRol.eliminarRolSinAvisar(t)
+                #controlRol.eliminarRolSinAvisar(t)
                 print usu.roles
      
              

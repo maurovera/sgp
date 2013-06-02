@@ -132,7 +132,8 @@ def nuevaSolicitud(idProyecto, idFase):
         item  =  request.form['idItem']
         #Descripcion = request.form['descripcion']
         #Estado = request.form['estado']
-          
+        accionSol = request.form['accionSol']
+        print accionSol + "jajajjaajja esta es una accion carajo"  
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente 
         #con un metodo kachiai
@@ -145,6 +146,7 @@ def nuevaSolicitud(idProyecto, idFase):
             solicitud.costo = 0
             solicitud.impacto = 0
             solicitud.idItem = item
+            solicitud.accionSol = accionSol
             
             r = control.nuevaSolicitud(solicitud)
             if(r["estado"] == True):

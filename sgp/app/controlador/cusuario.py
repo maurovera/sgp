@@ -135,4 +135,17 @@ class ControlUsuario():
             if rol in usuario.roles :
                 print "Entro"
                 return usuario
-        
+    
+    def getUsuariosByRol(self, rol):
+        print "IN getUsuariosByRol"
+        print rol
+        usuarios = self.getUsuarios()
+        print usuarios
+        retorno = []
+        for usuario in usuarios:
+            print usuario
+            print usuario.roles
+            if rol in usuario.roles :
+                retorno.append( usuario )
+            
+        return retorno        

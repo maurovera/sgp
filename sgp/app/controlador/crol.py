@@ -20,6 +20,8 @@ class ControlRol():
          retorno = db.session.query(Rol).filter(Rol.idProyecto == idProyecto ).all()
          return retorno
     
+    
+    
     def nuevoRol(self, rol):
         """ funcion nuevoRol """
         resultado = {"estado" : True, "mensaje" : "exito"}

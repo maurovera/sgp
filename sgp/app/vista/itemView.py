@@ -61,7 +61,20 @@ def indexItem(idProyecto=None,idFase=None):
     ''' Devuelve los datos de un item en Concreto '''
     items = listadoItem(idFase);
     tipoItems = listadoTipoItem(idFase);
-    return render_template('indexItem.html', items = items, idProyecto = idProyecto, idFase = idFase, tipoItems = tipoItems)
+    nombresTipoItem = {}
+    for tipo in tipoItems:
+        nombresTipoItem[tipo.idTipoItem] = ''+ tipo.nombre
+    
+    estadosItem = {}
+    for item in items:
+        datos = item.datos
+        for dItem in datos:
+            if dItem.version == item.ultimaVersion :
+                estadosItem[item.idItemActual] = dItem.estado
+        
+        
+    
+    return render_template('indexItem.html', items = items, idProyecto = idProyecto, idFase = idFase, tipoItems = tipoItems, nombresTipoItem = nombresTipoItem, estadosItem = estadosItem) 
 
 
 @app.route('/item/eliminar')

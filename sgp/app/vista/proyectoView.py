@@ -129,6 +129,8 @@ def nuevoProyecto():
                 #Creamos el rol con los permisos para el proyecto.
                 u = controladorusuario.getUsuarioById(idUsuario)
                 rolNuevo = crearRolProyecto(proyecto)
+                rolComite = crearRolComiteProyecto(proyecto)
+                e = controladorusuario.agregarRol(u,rolComite)
                 r2 = controladorusuario.agregarRol(u,rolNuevo)
                 if(r2["estado"] == True ):
                     flash("Exito, se creo un nuevo proyecto")
@@ -324,6 +326,23 @@ def crearRolProyecto(proyecto):
     r.permisos.append(cp.buscarPorValor(10))
 
     return r
+
+def crearRolComiteProyecto(proyecto):
+    ''' Se encarga de la creacion de un Rol Comite con los permisos para votar dado dado @return Rol'''
+    r = Rol()
+    r.nombre = "MiembroComite " + proyecto.nombre
+    r.descripcion = "Es un miembro del comite " + proyecto.nombre
+    r.idProyecto = proyecto.idProyecto
+    #Agregamos los permisos en duro
+    #Primero instanciamos el controlador
+    cp = ControlPermiso()
+    #Y vamos agregando los permisos respectivos a proyectos
+    # y vemos los permisos que va a tener
+    r.permisos.append(cp.buscarPorValor(25))
+
+    return r
+
+
 
 # se agrego en fecha 23/05/2013
 # autor: mauro vera. 

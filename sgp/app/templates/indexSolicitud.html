@@ -121,6 +121,7 @@
             <th>Estado</th>
             <th>Costo</th>
             <th>Impacto</th>
+            <th>Accion a realizar<th>
             <th>Eliminar</th>
             <th>Modificar</th>
             <th>Enviar</th>
@@ -134,6 +135,7 @@
             <td>{{u.estado}}</td>
             <td>{{u.costo}}</td>
             <td>{{u.impacto}}</td>
+            <td>{{u.accionSol}}</td>
             {%if u.estado != "pendiente"%}
             	<td><a class="btn btn-danger" onClick="eliminar({{u.idSolicitud}});">Eliminar</a></td>
             {%else %}
@@ -210,6 +212,13 @@
           				<option value="{{p.idItemActual}}">{{p.numero}}-IdFase{{p.idFase}}</option>
             		{% endfor %}
           		</select>
+          		
+          		<label>Tipo de Accion:</label>
+				<select name="accionSol">
+                	<option value="eliminar"> Eliminar </option>
+                	<option value="modificar"> Modificar </option>
+                </select>
+				
 		<!--- 	<label>Estado:</label>
 				<input type="text" placeholder="estado" name="estado" id="estado"> --->
 				<br/>

@@ -15,8 +15,9 @@ class SolicitudDeCambio(db.Model):
     estado = db.Column( db.String(45) )
     costo = db.Column( db.Integer )
     impacto = db.Column( db.Integer )
+    
     idItem = db.Column(db.Integer, db.ForeignKey('item.idItemActual'))
-   
+    accionSol = db.Column( db.String(45) , nullable = False)
 
 
 

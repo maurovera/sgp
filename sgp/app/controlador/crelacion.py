@@ -14,10 +14,13 @@ class ControlRelacion():
         """ funcion nuevoRelacion """
         resultado = {"estado" : True, "mensaje" : "exito"}
         try:
-            db.session.add(relacion)
-            #print "Hice el add"
-            db.session.commit()
-            #print "Hice el commit"
+            if(not self.detectarCiclo(relacion.idAntecesor, relacion.idSucesor)):
+                db.session.add(relacion)
+                #print "Hice el add"
+                db.session.commit()
+                #print "Hice el commit"
+            else :
+                resultado = {"estado" : False, "mensaje" : "Se formara un ciclo"}
         except Exception, error :
             #print "Capturo exp" + str(error)
             resultado = {"estado" : False, "mensaje" : str(error)}
@@ -62,6 +65,40 @@ class ControlRelacion():
         retorno = list(db.session.query(Relacion).filter(Relacion.idAntecesor == idItem ).all())
         retorno += list(db.session.query(Relacion).filter(Relacion.idSucesor == idItem ).all())
         return retorno
+    
+    def getAntecesores(self,idItem):
+        retorno = list(db.session.query(Relacion).filter(Relacion.idSucesor == idItem ).all())
+        antecesores = []
+        for r in retorno:
+            antecesores.append(r.idAntecesor)
+            antecesores += self.getAntecesores(r.idAntecesor)
+        return antecesores
+    
+    def getSucesores(self,idItem):
+        retorno = list(db.session.query(Relacion).filter(Relacion.idAntecesor == idItem ).all())
+        sucesores = []
+        for r in retorno:
+            sucesores.append(r.idSucesor)
+            sucesores += self.getSucesores(r.idSucesor)
+        
+        return sucesores
+    
+    def detectarCiclo(self, idAntecesor, idSucesor):
+        #Se busca los sucesores del sucesor, y los 
+        #antecesores del antecesor, si se encuentra alguna coincidencia
+        #se retorna true
+        r = False
+        
+        a = self.getAntecesores(idAntecesor)
+        b = self.getSucesores(idSucesor)
+        
+        for isgte in a:
+            for iant in b:
+                if( isgte == iant):
+                    r = True
+                    break
+        return r
+        
    
 #    def buscarPorNombre(self,nombre):
 #        retorno = db.session.query(Usuario).filter(Usuario.nombre.ilike("%"+nombre+"%")).all()

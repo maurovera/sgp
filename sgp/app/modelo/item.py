@@ -11,6 +11,7 @@ from app import db
 
 class Item(db.Model):
     idItemActual = db.Column(db.Integer, primary_key = True)
+    nombreItemActual =  db.Column( db.String(45), index = True, nullable = False)
     numero = db.Column(db.Integer, nullable=False)
     eliminado = db.Column(db.Boolean)
     ultimaVersion = db.Column( db.Integer, nullable = False)
