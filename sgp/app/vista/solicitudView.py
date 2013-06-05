@@ -222,3 +222,6 @@ def enviarSol(idProyecto, idFase, idSolicitud):
         
 
     return redirect(url_for('indexSolicitud', idProyecto = idProyecto, idFase = idFase))
+
+
+

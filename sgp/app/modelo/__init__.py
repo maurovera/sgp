@@ -15,4 +15,5 @@ from item import Item
 from lineaBase import LineaBase
 from relacion import Relacion
 from solicitudDeCambio import SolicitudDeCambio
+from mensaje import Mensaje
 

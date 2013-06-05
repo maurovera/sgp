@@ -26,9 +26,8 @@ class Usuario(db.Model):
         backref=db.backref('usuarios', lazy='dynamic'))
     #role = db.Column(db.SmallInteger, default = ROLE_USER)
     #posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
-
-
-
+    mensajes = db.relationship('Mensaje', backref='usuario',
+                                lazy='dynamic')
 
 
     def setnombreUsuario(self,nombre):

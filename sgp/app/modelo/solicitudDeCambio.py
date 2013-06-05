@@ -18,8 +18,10 @@ class SolicitudDeCambio(db.Model):
     
     idItem = db.Column(db.Integer, db.ForeignKey('item.idItemActual'))
     accionSol = db.Column( db.String(45) , nullable = False)
-
-
+    
+    cantidadVotos = db.Column( db.Integer , nullable = False)
+    votoPositivo =  db.Column( db.Integer , nullable = False)
+    votoNegativo = db.Column( db.Integer , nullable = False)
 
 
     def setnombreSolicitud(self,nombre):
