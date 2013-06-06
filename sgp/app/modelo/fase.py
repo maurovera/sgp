@@ -8,7 +8,7 @@ from app import db
 
 class Fase(db.Model):
     idFase = db.Column(db.Integer, primary_key = True)
-    nombre = db.Column( db.String(45), index = True, unique = True, nullable = False)
+    nombre = db.Column( db.String(45), index = True, nullable = False)
     numeroFase = db.Column(db.Integer, nullable = False)
     descripcion = db.Column( db.String(100) , nullable = False)
     estado = db.Column(db.String(45))

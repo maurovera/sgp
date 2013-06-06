@@ -15,17 +15,20 @@ class SolicitudDeCambio(db.Model):
     estado = db.Column( db.String(45) )
     costo = db.Column( db.Integer )
     impacto = db.Column( db.Integer )
-    
+
     idItem = db.Column(db.Integer, db.ForeignKey('item.idItemActual'))
     accionSol = db.Column( db.String(45) , nullable = False)
-    
+
     cantidadVotos = db.Column( db.Integer , nullable = False)
     votoPositivo =  db.Column( db.Integer , nullable = False)
     votoNegativo = db.Column( db.Integer , nullable = False)
 
+    idUsuario = db.Column( db.Integer, db.ForeignKey('usuario.idUsuario') )
+
+    votantes = db.Column(db.String(500))
 
     def setnombreSolicitud(self,nombre):
-        self.nombreUsuario = nombre
+        self.nombreSolicitud = nombre
 
     def __repr__(self):
         return '<SolcitudDeCambio %r>' % (self.nombreSolicitud)

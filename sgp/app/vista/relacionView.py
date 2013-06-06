@@ -229,4 +229,3 @@ def modificarRelacion(idProyecto, idFase):
 #         
     return redirect(url_for('indexRelacion',idProyecto= idProyecto, idFase = idFase))
 
-

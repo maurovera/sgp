@@ -9,6 +9,7 @@ from app.modelo import DatosItem
 from app import db
 from crelacion import ControlRelacion
 
+
 class ControlItem():
     """ clase control  item """
     def getItemById(self,id):
@@ -112,33 +113,33 @@ class ControlItem():
         relaciones = cRelacion.getRelacionByIdItemActual(idItemActual)
         datosItem.relaciones = relaciones
         print datosItem.relaciones
-    
+
     def comprobarAprobado(self,item):
         datos = item.datos
         for d in datos:
             if (d.version == item.ultimaVersion):
                 if(d.estado == "aprobado"):
                     return True
-        
+
         return False
-        
+
     def getItemAprobadoByFase(self,idFase):
         listaRetorno = []
         listaFase = self.getItemByFase(idFase)
         for i in listaFase:
             if(self.comprobarAprobado(i)):
                 listaRetorno.append(i)
-        
+
         return listaRetorno
-        
+
     def getDatoActualByIdItemActual(self,idItemActual):
         item = self.getItemById(idItemActual)
         for dato in item.datos:
             if (dato.version == item.ultimaVersion):
                 return dato
-            
-            
-    # esta funcion fue agregada para comprobar todo los items en estado final        
+
+
+    # esta funcion fue agregada para comprobar todo los items en estado final
     def comprobarItemEstadofinal(self,item):
         ''' item en estado final '''
         datos = item.datos
@@ -146,13 +147,13 @@ class ControlItem():
             if (d.version == item.ultimaVersion):
                 if(d.estado == "final"):
                     return True
-        
+
         return False
-    
-    # esto se agrego en fecha 23052013 
+
+    # esto se agrego en fecha 23052013
     # por mauro
     # listado de item con estado final segun esto
-        
+
     def getItemFinal(self):
         ''' listado de item final '''
         listaRetorno = []
@@ -160,5 +161,64 @@ class ControlItem():
         for i in listaitem:
             if(self.comprobarItemEstadofinal(i)):
                 listaRetorno.append(i)
-        
+
         return listaRetorno
+
+    def pasarRevision(self,idItemActual, idItemOriginal, direccion):
+        #Realizamos las operaciones para habilitar la modificacion
+        # El item solicitado pasa a revision y su red (antecesores sucesores)
+        # Los otros item en la misma LB de final a aprobado
+        # La LB pasa a un estado LIBERADO
+        # Las LB de su Red pasan a NO VALIDO
+        #
+        import crelacion, clineaBase, cdatosItem
+        item = self.getItemById(idItemActual)
+
+        print item.nombreItemActual
+
+        #Primero modificamos los item de su LB
+        datoActual = self.getDatoActualByIdItemActual(idItemActual)
+        lb = list(datoActual.itemLB)[0]
+        controlLB = clineaBase.ControlLineaBase()
+        datosItemLB = lb.items
+        for dato in datosItemLB:
+            if (dato.idItemActual != idItemActual):
+                dato.estado = 'aprobado'
+                cdatosItem.ControlDatosItem().modificarDatosItem(dato)
+
+        #Cambiamos su estado a revision
+        datoActual.estado = 'revision'
+        cdatosItem.ControlDatosItem().modificarDatosItem(dato)
+
+        antecesores = crelacion.ControlRelacion().getAntecesores(idItemActual)
+        sucesores = crelacion.ControlRelacion().getSucesores(idItemActual)
+
+        if (direccion == -1 or direccion == 0):
+            for ant in antecesores:
+                if (ant == idItemOriginal):
+                    break
+                self.pasarRevision(ant,idItemOriginal,-1)
+
+        if (direccion == 1 or direccion == 0):
+            for suc in sucesores:
+                if (suc == idItemOriginal):
+                    break
+                self.pasarRevision(suc,idItemOriginal, 1)
+
+
+        #Cambiamos el estado de la LB
+        #Liberado
+        if (idItemActual == idItemOriginal):
+            lb.estado = 1
+        #Invaldio
+        else :
+            lb.estado = -1
+
+        controlLB.modificarLineaBase(lb)
+
+
+
+
+
+
+

@@ -18,7 +18,7 @@
 		$("#tipo").val( tipo );
 		$("#idSucesor").val( idSucesor );
 		$("#idAntecesor").val( idAntecesor );
-		
+
 		// SI TODO SALE BIEN Y LAS PUTAS
 		//Mostramos el formulario
 		mostrarFormulario();
@@ -86,7 +86,7 @@
             <th>tipo</th>
             <th>IdAntecesor</th>
             <th>IdSucesor </th>
-            
+
             <th>Eliminar</th>
             <th>Modificar</th>
           </tr>
@@ -94,20 +94,20 @@
           <tr>
             <td>{{r.idRelacion}}</td>
             <td>{{r.tipo}}</td>
-            	
+
             {%for i in items%}
             	{%if i.idItemActual == r.idAntecesor%}
             		<td>{{i.numero}}</td>
             	{%endif%}
             {%endfor%}
-            
+
             {%for i in items%}
             	{%if i.idItemActual == r.idSucesor%}
             		<td>{{i.numero}}</td>
             	{%endif%}
             {%endfor%}
-            
-            
+
+
             <td><a class="btn btn-danger" onClick="eliminar({{r.idRelacion}});">Eliminar</a></td>
             <td><a class="btn" onClick="habilitarModificar('{{r.idRelacion}}','{{r.tipo}}','{{r.idSucesor}}','{{r.idAntecesor}}');">
             Modificar</a></td>
@@ -152,21 +152,21 @@
                 	<option value="Padre-Hijo"> Padre-Hijo </option>
                 	<option value="Antecesor-Sucesor"> Antecesor-Sucesor </option>
                 </select>-->
-				
+
 				<label>Antecesor:</label>
 				<select name="idAntecesor">
                 	{% for i in itemsFiltro  %}
-          				<option value="{{i.idItemActual}}">{{i.numero}} - [Fase ID {{i.idFase}}] </option>
+          				<option value="{{i.idItemActual}}">{{i.nombreItemActual}} - [Fase ID {{i.idFase}}] </option>
             		{% endfor %}
             	</select>
-            	
+
             	<label>Sucesor:</label>
 				<select name="idSucesor">
                 	{% for i in itemsFiltro %}
-          				<option value="{{i.idItemActual}}">{{i.numero}} - [Fase ID {{i.idFase}}]</option>
+          				<option value="{{i.idItemActual}}">{{i.nombreItemActual}} - [Fase ID {{i.idFase}}]</option>
             		{% endfor %}
             	</select>
-            	 
+
 				<br/>
 				<br/>
 

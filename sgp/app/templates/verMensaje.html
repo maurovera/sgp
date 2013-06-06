@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+
+
+<div class="row">
+    <br>
+</div>
+
+<div class="row">
+    <div class="span12">
+        <center>
+        <h1> {{mensaje.titulo}}</h1>
+        </center>
+        <p> enviado el : {{mensaje.fecha}}</p>
+        <hr/>
+        <p style="font-size:18px;">{{mensaje.cuerpo | safe}}</p>
+        <br/>
+        <hr>
+        <center>
+          <a href="{{url_for('indexMensaje')}}" class="btn">Volver a la bandeja</a>
+        </center>
+    </div>
+</div>
+
+<hr>
+
+
+
+
+
+
+
+
+{% endblock %}

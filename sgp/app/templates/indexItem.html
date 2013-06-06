@@ -98,30 +98,30 @@
             <td>{{u.eliminado}}</td>
             <td>{{u.ultimaVersion}}</td>
             <td>{{ nombresTipoItem[u.idTipoItem] }}</td>
-			
-			{%  if not estadosItem[u.idItemActual] == 'final' %}            
-	            
+
+			{%  if not estadosItem[u.idItemActual] == 'final' %}
+
 	            {% if not u.eliminado == True %}
 	            	<td><a class="btn btn-danger" onClick="eliminar({{u.idItemActual}});">Eliminar</a></td>
 	            {% else %}
 	            <td></td>
 	            {% endif %}
-	
+
 	            {% if not u.eliminado == True %}
 	            <td><a class="btn" onClick="habilitarModificar('{{u.idItemActual}}','{{u.numero}}','{{u.eliminado}}','{{u.ultimaVersion}}','{{idProyecto}}','{{idFase}}');">
 	            Modificar</a></td>
-	            
+
 	            {% else %}
 	            <td></td>
 	            {% endif %}
-	
+
 	            {% if not u.eliminado == True %}
 	           <td><a href="{{url_for('datos')}}/{{u.idItemActual}}/{{idProyecto}}" class="btn btn-info"><small>Datos Item</small></a></td>
 	            {% else %}
 	            <td></td>
 	            {% endif %}
-	            
-	            
+
+
 	            {% if u.eliminado == True %}
 	            <td><a href="{{url_for('datos')}}/{{u.idItemActual}}/{{idProyecto}}" class="btn"><small>Revivir</small></a></td>
 	            {% else %}
@@ -180,6 +180,9 @@
           <option value="{{tipoItem.idTipoItem}}"> {{tipoItem.nombre}} </option>
           {% endfor %}
         </select>
+        <br/>
+        Nombre del Item: <br/>
+        <input type="text" placeholder="Nombre Item" name ="nombreItem" id="nombreItem">
 
 				<input type="hidden" placeholder="UltimaVersion" name="ultimaVersion" id="ultimaVersion" >
 				<input type="hidden"  name="idProyecto" id="idProyecto" value={{idProyecto}} >

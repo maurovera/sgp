@@ -99,4 +99,3 @@ def indexAdministrarFase(idProyecto):
 
     #return redirect(url_for('iniciarProyecto', idProyecto= idProyecto))
 
-

@@ -6,6 +6,7 @@ Created on 10/04/2013
 from app.modelo import Rol
 from app import db
 from cproyecto import ControlProyecto
+from cusuario import ControlUsuario
 class ControlRol():
     """ clase control rol """
     def getRolById(self,id):
@@ -14,14 +15,14 @@ class ControlRol():
     def getRoles(self):
         """ funcion getrol """
         return Rol.query.all()
-    
+
     def getRolPorProyecto(self,idProyecto):
          """ funcion que filtra los roles por el id del Proyecto """
          retorno = db.session.query(Rol).filter(Rol.idProyecto == idProyecto ).all()
          return retorno
-    
-    
-    
+
+
+
     def nuevoRol(self, rol):
         """ funcion nuevoRol """
         resultado = {"estado" : True, "mensaje" : "exito"}
@@ -68,7 +69,7 @@ class ControlRol():
             if (rol.idProyecto ):
                 cp = ControlProyecto()
                 p = cp.getProyectoById(rol.idProyecto)
-                
+
             """ hacemos un delete de rol """
             db.session.delete(rol)
             """ se comitea el cambio """
@@ -125,7 +126,7 @@ class ControlRol():
         else :
             resultado = {"estado" : False, "mensaje" : "El rol ya posee este permiso"}
             return resultado
-    
+
     def getRolByIdProyecto(self,idProyecto):
         lista = self.getRoles()
         for r in lista :
@@ -133,5 +134,24 @@ class ControlRol():
             if str(r.idProyecto) == str(idProyecto) :
                 print "--------ENTRO Y RETORNA EL PROYECTO " + r.nombre
                 return r
-        
-        
+
+
+    def getMiembrosComite(self,idProyecto):
+        '''Retorna la lista de Miembros del Comite de un Proyecto'''
+        roles = self.getRolPorProyecto(idProyecto)
+        controlProyecto = ControlProyecto()
+        controlUsuario = ControlUsuario()
+        proyecto = controlProyecto.getProyectoById(idProyecto)
+        rol = None
+        for r in roles:
+            #Busco el rol Miembro de Comite
+            nombreRol = "MiembroComite " + proyecto.nombre
+            if (r.nombre == nombreRol ):
+                #Tenemos el rol.
+                rol = r
+                break
+        miembros = []
+        if(rol):
+            miembros = controlUsuario.getUsuariosByRol(rol)
+
+        return miembros

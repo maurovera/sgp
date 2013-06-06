@@ -18,7 +18,7 @@
 		$("#nombreSolicitud").val( nombreSolicitud );
 		$("#descripcion").val( descripcion );
 		$("#estado").val( estado );
-		
+
 
 		// SI TODO SALE BIEN
 		//Mostramos el formulario
@@ -31,7 +31,7 @@
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
 	}
-	
+
 	function enviarSol(idSolicitud){
 		$("#botones-solicitud").empty().append("<a href=\"{{url_for('enviarSol')}}/{{idProyecto}}/{{idFase}}/" + idSolicitud +  "\"  class=\"btn danger\">Si</a>"
 		+
@@ -141,27 +141,27 @@
             {%else %}
             <td></td>
             {%endif%}
-            
+
             {%if u.estado != "pendiente"%}
             	<td><a class="btn" onClick="habilitarModificar('{{u.idSolicitud}}','{{u.nombreSolicitud}}','{{u.descripcion}}','{{u.estado}}');">
             Modificar</a></td>
             {%else %}
             <td></td>
             {%endif%}
-            
+
             {%if u.estado != "pendiente"%}
             	<td><a class="btn "onClick="enviarSol({{u.idSolicitud}});">Enviar</a></td>
             {%else %}
             <td></td>
             {%endif%}
-            
+
           </tr>
-		  	
+
           {% else %}
           	<tr>
           		NO HAY REGISTROS
           	</tr>
-          {%endif%}	
+          {%endif%}
           {% endfor %}
 
         </table>
@@ -201,7 +201,7 @@
 		<form action="{{ url_for('nuevaSolicitud') }}/{{idProyecto}}/{{idFase}}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
 
-				
+
 				<label>Nombre de solicitud:</label>
 				<input type="text" placeholder="nombreSolicitud" name="nombreSolicitud" id="nombreSolicitud">
 				<label>Descripcion de solicitud:</label>
@@ -209,16 +209,15 @@
 				<label>Item a cambiar:</label>
 				<select name="idItem">
                 	{% for p in items %}
-          				<option value="{{p.idItemActual}}">{{p.numero}}-IdFase{{p.idFase}}</option>
+          				<option value="{{p.idItemActual}}">{{p.nombreItemActual}}- IdFase {{p.idFase}}</option>
             		{% endfor %}
           		</select>
-          		
+
           		<label>Tipo de Accion:</label>
 				<select name="accionSol">
                 	<option value="eliminar"> Eliminar </option>
                 	<option value="modificar"> Modificar </option>
                 </select>
-				
 		<!--- 	<label>Estado:</label>
 				<input type="text" placeholder="estado" name="estado" id="estado"> --->
 				<br/>

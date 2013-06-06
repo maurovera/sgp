@@ -61,4 +61,3 @@ class ControlSolicitud():
         retorno = db.session.query(SolicitudDeCambio).filter(SolicitudDeCambio.nombreSolicitud.ilike("%"+nombre+"%")).all()
         return retorno
 
-

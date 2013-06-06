@@ -11,7 +11,7 @@
 		.botones-cabecera{
 			text-align : right;
 		}
-		
+
 
 	</style>
 <link href="{{ url_for('static', filename = 'bootstrap/css/bootstrap-responsive.css') }}" rel="stylesheet">
@@ -31,7 +31,7 @@ function hideModal(){
 
 <!-- BARRA DE NAVEGACION -->
 <div class="navbar navbar-fixed-top">
-		
+
 		<div class="navbar-inner">
 			<div class="container">
 				{% if session.logged_in %}
@@ -39,11 +39,12 @@ function hideModal(){
 				<h5>Bienvenido {{session.usuario}} !</h5>
 				</div>
 				{% endif %}
-			
+
 				<div class="botones-cabecera">
 					<a href="{{url_for('index')}}"><img src="{{url_for('static',filename = 'img/home.png')}}"></a>
-					
-				{% if session.logged_in %}	
+				    <a href="{{url_for('indexMensaje')}}"> <img src="{{url_for('static',filename = 'img/mensaje.png')}}"></a>
+
+				{% if session.logged_in %}
 					<a href="{{url_for('logout')}}" class="btn btn-danger">Salir</a>
 				{% else %}
 					<a class="btn btn-primary" href="#login" data-toggle="modal">Ingresar</a>
@@ -56,13 +57,13 @@ function hideModal(){
 
 
 <div class="container">
-	
+
 {%if session.logged_in %}
 
 {% else %}
 	<div class="hero-unit">
 			<h1>SGP!</h1>
-			<p>Bienvenido a SGP, un sistema de gerenciamiento de proyectos. 
+			<p>Bienvenido a SGP, un sistema de gerenciamiento de proyectos.
 			Ingrese al sistema para realizar modificaciones.
 			Utilice el menu para acceder a las diferentes partes del sistema</p>
 			<p><a class="btn btn-primary" href="#login" data-toggle="modal">Ingresar</a></p>
@@ -79,13 +80,13 @@ function hideModal(){
       </div>
       <form action="{{url_for('login')}}" method="post">
       <div class="modal-body">
-        
+
         <p>Complete el formulario para ingresar al sistema</p>
         <input type="text" placeholder="Nombre de Usuario" id="usuario" name="nombreUsuario">
-        <br/> 
+        <br/>
         <input type="password" placeholder="Contraseña" id="password" name="contrasena">
         <br/>
-       
+
       </div>
       <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal">Cerrar</a>
@@ -93,8 +94,8 @@ function hideModal(){
       </div>
       </form>
     </div>
-		
-	
+
+
 	{% for message in get_flashed_messages() %}
 		<div class="modal">
 			<div class="modal-header">
@@ -106,11 +107,11 @@ function hideModal(){
       		</div>
 	      	<div class="modal-footer">
 	        	<a href="#" class="btn" data-dismiss="modal" onClick="hideModal();">Cerrar</a>
-	      	</div>				
+	      	</div>
 		</div>
 	{% endfor %}
-	
-	{%if session.logged_in %}		
+
+	{%if session.logged_in %}
 		{% block body %}{% endblock %}
-	{% endif %} 
+	{% endif %}
 </div>

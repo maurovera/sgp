@@ -17,7 +17,7 @@
 		$("#idLB").val( idLB );
 		$("#numero").val( numero );
 		$("#estado").val( estado );
-		
+
 		// SI TODO SALE BIEN
 		//Mostramos el formulario
 		mostrarFormulario();
@@ -29,13 +29,13 @@
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
 	}
-	
+
 	function cerrar(idLB){
-		
+
 	}
-	
-	
-	
+
+
+
 	function mostrarFormulario(){
 		$("#formulario-div").show("slow");
 		$("#boton-mostrar-formulario").hide();
@@ -123,14 +123,14 @@
           {% for u in lineaBases %}
           <tr>
             <td>{{u.idLB}}</td>
-            <td>{{u.numero}}</td> 	
-            	
+            <td>{{u.numero}}</td>
+
             <td>{{u.estado}}</td>
             <td><a class="btn btn-danger" onClick="eliminar({{u.idLB}});">Eliminar</a></td>
             <!---<td><a class="btn" onClick="habilitarModificar('{{u.idLB}}','{{u.Numero}}','{{u.Estado}}');">
             Modificar</a></td>--->
             <td><a class="btn btn-danger" onClick="abrir({{u.idLB}});">Abrir</a></td>
-            <td><a class="btn" onClick="eliminar({{u.idLB}});">Cerrar</a></td>  
+            <td><a class="btn" onClick="eliminar({{u.idLB}});">Cerrar</a></td>
           </tr>
 
           {% else %}
@@ -176,14 +176,14 @@
 		<form action="{{ url_for('nuevaLB') }}/{{idProyecto}}/{{idFase}}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
 
-				
+
 				<label>Numero:</label>
 				<input type="number" placeholder="Numero de LB" name="numero" id="numero">
-				<!--<label>Estado:</label>--->
-				<input type="hidden" placeholder="Estado" name="estado" id="estado"> 
+				<!--<label>Estado:</label>-->
+				<input type="hidden" placeholder="Estado" name="estado" id="estado">
 				<label>Items</label>
-				{% for i in listaItem %}				
-					<input type="checkbox" name="item" value="{{i.idItemActual}}">Item numero : {{i.numero}}<br>
+				{% for i in listaItem %}
+					<input type="checkbox" name="item" value="{{i.idItemActual}}">Item : {{i.nombreItemActual}}<br>
 				{% endfor %}
 				<br/>
 				<br/>

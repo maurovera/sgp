@@ -8,8 +8,9 @@ from fasesView import *
 from itemView import *
 from datosItemView import *
 from lineaBaseView import *
-from relacionView import * 
+from relacionView import *
 from solicitudView import *
 from miembroProyectoFaseView import *
 from rolesPorProyectoView import *
 from comiteView import *
+from mensajeView import *

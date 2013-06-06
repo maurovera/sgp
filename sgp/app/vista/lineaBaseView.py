@@ -55,9 +55,9 @@ def indexLineaBase(idProyecto= None, idFase=None):
 def eliminarLineaBase(id=None, idFase=None, idProyecto = None):
     if(id):
         lineaBase = control.getLineaBaseById(id)
-        
+
         if(lineaBase):
-            
+
             r= control.eliminarLineaBase(lineaBase)
             if(r["estado"] == True):
                 flash("Se elimino con exito la Linea Base con ID: ")
@@ -65,78 +65,76 @@ def eliminarLineaBase(id=None, idFase=None, idProyecto = None):
                 flash("Ocurrio un error: "+ r["mensaje"])
         else :
             flash("Ocurrio un error durante la eliminacion")
-    
+
     return redirect(url_for('indexLineaBase', idProyecto = idProyecto, idFase=idFase))
 
 @app.route('/lineaBase/abrir')
 @app.route('/lineaBase/abrir/<id>/<idProyecto>/<idFase>')
 def abrirLineaBase(id=None, idFase=None, idProyecto = None):
     return redirect(url_for('indexLineaBase', idProyecto = idProyecto, idFase=idFase))
-         
+
 
 @app.route('/lineaBase/nuevo')
 @app.route('/lineaBase/nuevo/<idProyecto>/<idFase>', methods=['GET','POST'])
 def nuevaLB(idFase=None, idProyecto = None):
     ''' Crea una nueva linea base '''
     #Si recibimos algo por post
-    
-    
-    
+
+
+
     if request.method == 'POST' :
-        
-        
+
+
         print "LO QUE SE RECIBE POR POST EN LB"
         print request.form['numero']
-        print request.form['estado']
         print request.form.getlist('item')
         print "------fin lb post---------"
         #idLB= request.form['idLB']
         numero = request.form['numero']
-        estado = request.form['estado']
         idFase = idFase
         listaItem = request.form.getlist('item')
         print "Estoy aca adentro del form :D CAGADA DE PATO..."
-        #Si esta todo completo (Hay que hacer una verificacion probablemente 
+        #Si esta todo completo (Hay que hacer una verificacion probablemente
         #con un metodo kachiai
-        if(numero and estado and idFase and listaItem):
+        if(numero and idFase and listaItem):
             lineaBase = LineaBase()
             #falta auto incremento de numero de linea base por fase
             lineaBase.numero = numero
-            lineaBase.estado = estado
+            lineaBase.estado = 0
             lineaBase.idFase = idFase
-            
+
             r = control.nuevaLineaBase(lineaBase)
-            
+
             if(r["estado"] == True):
                 r1 = control.agregarItemLB(lineaBase,listaItem)
                 if(r1["estado"] == True ):
                     flash("Exito, se creo una nueva LB")
                 else:
-                   flash("Ocurrio un error : " + r1["mensaje"])    
+                   flash("Ocurrio un error : " + r1["mensaje"])
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
-                    
+
     return redirect(url_for('indexLineaBase',idProyecto = idProyecto, idFase=idFase))
 
 @app.route('/lineaBase/modificar')
 @app.route('/lineaBase/modificar/<idProyecto>/<idFase>', methods=['GET','POST'])
 def modificarLB(idFase=None, idProyecto=None):
     ''' Modifica una LB '''
-    
-    
-    
+
+
+
     if request.method == 'POST' :
-        
+
         print request.form['idLB']
         print request.form['numero']
         print request.form['estado']
-        
+
         idLB= request.form['idLB']
         numero = request.form['numero']
         estado = request.form['estado']
-        
+
         print "Estoy aca adentro del form..."
-        #Si esta todo completo (Hay que hacer una verificacion probablemente 
+        #Si esta todo completo (Hay que hacer una verificacion probablemente
         #con un metodo kachiai
         if(idLB and numero and estado):
             lineaBase = control.getLineaBaseById(idLB)
@@ -144,14 +142,14 @@ def modificarLB(idFase=None, idProyecto=None):
                 lineaBase.idLB = idLB
                 lineaBase.numero = numero
                 lineaBase.estado = estado
-                    
+
                 r = control.modificarLineaBase(lineaBase)
                 if( r["estado"] == True ):
                     flash(u"Modficado con exito")
                 else:
                     flash(u"Ocurrio un error : " + r["mensaje"])
-                       
-        
+
+
     return redirect(url_for('indexLineaBase', idProyecto=idProyecto, idFase=idFase))
 
 @app.route("/lineaBase/buscar")

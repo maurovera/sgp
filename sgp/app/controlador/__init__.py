@@ -13,4 +13,3 @@ from catributoDeItem import ControlAtributoDeItem
 from csolicitud import ControlSolicitud
 from cmensaje import ControlMensaje
 
-

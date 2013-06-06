@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+
+	function eliminar(id){
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarMensaje')}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+		+
+         "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
+        $("#modal-from-dom").modal('show');
+	}
+
+	function mostrarFormulario(){
+		$("#formulario-div").show("slow");
+		$("#boton-mostrar-formulario").hide();
+	}
+	function ocultarFormulario(){
+		$("#formulario-div").hide("slow");
+		$("#boton-mostrar-formulario").show();
+		$("#formulario")[0].reset();
+
+	}
+
+
+
+</script>
+
+<div id="modal-from-dom" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal">&times;</a>
+      <h3>Eliminar Mensaje</h3>
+    </div>
+    <div class="modal-body">
+      <p>La eliminacion de un Mensaje es irreversible.</p>
+      <p>Esta seguro que desea eliminar?</p>
+    </div>
+    <div class="modal-footer" id="botones-eliminar">
+    	<!-- placeholder -->
+    </div>
+</div>
+
+<div class="row">
+    <br>
+</div>
+
+<div class="row">
+	<div class="span12">
+		<center>
+		<h1> Mensajes de {{session['usuario']}} </h1>
+		<!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
+		</center>
+	</div>
+</div>
+
+<hr>
+
+<div class="usuarios">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de Mensajes </h2>
+        <table class="table table-striped">
+          <tr>
+
+            <th>Fecha</th>
+            <th>Titulo </th>
+            <th>Ver</th>
+            <th>Eliminar</th>
+             </tr>
+          {% for u in mensajes %}
+
+          {% if u.estado == 'leido' %}
+          <tr style="font-style:italic;">
+          {% else %}
+          <tr>
+          {% endif %}
+            <td>{{u.fecha}}</td>
+            <td>{{u.titulo}}</td>
+            <td><a class="btn btn-info" href="{{url_for('mostrarMensaje')}}/{{u.idMensaje}}">Mostrar</a></td>
+			<td><a class="btn btn-danger" onClick="eliminar({{u.idMensaje}});">Eliminar</a></td>
+
+          </tr>
+
+          {% else %}
+          	<tr>
+          		NO HAY REGISTROS
+          	</tr>
+          {% endfor %}
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+
+
+
+{% endblock %}

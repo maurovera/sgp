@@ -64,17 +64,17 @@ def indexItem(idProyecto=None,idFase=None):
     nombresTipoItem = {}
     for tipo in tipoItems:
         nombresTipoItem[tipo.idTipoItem] = ''+ tipo.nombre
-    
+
     estadosItem = {}
     for item in items:
         datos = item.datos
         for dItem in datos:
             if dItem.version == item.ultimaVersion :
                 estadosItem[item.idItemActual] = dItem.estado
-        
-        
-    
-    return render_template('indexItem.html', items = items, idProyecto = idProyecto, idFase = idFase, tipoItems = tipoItems, nombresTipoItem = nombresTipoItem, estadosItem = estadosItem) 
+
+
+
+    return render_template('indexItem.html', items = items, idProyecto = idProyecto, idFase = idFase, tipoItems = tipoItems, nombresTipoItem = nombresTipoItem, estadosItem = estadosItem)
 
 
 @app.route('/item/eliminar')
@@ -112,17 +112,18 @@ def nuevoItem():
         idProyecto = request.form['idProyecto']
         idFase = request.form['idFase']
         idTipoItem = request.form['idTipoItem']
+        nombreItem = request.form['nombreItem']
 
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente
         #con un metodo kachiai
-        if(idFase and idTipoItem):
+        if(idFase and idTipoItem and nombreItem):
             #Se necesita cargar todos los atributos del tipo item.
             item = Item()
             item.idFase = idFase
             item.idTipoItem = idTipoItem
             item.eliminado = False
-
+            item.nombreItemActual = nombreItem
             fase = controlFase.getFaseById(idFase)
             tipoItem = controlTipoItem.getTipoItemById(idTipoItem)
             numero = len( list(fase.items) ) + 1
@@ -200,4 +201,3 @@ def modificarItem():
 #    print "Helloooooowww"
 #    tipoItems = busquedaPorNombre(nombrebuscado);
 #    return render_template('indexTipoItem.html', tipoItems = tipoItems)
-
