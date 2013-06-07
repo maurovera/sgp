@@ -118,7 +118,7 @@
             <th>Eliminar</th>
             <!---<th>Modificar</th>--->
             <th>Abrir</th>
-            <th>Cerrar</th>
+           
           </tr>
           {% for u in lineaBases %}
           <tr>
@@ -130,7 +130,7 @@
             <!---<td><a class="btn" onClick="habilitarModificar('{{u.idLB}}','{{u.Numero}}','{{u.Estado}}');">
             Modificar</a></td>--->
             <td><a class="btn btn-danger" onClick="abrir({{u.idLB}});">Abrir</a></td>
-            <td><a class="btn" onClick="eliminar({{u.idLB}});">Cerrar</a></td>
+            
           </tr>
 
           {% else %}
@@ -188,7 +188,7 @@
 				<br/>
 				<br/>
 
-				<input type="submit" value="Guardar" class="btn btn-primary" id="btn-accion">
+				<input type="submit" value="CERRAR LINEA BASE" class="btn btn-primary" id="btn-accion">
 
 			</fieldset>
 		</form>
