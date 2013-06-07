@@ -72,7 +72,13 @@ def indexItem(idProyecto=None,idFase=None):
             if dItem.version == item.ultimaVersion :
                 estadosItem[item.idItemActual] = dItem.estado
 
-
+    
+    # aqui controlamos si todo los items estan en estado final
+    if not corroborarFaseFinal(idFase):
+        fase = controlFase.getFaseById(idFase)
+        # aqui pasamos la fase a un estado final
+        fase.estado = "final"
+        controlFase.modificarFase(fase)
 
     return render_template('indexItem.html', items = items, idProyecto = idProyecto, idFase = idFase, tipoItems = tipoItems, nombresTipoItem = nombresTipoItem, estadosItem = estadosItem)
 
@@ -201,3 +207,18 @@ def modificarItem():
 #    print "Helloooooowww"
 #    tipoItems = busquedaPorNombre(nombrebuscado);
 #    return render_template('indexTipoItem.html', tipoItems = tipoItems)
+
+# se agrego importar tipoItem entre fases
+def corroborarFaseFinal(idFase):
+    valor = False
+    listaItem = listadoItem(idFase);
+    
+    for i in listaItem:
+        if( not control.comprobarItemEstadofinal(i) ):
+            valor = True
+              
+            
+    
+    return valor    
+
+
