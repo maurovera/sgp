@@ -94,8 +94,8 @@ class ControlUsuario():
         permisos = []
         r = usuario.roles
         for rol in r :
-             permisos += rol.permisos
-        valorpermisos = []
+            permisos += rol.permisos
+            valorpermisos = []
         for p in permisos:
             valorpermisos.append(p.valor)
         return valorpermisos
