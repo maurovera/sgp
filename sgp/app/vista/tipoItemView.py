@@ -71,12 +71,22 @@ def indexTipoItem(idProyecto=None,idFase=None):
 def eliminarTipoItem(idProyecto=None,idFase=None,id=None):
     if(id):
         tipoItem = control.getTipoItemById(id)
-
+        # aqui antes de eliminar un Tipo Item se tiene que saber si esta instanciado un item
+        # pendiente, que te avise. 
+        # si el item esta en estado eliminado se elimina el tipo item
+        # al eliminar el tipo item solo pasa a un estado eliminado
         if(tipoItem):
-
+            
             r= control.eliminarTipoItem(tipoItem)
             if(r["estado"] == True):
                 flash("Se elimino con exito el tipo item: " + tipoItem.nombre)
+                fase = controlFase.getFaseById(idFase)
+                # aqui ya hace el control 
+                # si no tiene TipoItem pasa a inicial
+                if (not corroborarSiTieneTipoItem(idFase)):
+                    fase.estado = "no iniciado"
+                    controlFase.modificarFase(fase)
+            
             else:
                 flash("Ocurrio un error: "+ r["mensaje"])
         else :
@@ -122,6 +132,8 @@ def nuevoTipoItem():
             r = control.nuevoTipoItem(tipoItem)
             if(r["estado"] == True):
                 fase = controlFase.getFaseById(idFase)
+                # aqui ya hace el control 
+                # como se agrega siempre sera pues en desarollo la fase
                 if (fase.estado != "desarrollo"):
                     fase.estado = "desarrollo"
                     controlFase.modificarFase(fase)
@@ -216,7 +228,13 @@ def importarTipoItem(idProyecto, idFase):
 
             r = control.nuevoTipoItem(tipoItem)
             if(r["estado"] == True):
-                flash("Exito, se creo un nuevo tipo item")
+                fase = controlFase.getFaseById(idFase)
+                # aqui ya hace el control 
+                # como se agrega siempre sera pues en desarollo la fase
+                if (fase.estado != "desarrollo"):
+                    fase.estado = "desarrollo"
+                    controlFase.modificarFase(fase)
+                flash("Exito, se importo un tipo item")
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
 
@@ -349,3 +367,11 @@ def returnTipoItem(idTipoItem,idProyecto,idFase):
     return redirect(url_for('indexTipoItem', idProyecto=idProyecto, idFase=idFase ))
 
 # se agrego importar tipoItem entre fases
+def corroborarSiTieneTipoItem(idFase):
+    valor = False
+    listaDeTipoItem = listadoTipoItem(idFase);
+    if len( listaDeTipoItem ) > 0:
+        valor = True
+    
+    return valor    
+    

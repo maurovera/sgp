@@ -4,11 +4,26 @@ from flask import render_template, flash, redirect, request, session, g, url_for
 from app import app
 from app.controlador import ControlLineaBase
 from app.controlador import ControlItem
+from app.controlador import ControlDatosItem
+from app.controlador import ControlFase
 from app.modelo import LineaBase
 from contextlib import closing
 
 control = ControlLineaBase()
 controlItem = ControlItem()
+controlDatos = ControlDatosItem()
+controlFase = ControlFase()
+
+def listadoItem(idFase):
+    ''' Devuelve un listado de los tipo item '''
+    lista = None
+    r = True
+    if(r):
+        lista = controlItem.getItemByFase(idFase)
+    else:
+        flash("Error. Lista no devuelta")
+    return lista
+
 
 def listadoItemAprobado(idFase):
     lista = controlItem.getItemAprobadoByFase(idFase)
@@ -36,6 +51,16 @@ def listadoLineaBase(idFase):
         flash("Error. Lista no devuelta")
     return lista
 
+def listadoDeEstados():
+    ''' Devuelve un listado de las lineas base '''
+    listaN = []
+    #lista = control.getLBByFase(idFase)
+    listaN.append({"numero" : 0, "estado" :  "creado"})
+    listaN.append({"numero" : 1, "estado" :  "liberado"})
+    listaN.append({"numero" : -1, "estado" :  "no valido"})    
+    return listaN
+
+
 
 @app.route('/lineaBase')
 @app.route('/lineaBase/<idProyecto>/<idFase>')
@@ -43,11 +68,21 @@ def indexLineaBase(idProyecto= None, idFase=None):
     ''' Devuelve los datos de una LB en Concreto '''
     lineaBases = listadoLineaBase(idFase);
     listaItem = listadoItemAprobado(idFase);
+    listaEstado = listadoDeEstados();
+    
+    
+    if not corroborarFaseFinal(idFase):
+        fase = controlFase.getFaseById(idFase)
+        # aqui pasamos la fase a un estado final
+        fase.estado = "final"
+        controlFase.modificarFase(fase)
+    
+        
     print idProyecto
     print idFase
     print "listaItem"
     print listaItem
-    return render_template('indexLineaBase.html', lineaBases = lineaBases, idProyecto=idProyecto, idFase=idFase, listaItem = listaItem)
+    return render_template('indexLineaBase.html', lineaBases = lineaBases, idProyecto=idProyecto, idFase=idFase, listaItem = listaItem, listaEstado = listaEstado)
 
 
 @app.route('/lineaBase/eliminar')
@@ -71,6 +106,36 @@ def eliminarLineaBase(id=None, idFase=None, idProyecto = None):
 @app.route('/lineaBase/abrir')
 @app.route('/lineaBase/abrir/<id>/<idProyecto>/<idFase>')
 def abrirLineaBase(id=None, idFase=None, idProyecto = None):
+    ''' pasa todo los estados de los items a estado aprobado menos los que estan en revision '''
+    lb = control.getLineaBaseById(id)
+    #pasa a un estado liberado estado igual a 1
+    lb.estado = 1
+    control.modificarLineaBase(lb)
+    
+    # se pasa todo los items en estado final a aprobado
+    lista = lb.items
+    for d in lista:
+        dato = controlItem.getDatoActualByIdItemActual(d.idItemActual)
+        if dato.estado != "revision":
+            dato.estado = "aprobado"
+            controlDatos.modificarDatosItem(dato)
+        
+    
+    flash("Se abrio con exito la Linea Base ")
+    # CORROBORAMOS QUE TENGA ALMENOS UNA LB
+    fase = controlFase.getFaseById(idFase)
+    # aqui ya hace el control 
+    # como abrimos la lb vemos si tiene al menos una linea base que no este liberada
+    if (not corroborarSiTieneLB(idFase) ):
+        fase.estado = "desarrollo"
+        controlFase.modificarFase(fase)
+                    
+       
+    # pregunta es necesario desligar a todo los items de la lb base liberada
+        
+    
+    
+    
     return redirect(url_for('indexLineaBase', idProyecto = idProyecto, idFase=idFase))
 
 
@@ -108,6 +173,14 @@ def nuevaLB(idFase=None, idProyecto = None):
             if(r["estado"] == True):
                 r1 = control.agregarItemLB(lineaBase,listaItem)
                 if(r1["estado"] == True ):
+                    fase = controlFase.getFaseById(idFase)
+                    # aqui ya hace el control 
+                    # como se agrega siempre sera pues con LB la fase
+                    if (fase.estado != "en linea base"):
+                        fase.estado = "en linea base"
+                        controlFase.modificarFase(fase)
+                    
+                    
                     flash("Exito, se creo una nueva LB")
                 else:
                    flash("Ocurrio un error : " + r1["mensaje"])
@@ -159,3 +232,67 @@ def buscarLB(idBuscado):
     print "Helloooooowww   " + idBuscado
     lineasBase = busquedaPorId(idBuscado);
     return render_template('indexLineaBase.html', lineaBases = lineasBase)
+
+
+@app.route('/lineaBase/mostrarItem')
+@app.route('/lineaBase/mostrarItem/<idLB>/<idProyecto>/<idFase>')
+def mostrarItemDeLB(idLB, idProyecto = None, idFase = None):
+    lb = control.getLineaBaseById(idLB)
+    lista  = lb.items
+    print "esto son los datos del item:"
+    listaN = []
+    for d in lista:
+        
+        print d
+        item = controlItem.getItemById(d.idItemActual)
+        print "nombre del item : "
+        print item.nombreItemActual
+        dato = controlItem.getDatoActualByIdItemActual(d.idItemActual)
+        print "estado del item"
+        print dato.estado
+        listaN.append({"nombre": item.nombreItemActual,"dato" :  dato.estado })
+        
+    print "lista nueva"
+    for i in listaN:
+        print i["nombre"]
+    
+    print "fin de listado"
+    
+    print "Esta es la lista de estado"
+    listaEstado = listadoDeEstados();
+    for i in listaEstado:
+        print i["estado"]
+        
+    
+    return redirect(url_for('indexLineaBase', idProyecto = idProyecto, idFase=idFase))    
+
+
+
+def corroborarSiTieneLB(idFase):
+    ''' corroborar si tiene una linea base '''
+    valor = False
+    listaLB = listadoLineaBase(idFase);
+    
+    for l in listaLB:
+        #si la linea base no esta liberada
+        if l.estado != 1:
+            valor = True
+    
+    return valor    
+
+
+
+# se agrego importar tipoItem entre fases
+def corroborarFaseFinal(idFase):
+    valor = False
+    listaItem = listadoItem(idFase);
+    
+    for i in listaItem:
+        if( not controlItem.comprobarItemEstadofinal(i) ):
+            valor = True
+              
+            
+    
+    return valor    
+    
+    
