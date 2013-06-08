@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+
+
+<div class="row">
+	<div class="span12">
+		<center>
+		<h1> Item de linea Base <br> {{lineaBase.numero}}</h1>
+		
+		</center>
+	</div>
+</div>
+
+<hr>
+
+<div class="usuarios">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de Items </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Nombre item</th>
+            <th>Esta Eliminado </th>
+            <th> Version</th>
+            <th> Prioridad </th>
+            
+            
+          </tr>
+          {% for u in items %}
+          <tr>
+            <td>{{u['nombre']}}</td>
+            <td>{{u['eliminado']}}</td>
+            <td>{{u['version']}}</td>
+            <td>{{u['prioridad']}}</td>
+            
+            
+
+          {% else %}
+          	<tr>
+          		NO HAY REGISTROS
+          	</tr>
+          {% endfor %}
+
+        </table>
+      </div>
+
+    </div>
+
+
+
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <a href="{{url_for('indexLineaBase')}}/{{idProyecto}}/{{idFase}}" class="btn btn-large btn-success">Atras!</a>
+        </center>
+    </div>
+</div>
+
+
+</div>
+{% endblock %}

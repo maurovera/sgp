@@ -6,6 +6,7 @@ from app.controlador import ControlLineaBase
 from app.controlador import ControlItem
 from app.controlador import ControlDatosItem
 from app.controlador import ControlFase
+from app.controlador import ControlProyecto
 from app.modelo import LineaBase
 from contextlib import closing
 
@@ -13,6 +14,7 @@ control = ControlLineaBase()
 controlItem = ControlItem()
 controlDatos = ControlDatosItem()
 controlFase = ControlFase()
+controlProyecto =  ControlProyecto()
 
 def listadoItem(idFase):
     ''' Devuelve un listado de los tipo item '''
@@ -70,12 +72,8 @@ def indexLineaBase(idProyecto= None, idFase=None):
     listaItem = listadoItemAprobado(idFase);
     listaEstado = listadoDeEstados();
     
+    estadoDeLaFase(idFase, idProyecto)
     
-    if not corroborarFaseFinal(idFase):
-        fase = controlFase.getFaseById(idFase)
-        # aqui pasamos la fase a un estado final
-        fase.estado = "final"
-        controlFase.modificarFase(fase)
     
         
     print idProyecto
@@ -123,13 +121,7 @@ def abrirLineaBase(id=None, idFase=None, idProyecto = None):
     
     flash("Se abrio con exito la Linea Base ")
     # CORROBORAMOS QUE TENGA ALMENOS UNA LB
-    fase = controlFase.getFaseById(idFase)
-    # aqui ya hace el control 
-    # como abrimos la lb vemos si tiene al menos una linea base que no este liberada
-    if (not corroborarSiTieneLB(idFase) ):
-        fase.estado = "desarrollo"
-        controlFase.modificarFase(fase)
-                    
+    estadoDeLaFaseAlEliminar(idFase, idProyecto)                
        
     # pregunta es necesario desligar a todo los items de la lb base liberada
         
@@ -173,13 +165,7 @@ def nuevaLB(idFase=None, idProyecto = None):
             if(r["estado"] == True):
                 r1 = control.agregarItemLB(lineaBase,listaItem)
                 if(r1["estado"] == True ):
-                    fase = controlFase.getFaseById(idFase)
-                    # aqui ya hace el control 
-                    # como se agrega siempre sera pues con LB la fase
-                    if (fase.estado != "en linea base"):
-                        fase.estado = "en linea base"
-                        controlFase.modificarFase(fase)
-                    
+                    estadoDeLaFase(idFase, idProyecto)
                     
                     flash("Exito, se creo una nueva LB")
                 else:
@@ -243,7 +229,6 @@ def mostrarItemDeLB(idLB, idProyecto = None, idFase = None):
     listaN = []
     for d in lista:
         
-        print d
         item = controlItem.getItemById(d.idItemActual)
         print "nombre del item : "
         print item.nombreItemActual
@@ -288,11 +273,158 @@ def corroborarFaseFinal(idFase):
     listaItem = listadoItem(idFase);
     
     for i in listaItem:
-        if( not controlItem.comprobarItemEstadofinal(i) ):
-            valor = True
+        if i.eliminado == False:
+            if( not controlItem.comprobarItemEstadofinal(i) ):
+                valor = True
               
-            
-    
     return valor    
     
     
+def corroborarSiTieneItem(idFase):
+    valor = False
+    listaDeItem = listadoItem(idFase);
+    for i in listaDeItem:
+        if i.eliminado == False: 
+                valor = True
+    
+    return valor
+#def corroborarFasAntFinal(idFase, idProyecto):
+#    valor = False
+#    pro = controlProyecto.getProyectoById(idProyecto)
+#    faseActual =  controlFase.getFaseById(idFase)
+#    if faseActual.numeroFase == 1:
+#        valor = False
+#    if faseActual.numeroFase > 1:
+#        for f in pro.fases:
+            # si la fase que queres es diferente
+#            if(f.numeroFase == faseActual.numeroFase - 1): 
+                # y si al menos hay alguna fase que no es final
+#                if(f.estado != 'final'):
+#                   valor = True
+            
+#   return valor
+
+
+
+def estadoDeLaFaseAlEliminar(idFase, idProyecto):
+    faseActual = controlFase.getFaseById(idFase)
+    proyecto = controlProyecto.getProyectoById(idProyecto)
+    # aca se controla si todos son finales y la anterior es final
+    if not corroborarFaseFinal(idFase):
+        for f in proyecto.fases:
+            if(faseActual.numeroFase > 1 ):
+                if f.numeroFase == faseActual.numeroFase - 1:
+                    if f.estado == 'final':
+                        faseActual.estado = 'final'
+                        controlFase.modificarFase(faseActual)
+            elif faseActual.numeroFase == 1:
+                faseActual.estado = 'final'
+                controlFase.modificarFase(faseActual)
+                
+    
+    
+    elif corroborarSiTieneLB(idFase):
+        faseActual.estado = "en linea base"
+        controlFase.modificarFase(faseActual)
+    elif corroborarSiTieneItem(idFase):
+        faseActual.estado = "desarrollo"
+        controlFase.modificarFase(faseActual)
+    else: 
+        faseActual.estado = "no iniciado"
+        controlFase.modificarFase(faseActual)   
+            
+     
+    # aqui cambia los estados de las fases sgtes si es necesario
+    if faseActual.estado != 'final':
+        for f in proyecto.fases:
+            if f.numeroFase > faseActual.numeroFase:
+                fase = controlFase.getFaseById(f.idFase)
+                if corroborarSiTieneLB(f.idFase):
+                    fase.estado = "en linea base"
+                    controlFase.modificarFase(fase)
+                else:
+                    fase.estado = "desarrollo"
+                    controlFase.modificarFase(fase)
+
+
+def estadoDeLaFase(idFase, idProyecto):
+    faseActual = controlFase.getFaseById(idFase)
+    proyecto = controlProyecto.getProyectoById(idProyecto)
+    # aca se controla si todos son finales y la anterior es final
+    if not corroborarFaseFinal(idFase):
+        for f in proyecto.fases:
+            if(faseActual.numeroFase > 1 ):
+                if f.numeroFase == faseActual.numeroFase - 1:
+                    if f.estado == 'final':
+                        faseActual.estado = 'final'
+                        controlFase.modificarFase(faseActual)
+                        cambiarAdelanteSiFinal(idFase, idProyecto)
+            elif faseActual.numeroFase == 1:
+                faseActual.estado = 'final'
+                controlFase.modificarFase(faseActual)
+                cambiarAdelanteSiFinal(idFase, idProyecto)
+                
+                     
+                
+    elif corroborarSiTieneLB(idFase):
+        faseActual.estado = "en linea base"
+        controlFase.modificarFase(faseActual)
+    elif corroborarSiTieneItem(idFase):
+        faseActual.estado = "desarrollo"
+        controlFase.modificarFase(faseActual)
+    else: 
+        faseActual.estado = "no iniciado"
+        controlFase.modificarFase(faseActual)   
+            
+ 
+def cambiarAdelanteSiFinal(idFase, idProyecto):
+    faseActual = controlFase.getFaseById(idFase)
+    pro = controlProyecto.getProyectoById(idProyecto) 
+    if faseActual.estado == 'final':
+        for f in pro.fases:
+            if f.numeroFase > faseActual.numeroFase:
+                fase = controlFase.getFaseById(f.idFase)
+                if  not corroborarFaseFinal(idFase): 
+                    fase.estado = "final"
+                    controlFase.modificarFase(fase)
+                elif corroborarSiTieneLB(f.idFase):
+                    fase.estado = "en linea base"
+                    controlFase.modificarFase(fase)
+                else:
+                    fase.estado = "desarrollo"
+                    controlFase.modificarFase(fase)
+    
+ 
+ 
+     
+    # aqui cambia los estados de las fases sgtes si es necesario
+#     if faseActual.estado != 'final':
+#         for f in proyecto.fases:
+#             if f.numeroFase > faseActual.numeroFase:
+#                 fase = controlFase.getFaseById(f.idFase)
+#                 if corroborarSiTieneLB(f.idFase):
+#                     fase.estado = "en linea base"
+#                     controlFase.modificarFase(fase)
+#                 else:
+#                     fase.estado = "desarrollo"
+#                     controlFase.modificarFase(fase)
+
+@app.route('/lineaBase/listado')
+@app.route('/lineaBase/listado/<id>/<idProyecto>/<idFase>')
+def listaItemLB(id = None, idProyecto= None, idFase=None):
+    lineaBase = control.getLineaBaseById(id)
+    
+    datos  = lineaBase.items
+    print "esto son los datos del item:"
+    items = []
+    for d in datos:
+        item = controlItem.getItemById(d.idItemActual)
+        datoItem = controlItem.getDatoActualByIdItemActual(d.idItemActual)
+        #items.append(item)
+        items.append({"nombre": item.nombreItemActual,
+                      "eliminado": item.eliminado,
+                      "version": item.ultimaVersion,
+                      "prioridad" :  datoItem.prioridad })
+        
+        
+    return render_template('listaItemLB.html', lineaBase = lineaBase, idProyecto=idProyecto, idFase=idFase, items = items)

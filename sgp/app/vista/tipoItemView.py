@@ -7,6 +7,8 @@ from app.modelo import TipoItem
 from app.modelo import AtributoPorTipoItem
 from app.controlador import ControlAtributoPorTipoItem
 from app.controlador import ControlFase
+from app.controlador import ControlProyecto
+from app.controlador import ControlLineaBase
 from contextlib import closing
 
 #---------------------------------------------
@@ -15,12 +17,12 @@ from app.controlador import ControlUsuario
 from app.controlador import ControlPermiso
 from app.modelo import Usuario
 #----------------------------------------------
-
+controlLineaBase =  ControlLineaBase()
 control = ControlTipoItem()
 # control == controlador
 controlFase = ControlFase()
 controladorAtributoPorTipoItem = ControlAtributoPorTipoItem()
-
+controlProyecto = ControlProyecto()
 #........... no se si sirve-----------------------------
 controladorusuario = ControlUsuario()
 #controladorrol = ControlRol()
@@ -62,7 +64,8 @@ def indexTipoItem(idProyecto=None,idFase=None):
     ''' Devuelve los datos de un Tipo item en Concreto '''
     tipoItems = listadoTipoItem(idFase);
     tipoItemsTodo = listadoTipoItemTodos();
-
+    #esto se agrego al final
+    #estadoDeLaFase(idFase, idProyecto)
     return render_template('indexTipoItem.html', tipoItems = tipoItems, idProyecto = idProyecto, idFase = idFase, tipoItemsTodo = tipoItemsTodo)
 
 
@@ -80,13 +83,7 @@ def eliminarTipoItem(idProyecto=None,idFase=None,id=None):
             r= control.eliminarTipoItem(tipoItem)
             if(r["estado"] == True):
                 flash("Se elimino con exito el tipo item: " + tipoItem.nombre)
-                fase = controlFase.getFaseById(idFase)
-                # aqui ya hace el control 
-                # si no tiene TipoItem pasa a inicial
-                if (not corroborarSiTieneTipoItem(idFase)):
-                    fase.estado = "no iniciado"
-                    controlFase.modificarFase(fase)
-            
+                estadoDeLaFase(idFase, idProyecto)
             else:
                 flash("Ocurrio un error: "+ r["mensaje"])
         else :
@@ -131,12 +128,8 @@ def nuevoTipoItem():
 
             r = control.nuevoTipoItem(tipoItem)
             if(r["estado"] == True):
-                fase = controlFase.getFaseById(idFase)
-                # aqui ya hace el control 
-                # como se agrega siempre sera pues en desarollo la fase
-                if (fase.estado != "desarrollo"):
-                    fase.estado = "desarrollo"
-                    controlFase.modificarFase(fase)
+                #hace todo los cambios para la fase
+                estadoDeLaFase(idFase, tipoItem.idProyecto)
                 flash("Exito, se creo un nuevo tipo item")
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
@@ -228,12 +221,7 @@ def importarTipoItem(idProyecto, idFase):
 
             r = control.nuevoTipoItem(tipoItem)
             if(r["estado"] == True):
-                fase = controlFase.getFaseById(idFase)
-                # aqui ya hace el control 
-                # como se agrega siempre sera pues en desarollo la fase
-                if (fase.estado != "desarrollo"):
-                    fase.estado = "desarrollo"
-                    controlFase.modificarFase(fase)
+                estadoDeLaFase(idFase, tipoItem.idProyecto)
                 flash("Exito, se importo un tipo item")
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
@@ -366,6 +354,9 @@ def eliminarAtributoTipoItem(idTipoItem,idAtributoPorTipoItem):
 def returnTipoItem(idTipoItem,idProyecto,idFase):
     return redirect(url_for('indexTipoItem', idProyecto=idProyecto, idFase=idFase ))
 
+
+
+#-------------controles para cambiar estado de la fase en siiiiiiiiiiiii carajoooo----------
 # se agrego importar tipoItem entre fases
 def corroborarSiTieneTipoItem(idFase):
     valor = False
@@ -373,5 +364,49 @@ def corroborarSiTieneTipoItem(idFase):
     if len( listaDeTipoItem ) > 0:
         valor = True
     
-    return valor    
+    return valor 
+
+def corroborarSiTieneLB(idFase):
+    ''' corroborar si tiene una linea base '''
+    valor = False
+    listaLB = controlLineaBase.getLBByFase(idFase)
     
+    
+    for l in listaLB:
+        #si la linea base no esta liberada
+        if l.estado != 1:
+            valor = True
+    
+    return valor    
+   
+    
+def estadoDeLaFase(idFase, idProyecto):
+    faseActual = controlFase.getFaseById(idFase)
+    #proyecto = controlProyecto.getProyectoById(idProyecto)
+    if faseActual.estado != 'final':    
+        if corroborarSiTieneLB(idFase):
+            faseActual.estado = "en linea base"
+            controlFase.modificarFase(faseActual)
+        elif corroborarSiTieneTipoItem(idFase):
+            faseActual.estado = "desarrollo"
+            controlFase.modificarFase(faseActual)
+        else: 
+            faseActual.estado = "no iniciado"
+            controlFase.modificarFase(faseActual)   
+            
+    # aqui cambia los estados de las fases sgtes si es necesario
+#     if faseActual.estado != 'final':
+#         for f in proyecto.fases:
+#             if f.numeroFase > faseActual.numeroFase:
+#                 fase = controlFase.getFaseById(f.idFase)
+#                 if corroborarSiTieneLB(f.idFase):
+#                     fase.estado = "en linea base"
+#                     controlFase.modificarFase(fase)
+#                 else:
+#                     fase.estado = "desarrollo"
+#                     controlFase.modificarFase(fase)
+    
+        
+        
+
+        

@@ -24,7 +24,7 @@ def listadoHistorialItems():
 def indexHistorialItems():
     ''' Devuelve los datos de un HistorialItems en Concreto '''
     hItems = listadoHistorialItems();
-    return render_template('indexHistorialItems.html', hItems = hItems)
+    return render_template('indexHistorialitems.html', hItems = hItems)
 
 
 @app.route('/hItem/eliminar')

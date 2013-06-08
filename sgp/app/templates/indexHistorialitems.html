@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<div class="row">
+	<div class="span12">
+		<center>
+		<h1> Historial de los items </h1>
+		<!-- nombreUsuario, nombre, apellido, CI, telefono, email, contrasena -->
+		</center>
+	</div>
+</div>
+
+<hr>
+
+<div class="usuarios">
+
+<div class="row">
+      <div class="span8">
+        <h2> Listado de historial de items </h2>
+        <table class="table table-striped">
+          <tr>
+            <th>Id</th>
+            <th>Tipo operacion</th>
+            <th>Fecha Modificacion </th>
+            <th>idUsuario</th>
+            <th>idItem</th>
+            
+          </tr>
+          {% for u in hItems %}
+          <tr>
+            <td>{{u.idHistorialItems}}</td>
+            <td>{{u.tipoModificacion}}</td>
+            <td>{{u.fechaModificacion}}</td>
+            <td>{{u.idUsuario}}</td>
+            <td>{{u.idItem}}</td>
+            
+          {% else %}
+          	<tr>
+          		NO HAY REGISTROS
+          	</tr>
+          {% endfor %}
+
+        </table>
+      </div>
+</div>
+
+
+
+</div>
+{% endblock %}

@@ -16,9 +16,12 @@ from app.controlador import ControlPermiso
 from app.controlador import ControlTipoItem
 from app.controlador import ControlAtributoDeItem
 from app.modelo import Usuario
+from app.controlador import ControlRelacion
+from app.controlador import ControlFase
 #----------------------------------------------
-
+controlRelacion = ControlRelacion()
 control = ControlItem()
+controlFase = ControlFase()
 # control == controlador
 controladorDatosItem = ControlDatosItem()
 
@@ -224,17 +227,44 @@ def estadoListoDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
 @app.route("/item/datos/aprobado/<idItem>/<idItemActual>/<idProyecto>")
 def estadoAprobadoDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
     '''Estado Aprobado '''
+    relaciones =  controlRelacion.getItemsAntecesores(idItemActual)
+    # si relaciones no tiene ningun antecesor
+    if relaciones != []:
+        for r in relaciones:
+            if r.tipo == 'Antecesor-Sucesor':
+                datos = controladorDatosItem.getDatosItemById(idItem)
+                datos.estado = "aprobado"
+                p= controladorDatosItem.modificarDatosItem(datos)
 
-    datos = controladorDatosItem.getDatosItemById(idItem)
-    datos.estado = "aprobado"
-    p= controladorDatosItem.modificarDatosItem(datos)
+                if( p["estado"] == True ):
+                    flash("El estado del item ha sido modificado")
+                else:
+                    flash("Ocurrio un error : " + p["mensaje"])
+            else:
+                #flash("tiene solo una relacion Padre-Hijo y no puede ser aprobado")
+                itemCabecera = control.getItemById(idItemActual)
+                fase = controlFase.getFaseById(itemCabecera.idFase)
+                if(fase.numeroFase == 1):
+                    datos = controladorDatosItem.getDatosItemById(idItem)
+                    datos.estado = "aprobado"
+                    p= controladorDatosItem.modificarDatosItem(datos)
+                    flash("El estado del item ha sido modificado")
+                else:
+                    flash("tiene solo una relacion Padre-Hijo, no es de la primera Fase y no se puede aprobar")
+                 
 
-    if( p["estado"] == True ):
-        flash("El estado del item ha sido modificado")
     else:
-        flash("Ocurrio un error : " + p["mensaje"])
+        itemCabecera = control.getItemById(idItemActual)
+        fase = controlFase.getFaseById(itemCabecera.idFase)
+        if(fase.numeroFase == 1):
+            datos = controladorDatosItem.getDatosItemById(idItem)
+            datos.estado = "aprobado"
+            p= controladorDatosItem.modificarDatosItem(datos)
+            flash("El estado del item ha sido modificado")
+        else:
+            flash("No posee antecesores, no puede aprobarse el item")       
 
-
+    
     return redirect(url_for('datos',idItemActual = idItemActual, idProyecto = idProyecto))
 
 @app.route("/item/datos/rechazado")

@@ -53,6 +53,7 @@
     </div>
     <div class="modal-body">
       <p>La eliminacion de un item es irreversible.</p>
+      <p>Todas sus relaciones seran eliminadas.</p>
       <p>Esta seguro que desea eliminar?</p>
     </div>
     <div class="modal-footer" id="botones-eliminar">
@@ -83,23 +84,27 @@
         <table class="table table-striped">
           <tr>
             <th>Id</th>
+            <th>Nombre</th>
             <th>numero </th>
             <th>eliminado</th>
             <th>ultimaVersion</th>
             <th>Tipo De Item </th>
             <th>Eliminar</th>
-            <th>Modificar</th>
+            <!---<th>Modificar</th>--->
             <th>Datos</th>
+            <th>Revivir<th>
           </tr>
           {% for u in items %}
           <tr>
             <td>{{u.idItemActual}}</td>
+            <td>{{u.nombreItemActual}}</td>
             <td>{{u.numero}}</td>
             <td>{{u.eliminado}}</td>
             <td>{{u.ultimaVersion}}</td>
             <td>{{ nombresTipoItem[u.idTipoItem] }}</td>
 
-			{%  if not estadosItem[u.idItemActual] == 'final' %}
+			{%  if not estadosItem[u.idItemActual] == 'final'  %}
+		
 
 	            {% if not u.eliminado == True %}
 	            	<td><a class="btn btn-danger" onClick="eliminar({{u.idItemActual}});">Eliminar</a></td>
@@ -108,11 +113,11 @@
 	            {% endif %}
 
 	            {% if not u.eliminado == True %}
-	            <td><a class="btn" onClick="habilitarModificar('{{u.idItemActual}}','{{u.numero}}','{{u.eliminado}}','{{u.ultimaVersion}}','{{idProyecto}}','{{idFase}}');">
-	            Modificar</a></td>
+	            <!---<td><a class="btn" onClick="habilitarModificar('{{u.idItemActual}}','{{u.numero}}','{{u.eliminado}}','{{u.ultimaVersion}}','{{idProyecto}}','{{idFase}}');">
+	            Modificar</a></td>--->
 
 	            {% else %}
-	            <td></td>
+	            <!---<td></td>--->
 	            {% endif %}
 
 	            {% if not u.eliminado == True %}
@@ -123,11 +128,12 @@
 
 
 	            {% if u.eliminado == True %}
-	            <td><a href="{{url_for('datos')}}/{{u.idItemActual}}/{{idProyecto}}" class="btn"><small>Revivir</small></a></td>
+	            <td><a href="{{url_for('revivirItem')}}/{{idProyecto}}/{{idFase}}/{{u.idItemActual}}" class="btn"><small>Revivir</small></a></td>
 	            {% else %}
 	            <td></td>
 	            {% endif %}
 	          </tr>
+	          
 		{% else %}
 			<td>Estado del Item {{u.numero}} : {{estadosItem[u.idItemActual]}}</td>
 			<td></td>

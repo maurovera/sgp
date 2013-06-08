@@ -15,3 +15,4 @@ from rolesPorProyectoView import *
 from comiteView import *
 from mensajeView import *
 from historialItemsView import *
+from historialLBView import * 

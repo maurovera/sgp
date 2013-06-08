@@ -78,7 +78,7 @@
             {% for a in atributos %}
                 <th> {{a.nombre}} </th>
             {% endfor %}
-            <th>Eliminar</th>
+            <!---<th>Eliminar</th>--->
            <!--  <th>Caducar dato</th> -->
             <th>Volver A esta Version</th>
 
@@ -93,7 +93,7 @@
             {% for aDeItem in f.atributosDeItem %}
                 <td>{{aDeItem.valor}}</td>
             {% endfor %}
-            <td><a class="btn btn-danger" onClick="eliminar({{f.idItem}});">Eliminar</a></td>
+            <!---<td><a class="btn btn-danger" onClick="eliminar({{f.idItem}});">Eliminar</a></td>--->
 
           	<!-- <td><a href="{{url_for('caducarDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn">Caducar</a></td> -->
 

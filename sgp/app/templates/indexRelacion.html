@@ -97,13 +97,13 @@
 
             {%for i in items%}
             	{%if i.idItemActual == r.idAntecesor%}
-            		<td>{{i.numero}}</td>
+            		<td>{{i.nombreItemActual}}</td>
             	{%endif%}
             {%endfor%}
 
             {%for i in items%}
             	{%if i.idItemActual == r.idSucesor%}
-            		<td>{{i.numero}}</td>
+            		<td>{{i.nombreItemActual}}</td>
             	{%endif%}
             {%endfor%}
 

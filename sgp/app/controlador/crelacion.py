@@ -9,6 +9,10 @@ class ControlRelacion():
     def getRelaciones(self):
         """ funcion getRelacion """
         return Relacion.query.all()
+    def getItemsAntecesores(self,idItem):
+        
+        retorno = list(db.session.query(Relacion).filter(Relacion.idSucesor == idItem ).all())
+        return retorno
     
     def nuevoRelacion(self, relacion):
         """ funcion nuevoRelacion """
@@ -99,7 +103,19 @@ class ControlRelacion():
                     break
         return r
         
-   
+    
+#     def eliminarRelacionPorItem(self, idItemActual):
+#         import citem
+#         controlItem = citem.ControlItem()
+#         itemActual = controlItem.getItemById(idItemActual)
+#         listaDeRelacion = self.getRelaciones()
+#         for r in listaDeRelacion:
+#             if (r.idAntecesor == itemActual.idItemActual or r.idSucesor == itemActual.idItemActual ):
+#                 self.eliminarRelacion(r)
+#                 
+        
+        
+    
 #    def buscarPorNombre(self,nombre):
 #        retorno = db.session.query(Usuario).filter(Usuario.nombre.ilike("%"+nombre+"%")).all()
         #retorno = db.session.query(Usuario).filter_by(nombre=nombre).all()

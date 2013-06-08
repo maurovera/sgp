@@ -15,7 +15,7 @@ class LineaBase(db.Model):
     numero = db.Column( db.Integer)
     estado = db.Column(db.Integer)
     idFase=  db.Column(db.Integer, db.ForeignKey('fase.idFase'))
-
+    idUsuario = db.Column(db.Integer)
 
     #def setNombreLineaBase(self,nombre):
          #self.nombre = nombre

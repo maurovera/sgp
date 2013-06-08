@@ -5,6 +5,7 @@ from app.controlador import ControlRelacion
 from app.controlador import ControlItem
 from app.controlador import ControlProyecto
 from app.controlador import ControlFase
+from app.controlador import ControlDatosItem
 from app.modelo import Item
 from app.modelo import Relacion
 from contextlib import closing
@@ -14,6 +15,7 @@ control = ControlRelacion()
 controlItem = ControlItem()
 controlProyecto =  ControlProyecto()
 controlFase = ControlFase()
+controlDatos = ControlDatosItem()
 
 
 #def busquedaPorNombre(nombre):
@@ -71,8 +73,11 @@ def listadoItemDeFaseActFasAnt(idProyecto, idFase):
                     
     
     for i in lista :
+        dato = controlItem.getDatoActualByIdItemActual(i.idItemActual)
+        
         if(i.eliminado == False):
-            retorno.append(i)
+            if dato.estado != 'final':
+                retorno.append(i)
     
     return retorno
 

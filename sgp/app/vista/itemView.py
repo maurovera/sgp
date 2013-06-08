@@ -5,7 +5,6 @@ from app import app
 from app.controlador import ControlItem
 from app.modelo import Item
 from app.modelo import DatosItem
-from app.controlador import ControlDatosItem
 from contextlib import closing
 
 #---------------------------------------------
@@ -14,29 +13,22 @@ from app.controlador import ControlUsuario
 from app.controlador import ControlPermiso
 from app.controlador import ControlTipoItem
 from app.controlador import ControlFase
+from app.controlador import ControlProyecto
+from app.controlador import ControlRelacion
+from app.controlador import ControlDatosItem
+from app.controlador import ControlLineaBase
+
 from app.modelo import Usuario
 #----------------------------------------------
-
+controlRelacion =  ControlRelacion()
 control = ControlItem()
-# control == controlador
+
 controladorDatosItem = ControlDatosItem()
 controlTipoItem = ControlTipoItem()
 controlFase = ControlFase()
-
-#........... no se si sirve-----------------------------
+controlProyecto = ControlProyecto()
 controladorusuario = ControlUsuario()
-#controladorrol = ControlRol()
-#----------------------------------------------
-
-#def busquedaPorNombre(nombre):
-#    ''' Devuelve un listado de los tipo de item que coincidan con un nombre '''
-#    lista = None
-#    r = True
-#    if(r):
-#        lista = control.buscarPorNombre(nombre)
-#    else:
-#        flash("Error. Lista no devuelta")
-#    return lista
+controlLineaBase = ControlLineaBase()
 
 def listadoItem(idFase):
     ''' Devuelve un listado de los tipo item '''
@@ -71,34 +63,37 @@ def indexItem(idProyecto=None,idFase=None):
         for dItem in datos:
             if dItem.version == item.ultimaVersion :
                 estadosItem[item.idItemActual] = dItem.estado
-
     
-    # aqui controlamos si todo los items estan en estado final
-    if not corroborarFaseFinal(idFase):
-        fase = controlFase.getFaseById(idFase)
-        # aqui pasamos la fase a un estado final
-        fase.estado = "final"
-        controlFase.modificarFase(fase)
-
+    #esta es la ultima modificacion            
+    #estadoDeLaFase(idFase, idProyecto)
+       
     return render_template('indexItem.html', items = items, idProyecto = idProyecto, idFase = idFase, tipoItems = tipoItems, nombresTipoItem = nombresTipoItem, estadosItem = estadosItem)
 
 
 @app.route('/item/eliminar')
 @app.route('/item/eliminar/<idProyecto>/<idFase>/<id>')
 def eliminarItem(idProyecto=None,idFase=None,id=None):
-    if(id):
-        item = control.getItemById(id)
-
-        if(item):
-
-            r= control.eliminarItem(item)
-            if(r["estado"] == True):
-                flash("Se elimino con exito el item: " + str( item.numero) )
-            else:
-                flash("Ocurrio un error: "+ r["mensaje"])
-        else :
-            flash("Ocurrio un error durante la eliminacion")
-
+    
+    item = control.getItemById(id)
+    datos = control.getDatoActualByIdItemActual(id)
+    if datos.estado == 'aprobado':
+        flash("no se puede eliminar, esta en un estado aprobado")
+        return redirect(url_for('indexItem', idProyecto=idProyecto, idFase=idFase))
+    elif datos.estado == 'final':
+        flash("no se puede eliminar, esta en un estado final")
+        return redirect(url_for('indexItem', idProyecto=idProyecto, idFase=idFase))             
+    else:
+        # se elimina todas sus relaciones
+        eliminarRelacionPorItem(id)
+        datos.estado = "eliminado"
+        controladorDatosItem.modificarDatosItem(datos)    
+        r= control.eliminarItem(item)
+        if(r["estado"] == True):
+            estadoDeLaFaseAlEliminar(idFase, idProyecto)
+            flash("Se elimino con exito el item: " + str( item.numero) )
+        else:
+            flash("Ocurrio un error: "+ r["mensaje"])
+        
     return redirect(url_for('indexItem', idProyecto=idProyecto, idFase=idFase))
 
 
@@ -139,11 +134,8 @@ def nuevoItem():
 
             r = control.nuevoItem(item)
             if (r["estado"] == True):
-                #Aca tenemos que mandar a la pantalla de carga del item
-                if (fase.estado != "desarrollo"):
-                    fase.estado = "desarrollo"
-                    controlFase.modificarFase(fase)
-
+                estadoDeLaFase(idFase, idProyecto)
+                    
                 return redirect(url_for('datos', idProyecto = idProyecto, idItemActual = item.idItemActual ))
             else:
                 flash("Ocurrio un error " + r["mensaje"])
@@ -200,6 +192,20 @@ def modificarItem():
 
     return redirect(url_for('indexItem', idProyecto=idProyecto, idFase=idFase))
 
+
+@app.route('/item/revivir')
+@app.route('/item/revivir/<idProyecto>/<idFase>/<id>')
+def revivirItem(idProyecto=None, idFase= None ,id=None):
+    item = control.getItemById(id)
+    item.eliminado = False
+    control.modificarItem(item)
+    dato = control.getDatoActualByIdItemActual(id)
+    dato.estado = "listo"
+    controladorDatosItem.modificarDatosItem(dato)
+    estadoDeLaFase(idFase, idProyecto)
+
+    return redirect(url_for('datos', idProyecto = idProyecto, idItemActual = id ))
+
 #@app.route("/item/buscar")
 #@app.route("/item/buscar/<nombrebuscado>")
 #def buscarTipoItem(nombrebuscado):
@@ -214,11 +220,132 @@ def corroborarFaseFinal(idFase):
     listaItem = listadoItem(idFase);
     
     for i in listaItem:
-        if( not control.comprobarItemEstadofinal(i) ):
-            valor = True
+        if i.eliminado == False:
+            if( not control.comprobarItemEstadofinal(i) ):
+                valor = True
+    
+    return valor
               
-            
+
+def corroborarSiTieneItem(idFase):
+    valor = False
+    listaDeItem = listadoItem(idFase);
+    for i in listaDeItem:
+        if i.eliminado == False: 
+                valor = True
+    
+    return valor 
+
+def corroborarSiTieneLB(idFase):
+    ''' corroborar si tiene una linea base '''
+    valor = False
+    listaLB = controlLineaBase.getLBByFase(idFase)
+    
+    
+    for l in listaLB:
+        #si la linea base no esta liberada
+        if l.estado != 1:
+            valor = True
     
     return valor    
+   
+    
+def estadoDeLaFase(idFase, idProyecto):
+    faseActual = controlFase.getFaseById(idFase)
+    proyecto = controlProyecto.getProyectoById(idProyecto)
+    #if faseActual.estado == 'final':    
+    if corroborarSiTieneLB(idFase):
+        faseActual.estado = "en linea base"
+        controlFase.modificarFase(faseActual)
+    elif corroborarSiTieneItem(idFase):
+        faseActual.estado = "desarrollo"
+        controlFase.modificarFase(faseActual)
+    else: 
+        faseActual.estado = "no iniciado"
+        controlFase.modificarFase(faseActual)   
+            
+     
+    # aqui cambia los estados de las fases sgtes si es necesario
+    if faseActual.estado != 'final':
+        for f in proyecto.fases:
+            if f.numeroFase > faseActual.numeroFase:
+                fase = controlFase.getFaseById(f.idFase)
+                if corroborarSiTieneLB(f.idFase):
+                    fase.estado = "en linea base"
+                    controlFase.modificarFase(fase)
+                else:
+                    fase.estado = "desarrollo"
+                    controlFase.modificarFase(fase)
+    
+
+def estadoDeLaFaseAlEliminar(idFase, idProyecto):
+    faseActual = controlFase.getFaseById(idFase)
+    proyecto = controlProyecto.getProyectoById(idProyecto)
+    # aca se controla si todos son finales y la anterior es final
+    if not corroborarFaseFinal(idFase):
+        for f in proyecto.fases:
+            if(faseActual.numeroFase > 1 ):
+                if f.numeroFase == faseActual.numeroFase - 1:
+                    if f.estado == 'final':
+                        faseActual.estado = 'final'
+                        controlFase.modificarFase(faseActual)
+                        cambiarAdelanteSiFinal(idFase, idProyecto)
+            elif faseActual.numeroFase == 1:
+                faseActual.estado = 'final'
+                controlFase.modificarFase(faseActual)
+                cambiarAdelanteSiFinal(idFase, idProyecto)
+        
+    elif corroborarSiTieneLB(idFase):
+        faseActual.estado = "en linea base"
+        controlFase.modificarFase(faseActual)
+    elif corroborarSiTieneItem(idFase):
+        faseActual.estado = "desarrollo"
+        controlFase.modificarFase(faseActual)
+    else: 
+        faseActual.estado = "no iniciado"
+        controlFase.modificarFase(faseActual)   
+            
+     
+    # aqui cambia los estados de las fases sgtes si es necesario
+    if faseActual.estado != 'final':
+        for f in proyecto.fases:
+            if f.numeroFase > faseActual.numeroFase:
+                fase = controlFase.getFaseById(f.idFase)
+                if corroborarSiTieneLB(f.idFase):
+                    fase.estado = "en linea base"
+                    controlFase.modificarFase(fase)
+                else:
+                    fase.estado = "desarrollo"
+                    controlFase.modificarFase(fase)
 
 
+
+
+
+def eliminarRelacionPorItem(idItemActual):
+         
+        itemActual = control.getItemById(idItemActual)
+        listaDeRelacion = controlRelacion.getRelaciones()
+        
+        for r in listaDeRelacion:
+            if (r.idAntecesor == itemActual.idItemActual or r.idSucesor == itemActual.idItemActual ):
+                controlRelacion.eliminarRelacion(r)
+
+
+
+def cambiarAdelanteSiFinal(idFase, idProyecto):
+    faseActual = controlFase.getFaseById(idFase)
+    pro = controlProyecto.getProyectoById(idProyecto) 
+    if faseActual.estado == 'final':
+        for f in pro.fases:
+            if f.numeroFase > faseActual.numeroFase:
+                fase = controlFase.getFaseById(f.idFase)
+                if  not corroborarFaseFinal(idFase): 
+                    fase.estado = "final"
+                    controlFase.modificarFase(fase)
+                elif corroborarSiTieneLB(f.idFase):
+                    fase.estado = "en linea base"
+                    controlFase.modificarFase(fase)
+                else:
+                    fase.estado = "desarrollo"
+                    controlFase.modificarFase(fase)

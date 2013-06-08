@@ -58,6 +58,16 @@ def mostrarProyecto():
     
     id = request.form["idProyecto"]
     print id
+    if FinalProyecto(id):
+        proyecto = controlador.getProyectoById(id)
+        proyecto.estado = 'finalizado'
+        controlador.modificarProyecto(proyecto)
+    else:
+        proyecto = controlador.getProyectoById(id)
+        proyecto.estado = 'iniciado'
+        controlador.modificarProyecto(proyecto)    
+        
+    
     #nombre de la funcion y los parametros
     return redirect(url_for('indexAdministrarFase', idProyecto = id))
     #return render_template('indexAdministrarFases.html', idProyecto = id )
@@ -99,3 +109,26 @@ def indexAdministrarFase(idProyecto):
 
     #return redirect(url_for('iniciarProyecto', idProyecto= idProyecto))
 
+
+def FinalProyecto(idProyecto):
+    valor = True
+    proyecto =  controlador.getProyectoById(idProyecto)
+    for f in proyecto.fases:
+        if f.estado != 'final':
+            valor = False
+           
+    return valor
+
+@app.route("/admfases/salir") 
+@app.route("/admfases/salir/<idProyecto>")
+def salirDeAdminFase(idProyecto = None):
+    if FinalProyecto(idProyecto):
+        proyecto = controlador.getProyectoById(idProyecto)
+        proyecto.estado = 'finalizado'
+        controlador.modificarProyecto(idProyecto)
+    else:
+        proyecto = controlador.getProyectoById(idProyecto)
+        proyecto.estado = 'iniciado'
+        controlador.modificarProyecto(idProyecto)    
+    
+    return redirect(url_for('indexFase'))
