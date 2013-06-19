@@ -1,15 +1,15 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>Python: module app.modelo.lineaBase</title>
+<html><head><title>Python: module app.modelo.mensaje</title>
 </head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="app.html"><font color="#ffffff">app</font></a>.<a href="app.modelo.html"><font color="#ffffff">modelo</font></a>.lineaBase</strong></big></big></font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="app.html"><font color="#ffffff">app</font></a>.<a href="app.modelo.html"><font color="#ffffff">modelo</font></a>.mensaje</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/mauro/git/sgp/sgp/app/modelo/lineaBase.py">/home/mauro/git/sgp/sgp/app/modelo/lineaBase.py</a></font></td></tr></table>
-    <p><tt>Created&nbsp;on&nbsp;01/05/2013<br>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/mauro/git/sgp/sgp/app/modelo/mensaje.py">/home/mauro/git/sgp/sgp/app/modelo/mensaje.py</a></font></td></tr></table>
+    <p><tt>Created&nbsp;on&nbsp;21/05/2013<br>
 &nbsp;<br>
 @author:&nbsp;mauren</tt></p>
 <p>
@@ -23,7 +23,7 @@
 <dt><font face="helvetica, arial">flask_sqlalchemy.Model(<a href="flask_sqlalchemy.html#Model">flask_sqlalchemy.Model</a>)
 </font></dt><dd>
 <dl>
-<dt><font face="helvetica, arial"><a href="app.modelo.lineaBase.html#LineaBase">LineaBase</a>
+<dt><font face="helvetica, arial"><a href="app.modelo.mensaje.html#Mensaje">Mensaje</a>
 </font></dt></dl>
 </dd>
 </dl>
@@ -31,18 +31,18 @@
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="LineaBase">class <strong>LineaBase</strong></a>(flask_sqlalchemy.Model)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="Mensaje">class <strong>Mensaje</strong></a>(flask_sqlalchemy.Model)</font></td></tr>
     
 <tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
-<dd><a href="app.modelo.lineaBase.html#LineaBase">LineaBase</a></dd>
+<dd><a href="app.modelo.mensaje.html#Mensaje">Mensaje</a></dd>
 <dd>flask_sqlalchemy.Model</dd>
 <dd><a href="flask_sqlalchemy.html#Model">flask_sqlalchemy.Model</a></dd>
 <dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="LineaBase-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>A&nbsp;simple&nbsp;constructor&nbsp;that&nbsp;allows&nbsp;initialization&nbsp;from&nbsp;kwargs.<br>
+<dl><dt><a name="Mensaje-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>A&nbsp;simple&nbsp;constructor&nbsp;that&nbsp;allows&nbsp;initialization&nbsp;from&nbsp;kwargs.<br>
 &nbsp;<br>
 Sets&nbsp;attributes&nbsp;on&nbsp;the&nbsp;constructed&nbsp;instance&nbsp;using&nbsp;the&nbsp;names&nbsp;and<br>
 values&nbsp;in&nbsp;``kwargs``.<br>
@@ -51,31 +51,35 @@ Only&nbsp;keys&nbsp;that&nbsp;are&nbsp;present&nbsp;as<br>
 attributes&nbsp;of&nbsp;the&nbsp;instance's&nbsp;class&nbsp;are&nbsp;allowed.&nbsp;These&nbsp;could&nbsp;be,<br>
 for&nbsp;example,&nbsp;any&nbsp;mapped&nbsp;columns&nbsp;or&nbsp;relationships.</tt></dd></dl>
 
+<dl><dt><a name="Mensaje-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
 <hr>
 Data descriptors defined here:<br>
+<dl><dt><strong>cuerpo</strong></dt>
+</dl>
 <dl><dt><strong>estado</strong></dt>
 </dl>
-<dl><dt><strong>idFase</strong></dt>
+<dl><dt><strong>fecha</strong></dt>
 </dl>
-<dl><dt><strong>idLB</strong></dt>
+<dl><dt><strong>idMensaje</strong></dt>
 </dl>
 <dl><dt><strong>idUsuario</strong></dt>
 </dl>
-<dl><dt><strong>items</strong></dt>
+<dl><dt><strong>titulo</strong></dt>
 </dl>
-<dl><dt><strong>numero</strong></dt>
+<dl><dt><strong>usuario</strong></dt>
 </dl>
 <hr>
 Data and other attributes defined here:<br>
-<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0xa683dcc; LineaBase&gt;</dl>
+<dl><dt><strong>__mapper__</strong> = &lt;Mapper at 0xa696fac; Mensaje&gt;</dl>
 
-<dl><dt><strong>__table__</strong> = Table('linea_base', MetaData(bind=None), Column(...io', Integer(), table=&lt;linea_base&gt;), schema=None)</dl>
+<dl><dt><strong>__table__</strong> = Table('mensaje', MetaData(bind=None), Column('id...), table=&lt;mensaje&gt;, nullable=False), schema=None)</dl>
 
-<dl><dt><strong>__tablename__</strong> = 'linea_base'</dl>
+<dl><dt><strong>__tablename__</strong> = 'mensaje'</dl>
 
 <hr>
 Methods inherited from flask_sqlalchemy.Model:<br>
-<dl><dt><a name="LineaBase-__mapper_cls__"><strong>__mapper_cls__</strong></a> = signalling_mapper(*args, **kwargs)</dt><dd><tt>Replacement&nbsp;for&nbsp;mapper&nbsp;that&nbsp;injects&nbsp;some&nbsp;extra&nbsp;extensions</tt></dd></dl>
+<dl><dt><a name="Mensaje-__mapper_cls__"><strong>__mapper_cls__</strong></a> = signalling_mapper(*args, **kwargs)</dt><dd><tt>Replacement&nbsp;for&nbsp;mapper&nbsp;that&nbsp;injects&nbsp;some&nbsp;extra&nbsp;extensions</tt></dd></dl>
 
 <strong>query</strong> = &lt;flask_sqlalchemy.BaseQuery object&gt;
 <hr>

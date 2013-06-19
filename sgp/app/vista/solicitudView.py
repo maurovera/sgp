@@ -165,8 +165,8 @@ def nuevaSolicitud(idProyecto, idFase):
             solicitud.nombreSolicitud = nombreSolicitud
             solicitud.descripcion = descripcion1
             solicitud.estado = "creado"
-            solicitud.costo = 0
-            solicitud.impacto = 0
+            solicitud.costo = 1500
+            solicitud.impacto = 3
             solicitud.idItem = item
             solicitud.accionSol = accionSol
             solicitud.cantidadVotos = 0

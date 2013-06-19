@@ -25,12 +25,20 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-eliminarItem"><strong>eliminarItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, id<font color="#909090">=None</font>)</dt></dl>
+<td width="100%"><dl><dt><a name="-cambiarAdelanteSiFinal"><strong>cambiarAdelanteSiFinal</strong></a>(idFase, idProyecto)</dt></dl>
+ <dl><dt><a name="-corroborarFaseFinal"><strong>corroborarFaseFinal</strong></a>(idFase)</dt><dd><tt>#&nbsp;se&nbsp;agrego&nbsp;importar&nbsp;tipoItem&nbsp;entre&nbsp;fases</tt></dd></dl>
+ <dl><dt><a name="-corroborarSiTieneItem"><strong>corroborarSiTieneItem</strong></a>(idFase)</dt></dl>
+ <dl><dt><a name="-corroborarSiTieneLB"><strong>corroborarSiTieneLB</strong></a>(idFase)</dt><dd><tt>corroborar&nbsp;si&nbsp;tiene&nbsp;una&nbsp;linea&nbsp;base</tt></dd></dl>
+ <dl><dt><a name="-eliminarItem"><strong>eliminarItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, id<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-eliminarRelacionPorItem"><strong>eliminarRelacionPorItem</strong></a>(idItemActual)</dt></dl>
+ <dl><dt><a name="-estadoDeLaFase"><strong>estadoDeLaFase</strong></a>(idFase, idProyecto)</dt></dl>
+ <dl><dt><a name="-estadoDeLaFaseAlEliminar"><strong>estadoDeLaFaseAlEliminar</strong></a>(idFase, idProyecto)</dt></dl>
  <dl><dt><a name="-indexItem"><strong>indexItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>)</dt><dd><tt>Devuelve&nbsp;los&nbsp;datos&nbsp;de&nbsp;un&nbsp;item&nbsp;en&nbsp;Concreto</tt></dd></dl>
  <dl><dt><a name="-listadoItem"><strong>listadoItem</strong></a>(idFase)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-listadoTipoItem"><strong>listadoTipoItem</strong></a>(idFase)</dt><dd><tt>Retorna&nbsp;una&nbsp;lista&nbsp;de&nbsp;Tipos&nbsp;de&nbsp;Item&nbsp;que&nbsp;corresponde&nbsp;a&nbsp;la&nbsp;fase</tt></dd></dl>
  <dl><dt><a name="-modificarItem"><strong>modificarItem</strong></a>()</dt><dd><tt>Modifica&nbsp;un&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-nuevoItem"><strong>nuevoItem</strong></a>()</dt><dd><tt>Crea&nbsp;un&nbsp;nuevo&nbsp;Item</tt></dd></dl>
+ <dl><dt><a name="-revivirItem"><strong>revivirItem</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, id<font color="#909090">=None</font>)</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -42,6 +50,9 @@
 <strong>app</strong> = &lt;flask.app.Flask object&gt;<br>
 <strong>control</strong> = &lt;app.controlador.citem.ControlItem instance&gt;<br>
 <strong>controlFase</strong> = &lt;app.controlador.cfase.ControlFase instance&gt;<br>
+<strong>controlLineaBase</strong> = &lt;app.controlador.clineaBase.ControlLineaBase instance&gt;<br>
+<strong>controlProyecto</strong> = &lt;app.controlador.cproyecto.ControlProyecto instance&gt;<br>
+<strong>controlRelacion</strong> = &lt;app.controlador.crelacion.ControlRelacion instance&gt;<br>
 <strong>controlTipoItem</strong> = &lt;app.controlador.ctipoitem.ControlTipoItem instance&gt;<br>
 <strong>controladorDatosItem</strong> = &lt;app.controlador.cdatosItem.ControlDatosItem instance&gt;<br>
 <strong>controladorusuario</strong> = &lt;app.controlador.cusuario.ControlUsuario instance&gt;<br>

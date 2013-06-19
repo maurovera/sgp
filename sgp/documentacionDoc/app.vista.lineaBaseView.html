@@ -18,14 +18,24 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-abrirLineaBase"><strong>abrirLineaBase</strong></a>(id<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, idProyecto<font color="#909090">=None</font>)</dt></dl>
+<td width="100%"><dl><dt><a name="-abrirLineaBase"><strong>abrirLineaBase</strong></a>(id<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, idProyecto<font color="#909090">=None</font>)</dt><dd><tt>pasa&nbsp;todo&nbsp;los&nbsp;estados&nbsp;de&nbsp;los&nbsp;items&nbsp;a&nbsp;estado&nbsp;aprobado&nbsp;menos&nbsp;los&nbsp;que&nbsp;estan&nbsp;en&nbsp;revision</tt></dd></dl>
  <dl><dt><a name="-buscarLB"><strong>buscarLB</strong></a>(idBuscado)</dt><dd><tt>Devuelve&nbsp;una&nbsp;lista&nbsp;de&nbsp;LB&nbsp;que&nbsp;coincidan&nbsp;con&nbsp;el&nbsp;ID&nbsp;proporcionado</tt></dd></dl>
  <dl><dt><a name="-busquedaPorId"><strong>busquedaPorId</strong></a>(idLB)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;las&nbsp;LB&nbsp;que&nbsp;coincidan&nbsp;con&nbsp;un&nbsp;ID</tt></dd></dl>
+ <dl><dt><a name="-cambiarAdelanteSiFinal"><strong>cambiarAdelanteSiFinal</strong></a>(idFase, idProyecto)</dt></dl>
+ <dl><dt><a name="-corroborarFaseFinal"><strong>corroborarFaseFinal</strong></a>(idFase)</dt><dd><tt>#&nbsp;se&nbsp;agrego&nbsp;importar&nbsp;tipoItem&nbsp;entre&nbsp;fases</tt></dd></dl>
+ <dl><dt><a name="-corroborarSiTieneItem"><strong>corroborarSiTieneItem</strong></a>(idFase)</dt></dl>
+ <dl><dt><a name="-corroborarSiTieneLB"><strong>corroborarSiTieneLB</strong></a>(idFase)</dt><dd><tt>corroborar&nbsp;si&nbsp;tiene&nbsp;una&nbsp;linea&nbsp;base</tt></dd></dl>
  <dl><dt><a name="-eliminarLineaBase"><strong>eliminarLineaBase</strong></a>(id<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>, idProyecto<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-estadoDeLaFase"><strong>estadoDeLaFase</strong></a>(idFase, idProyecto)</dt></dl>
+ <dl><dt><a name="-estadoDeLaFaseAlEliminar"><strong>estadoDeLaFaseAlEliminar</strong></a>(idFase, idProyecto)</dt></dl>
  <dl><dt><a name="-indexLineaBase"><strong>indexLineaBase</strong></a>(idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>)</dt><dd><tt>Devuelve&nbsp;los&nbsp;datos&nbsp;de&nbsp;una&nbsp;LB&nbsp;en&nbsp;Concreto</tt></dd></dl>
+ <dl><dt><a name="-listaItemLB"><strong>listaItemLB</strong></a>(id<font color="#909090">=None</font>, idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-listadoDeEstados"><strong>listadoDeEstados</strong></a>()</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;las&nbsp;lineas&nbsp;base</tt></dd></dl>
+ <dl><dt><a name="-listadoItem"><strong>listadoItem</strong></a>(idFase)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-listadoItemAprobado"><strong>listadoItemAprobado</strong></a>(idFase)</dt></dl>
  <dl><dt><a name="-listadoLineaBase"><strong>listadoLineaBase</strong></a>(idFase)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;las&nbsp;lineas&nbsp;base</tt></dd></dl>
  <dl><dt><a name="-modificarLB"><strong>modificarLB</strong></a>(idFase<font color="#909090">=None</font>, idProyecto<font color="#909090">=None</font>)</dt><dd><tt>Modifica&nbsp;una&nbsp;LB</tt></dd></dl>
+ <dl><dt><a name="-mostrarItemDeLB"><strong>mostrarItemDeLB</strong></a>(idLB, idProyecto<font color="#909090">=None</font>, idFase<font color="#909090">=None</font>)</dt></dl>
  <dl><dt><a name="-nuevaLB"><strong>nuevaLB</strong></a>(idFase<font color="#909090">=None</font>, idProyecto<font color="#909090">=None</font>)</dt><dd><tt>Crea&nbsp;una&nbsp;nueva&nbsp;linea&nbsp;base</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -37,7 +47,10 @@
 <td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
 <strong>app</strong> = &lt;flask.app.Flask object&gt;<br>
 <strong>control</strong> = &lt;app.controlador.clineaBase.ControlLineaBase instance&gt;<br>
+<strong>controlDatos</strong> = &lt;app.controlador.cdatosItem.ControlDatosItem instance&gt;<br>
+<strong>controlFase</strong> = &lt;app.controlador.cfase.ControlFase instance&gt;<br>
 <strong>controlItem</strong> = &lt;app.controlador.citem.ControlItem instance&gt;<br>
+<strong>controlProyecto</strong> = &lt;app.controlador.cproyecto.ControlProyecto instance&gt;<br>
 <strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>session</strong> = &lt;LocalProxy unbound&gt;</td></tr></table>

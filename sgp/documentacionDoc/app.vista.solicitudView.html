@@ -12,6 +12,14 @@
     <p><tt>#INDEX</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="datetime.html">datetime</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
@@ -19,15 +27,23 @@
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl><dt><a name="-buscarSolicitud"><strong>buscarSolicitud</strong></a>(idProyecto, idFase, nombrebuscado)</dt><dd><tt>Devuelve&nbsp;una&nbsp;lista&nbsp;de&nbsp;solicitudes&nbsp;que&nbsp;coincidan&nbsp;con&nbsp;el&nbsp;nombre&nbsp;proporcionado</tt></dd></dl>
  <dl><dt><a name="-busquedaPorNombre"><strong>busquedaPorNombre</strong></a>(nombre)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;nombreSolicitud&nbsp;que&nbsp;coincidan&nbsp;con&nbsp;un&nbsp;nombre</tt></dd></dl>
+ <dl><dt><a name="-comprobarMiembros"><strong>comprobarMiembros</strong></a>(idProyecto)</dt><dd><tt>Comprueba&nbsp;que&nbsp;el&nbsp;numero&nbsp;de&nbsp;miembros&nbsp;sea&nbsp;impar</tt></dd></dl>
  <dl><dt><a name="-eliminarSolicitud"><strong>eliminarSolicitud</strong></a>(idProyecto, idFase, idSolicitud<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-enviarMensajeMiembros"><strong>enviarMensajeMiembros</strong></a>(miembros, solicitud)</dt><dd><tt>Se&nbsp;encarga&nbsp;de&nbsp;enviar&nbsp;los&nbsp;mensajes&nbsp;al&nbsp;comite</tt></dd></dl>
  <dl><dt><a name="-enviarSol"><strong>enviarSol</strong></a>(idProyecto, idFase, idSolicitud)</dt></dl>
  <dl><dt><a name="-indexSolicitud"><strong>indexSolicitud</strong></a>(idProyecto, idFase)</dt><dd><tt>Devuelve&nbsp;los&nbsp;datos&nbsp;de&nbsp;una&nbsp;sol&nbsp;en&nbsp;Concreto</tt></dd></dl>
  <dl><dt><a name="-listadoItem"><strong>listadoItem</strong></a>()</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-listadoItemFinal"><strong>listadoItemFinal</strong></a>(idFase)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;los&nbsp;tipo&nbsp;item</tt></dd></dl>
  <dl><dt><a name="-listadoSolicitudes"><strong>listadoSolicitudes</strong></a>()</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;las&nbsp;sol</tt></dd></dl>
  <dl><dt><a name="-listadoSolicitudesByFase"><strong>listadoSolicitudesByFase</strong></a>(idFase)</dt><dd><tt>Devuelve&nbsp;un&nbsp;listado&nbsp;de&nbsp;las&nbsp;sol</tt></dd></dl>
+ <dl><dt><a name="-listadoUsuariosPorRoles"><strong>listadoUsuariosPorRoles</strong></a>(idProyecto)</dt></dl>
  <dl><dt><a name="-modificarSolicitud"><strong>modificarSolicitud</strong></a>(idProyecto, idFase)</dt><dd><tt>Modifica&nbsp;una&nbsp;sol</tt></dd></dl>
  <dl><dt><a name="-nuevaSolicitud"><strong>nuevaSolicitud</strong></a>(idProyecto, idFase)</dt><dd><tt>Crea&nbsp;una&nbsp;nueva&nbsp;sol</tt></dd></dl>
+ <dl><dt><a name="-procesarSolicitud"><strong>procesarSolicitud</strong></a>(solicitud)</dt></dl>
+ <dl><dt><a name="-verificarVotos"><strong>verificarVotos</strong></a>(solicitud)</dt><dd><tt>Realiza&nbsp;el&nbsp;conteo&nbsp;de&nbsp;votos</tt></dd></dl>
+ <dl><dt><a name="-votarNegativo"><strong>votarNegativo</strong></a>(idSolicitud<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-votarPositivo"><strong>votarPositivo</strong></a>(idSolicitud<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-votarSolicitud"><strong>votarSolicitud</strong></a>(idSolicitud<font color="#909090">=None</font>)</dt></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -38,7 +54,12 @@
 <td width="100%"><strong>abort</strong> = &lt;werkzeug.exceptions.Aborter object&gt;<br>
 <strong>app</strong> = &lt;flask.app.Flask object&gt;<br>
 <strong>control</strong> = &lt;app.controlador.csolicitud.ControlSolicitud instance&gt;<br>
+<strong>controlFase</strong> = &lt;app.controlador.cfase.ControlFase instance&gt;<br>
 <strong>controlItem</strong> = &lt;app.controlador.citem.ControlItem instance&gt;<br>
+<strong>controlMensaje</strong> = &lt;app.controlador.cmensaje.ControlMensaje instance&gt;<br>
+<strong>controlProyecto</strong> = &lt;app.controlador.cproyecto.ControlProyecto instance&gt;<br>
+<strong>controlRol</strong> = &lt;app.controlador.crol.ControlRol instance&gt;<br>
+<strong>controlUsuario</strong> = &lt;app.controlador.cusuario.ControlUsuario instance&gt;<br>
 <strong>g</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
 <strong>session</strong> = &lt;LocalProxy unbound&gt;</td></tr></table>
