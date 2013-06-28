@@ -1,5 +1,8 @@
+import datetime
 from app.modelo import LineaBase
+from app.modelo import HistorialItems
 from citem import ControlItem
+from chistorialItems import ControlHistorialItems
 from app import db
 
 class ControlLineaBase():
@@ -70,16 +73,28 @@ class ControlLineaBase():
         retorno = db.session.query(LineaBase).filter(LineaBase.idFase == idFase ).all()
         return retorno
     
-    def agregarItemLB(self,lineaBase,listaItem):
+    def agregarItemLB(self,lineaBase,listaItem, idUsuario):
         resultado = {"estado": True, "mensaje" : "exito"}
         citem = ControlItem()
+        controlHistorialItems = ControlHistorialItems()
+        
         for idItemActual in listaItem:
             item = citem.getItemById(idItemActual)
             dato = citem.getDatoActualByIdItemActual(idItemActual)
             dato.itemLB.append(lineaBase)
             dato.estado = "final"
             r = citem.modificarItem(item)
+            
+            # parte del historial
+            historial = HistorialItems()
+            historial.idUsuario = idUsuario
+            historial.tipoModificacion = "item a estado final"
+            historial.fechaModificacion = str(datetime.date.today())
+            historial.idItem = item.idItemActual
+            controlHistorialItems.nuevoHistorialItems(historial)
+            #--------------------------------------------------------
             if(r["estado"] != True):
+                
                 return r
         return resultado
         

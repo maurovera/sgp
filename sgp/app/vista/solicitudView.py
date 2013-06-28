@@ -165,8 +165,9 @@ def nuevaSolicitud(idProyecto, idFase):
             solicitud.nombreSolicitud = nombreSolicitud
             solicitud.descripcion = descripcion1
             solicitud.estado = "creado"
-            solicitud.costo = 1500
-            solicitud.impacto = 3
+            detalleImpacto = controlItem.calcularImpacto(item) 
+            solicitud.costo = detalleImpacto[1]
+            solicitud.impacto = detalleImpacto[0]
             solicitud.idItem = item
             solicitud.accionSol = accionSol
             solicitud.cantidadVotos = 0
@@ -267,7 +268,9 @@ def enviarMensajeMiembros(miembros, solicitud):
     item = controlItem.getItemById(solicitud.idItem)
     fase = controlFase.getFaseById(item.idFase)
     proyecto = controlProyecto.getProyectoById(fase.idProyecto)
-
+    
+    
+    #[complejidad,costo,listadoItem]
     for m in miembros:
 
         mensaje = Mensaje()
@@ -293,6 +296,8 @@ def enviarMensajeMiembros(miembros, solicitud):
 def votarSolicitud(idSolicitud = None):
     solicitud = control.getSolicitudById(idSolicitud)
     usuario = controlUsuario.getUsuarioById(solicitud.idUsuario)
+    detalleImpacto = controlItem.calcularImpacto(solicitud.idItem)
+    listadoItem = detalleImpacto[2]
     votantesStr = []
     if (solicitud.votantes):
         votantesStr = solicitud.votantes.split(",")
@@ -300,7 +305,7 @@ def votarSolicitud(idSolicitud = None):
     for vstr in votantesStr :
         if (vstr != ''):
             votantes.append(int(vstr))
-    return render_template('votarSolicitud.html', solicitud = solicitud, votantes = votantes, usuario = usuario)
+    return render_template('votarSolicitud.html', solicitud = solicitud, votantes = votantes, usuario = usuario, listadoItem = listadoItem)
 
 
 @app.route('/solicitud/votarPositivo')

@@ -14,13 +14,14 @@ from app.modelo import Fase
 
 from app.controlador import ControlFase
 from app.controlador import ControlTipoItem
+from app.controlador import ControlRelacion
 from app.modelo import Usuario
 from contextlib import closing
 
 controlador = ControlProyecto()
 controlFase = ControlFase()
 controlTipoIndex =  ControlTipoItem()
-
+controlRelacion = ControlRelacion()
 
 def busquedaPorNombre(nombre):
     ''' Devuelve un listado de los proyectos que coincidan con un nombre '''
@@ -132,3 +133,66 @@ def salirDeAdminFase(idProyecto = None):
         controlador.modificarProyecto(idProyecto)    
     
     return redirect(url_for('indexFase'))
+
+
+
+def generarColor(n):
+    colores = ["#f55","#5f5","#55f","#ccc","#aa5","#5aa","#a5a","#bab","#000","#999","#fab"]
+
+    return colores[n % 10]
+
+@app.route("/admfases/administrar/grafo")
+@app.route("/admfases/administrar/grafo/<idProyecto>")
+def grafoProyecto(idProyecto):
+    
+    '''Se encarga de dar inicio a un proyecto '''
+    proyecto = controlador.getProyectoById(idProyecto)
+    fases = list(proyecto.fases)
+    listadoItem = []
+    for f in fases:
+        for i in f.items:
+            if i.eliminado == False:
+                listadoItem.append(i)
+    
+    print listadoItem
+    
+    relaciones = controlRelacion.getRelacionesByIdProyecto(idProyecto)
+    print relaciones
+    
+    ''' 
+                nodes:{
+                     ${grafo['nodos']}
+                   },
+
+                   edges:{
+                     ${grafo['aristas']}
+                   }
+        
+        str(p_item.id_item_actual) + " : {'color': '#333', 'shape': 'box', 'label': '" +\
+                           self.codigo + "(" + str(p_item.complejidad) + ")'},\n"
+    '''
+    
+    json = "nodes: {"
+    
+    for i in listadoItem:
+        f = controlFase.getFaseById(i.idFase)
+        
+        color = generarColor(f.numeroFase)
+        nodo = str(i.idItemActual) + " : {'color': '"+color+"', 'shape': 'box', 'label': '" +\
+                           i.nombreItemActual + "'},\n"
+        json = json + nodo
+    
+    json = json + "},\n"
+    
+    json = json + "edges:{"
+    
+    for r in relaciones:
+        '''bar:{foo:{similarity:0},
+              baz:{similarity:.666}'''
+        arista = str(r.idAntecesor) + ":{" + str(r.idSucesor) + " : {similarity:0} },\n"
+        json = json + arista
+    
+    json = json + "}"
+    print json
+    
+    return render_template('indexGrafo.html', proyecto = proyecto, json=json )

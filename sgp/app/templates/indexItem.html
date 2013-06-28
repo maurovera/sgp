@@ -25,7 +25,7 @@
 	}
 
 	function eliminar(id){
-		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarItem')}}/{{idProyecto}}/{{idFase}}/" + id +  "\"  class=\"btn danger\">Si</a>"
+		$("#botones-eliminar").empty().append("<a href=\"{{url_for('eliminarItem')}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}/" + id +  "\"  class=\"btn danger\">Si</a>"
 		+
          "<a  data-dismiss=\"modal\" class=\"btn secondary\">No</a>");
         $("#modal-from-dom").modal('show');
@@ -128,7 +128,7 @@
 
 
 	            {% if u.eliminado == True %}
-	            <td><a href="{{url_for('revivirItem')}}/{{idProyecto}}/{{idFase}}/{{u.idItemActual}}" class="btn"><small>Revivir</small></a></td>
+	            <td><a href="{{url_for('revivirItem')}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}/{{u.idItemActual}}" class="btn"><small>Revivir</small></a></td>
 	            {% else %}
 	            <td></td>
 	            {% endif %}
@@ -193,6 +193,7 @@
 				<input type="hidden" placeholder="UltimaVersion" name="ultimaVersion" id="ultimaVersion" >
 				<input type="hidden"  name="idProyecto" id="idProyecto" value={{idProyecto}} >
 				<input type="hidden"  name="idFase" id="idFase" value="{{idFase}}" >
+				<input type="hidden"  name="idUsuario" id="idUsuario" value="{{session['idUsuario']}}" >
 				<br/>
 				<br/>
 

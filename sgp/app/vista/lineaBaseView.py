@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #INDEX
+import datetime
 from flask import render_template, flash, redirect, request, session, g, url_for, abort
 from app import app
 from app.controlador import ControlLineaBase
@@ -7,7 +8,11 @@ from app.controlador import ControlItem
 from app.controlador import ControlDatosItem
 from app.controlador import ControlFase
 from app.controlador import ControlProyecto
+from app.controlador import ControlHistorialLineaBase
+from app.controlador import ControlHistorialItems
+from app.modelo import HistorialLineaBase
 from app.modelo import LineaBase
+from app.modelo import HistorialItems
 from contextlib import closing
 
 control = ControlLineaBase()
@@ -15,6 +20,8 @@ controlItem = ControlItem()
 controlDatos = ControlDatosItem()
 controlFase = ControlFase()
 controlProyecto =  ControlProyecto()
+controlHistorial = ControlHistorialLineaBase()
+controlHistorialItems = ControlHistorialItems()
 
 def listadoItem(idFase):
     ''' Devuelve un listado de los tipo item '''
@@ -102,13 +109,21 @@ def eliminarLineaBase(id=None, idFase=None, idProyecto = None):
     return redirect(url_for('indexLineaBase', idProyecto = idProyecto, idFase=idFase))
 
 @app.route('/lineaBase/abrir')
-@app.route('/lineaBase/abrir/<id>/<idProyecto>/<idFase>')
-def abrirLineaBase(id=None, idFase=None, idProyecto = None):
+@app.route('/lineaBase/abrir/<id>/<idProyecto>/<idFase>/<idUsuario>')
+def abrirLineaBase(id=None, idFase=None, idProyecto = None, idUsuario = None):
     ''' pasa todo los estados de los items a estado aprobado menos los que estan en revision '''
     lb = control.getLineaBaseById(id)
     #pasa a un estado liberado estado igual a 1
     lb.estado = 1
     control.modificarLineaBase(lb)
+    # parte del historial de lb
+    historial = HistorialLineaBase()
+    historial.tipoOperacion = "linea base liberado"
+    historial.fechaModificacion = str(datetime.date.today())
+    historial.idLB = lb.idLB
+    historial.idUsuario = idUsuario
+    controlHistorial.nuevoHistorialLineaBase(historial)
+    # ----------------------------------------------------------
     
     # se pasa todo los items en estado final a aprobado
     lista = lb.items
@@ -117,7 +132,14 @@ def abrirLineaBase(id=None, idFase=None, idProyecto = None):
         if dato.estado != "revision":
             dato.estado = "aprobado"
             controlDatos.modificarDatosItem(dato)
-        
+            # parte del historial
+            historialN = HistorialItems()
+            historialN.idUsuario = idUsuario
+            historialN.tipoModificacion = "estado de item a aprobado"
+            historialN.fechaModificacion = str(datetime.date.today())
+            historialN.idItem = d.idItemActual
+            controlHistorialItems.nuevoHistorialItems(historialN)
+            #---------------------------------------------------------------
     
     flash("Se abrio con exito la Linea Base ")
     # CORROBORAMOS QUE TENGA ALMENOS UNA LB
@@ -141,7 +163,7 @@ def nuevaLB(idFase=None, idProyecto = None):
 
     if request.method == 'POST' :
 
-
+        idUsuario = request.form['idUsuario']
         print "LO QUE SE RECIBE POR POST EN LB"
         print request.form['numero']
         print request.form.getlist('item')
@@ -161,9 +183,18 @@ def nuevaLB(idFase=None, idProyecto = None):
             lineaBase.idFase = idFase
 
             r = control.nuevaLineaBase(lineaBase)
+            
+            # parte del historial de lb
+            historial = HistorialLineaBase()
+            historial.tipoOperacion = "linea base creada y cerrada"
+            historial.fechaModificacion = str(datetime.date.today())
+            historial.idLB = lineaBase.idLB
+            historial.idUsuario = idUsuario
+            controlHistorial.nuevoHistorialLineaBase(historial)
+            # ----------------------------------------------------------
 
             if(r["estado"] == True):
-                r1 = control.agregarItemLB(lineaBase,listaItem)
+                r1 = control.agregarItemLB(lineaBase,listaItem, idUsuario)
                 if(r1["estado"] == True ):
                     estadoDeLaFase(idFase, idProyecto)
                     

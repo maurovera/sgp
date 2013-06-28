@@ -9,6 +9,10 @@ class ControlRelacion():
     def getRelaciones(self):
         """ funcion getRelacion """
         return Relacion.query.all()
+    def getRelacionesByIdProyecto(self,idProyecto):
+        retorno = list(db.session.query(Relacion).filter(Relacion.idProyecto == idProyecto ).all())
+        return retorno
+    
     def getItemsAntecesores(self,idItem):
         
         retorno = list(db.session.query(Relacion).filter(Relacion.idSucesor == idItem ).all())

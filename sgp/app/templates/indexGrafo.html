@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block body %}
+
+
+<script>
+    
+
+    function mostrarFormulario(){
+        $("#formulario-div").show("slow");
+        $("#boton-mostrar-formulario").hide();
+    }
+    function ocultarFormulario(){
+        $("#formulario-div").hide("slow");
+        $("#boton-mostrar-formulario").show();
+        $("#formulario")[0].reset();
+
+    }
+
+</script>
+
+
+<div class="row">
+    <div class="span12">
+        <center>
+        <hr>
+        <h1> Grafo del {{proyecto.nombre}}</h1>
+        <hr>
+     
+        </center>
+    </div>
+</div>
+
+<hr>
+
+
+
+<div class="grafo">
+     <canvas id="viewport" width="700" height="600"></canvas>
+</div>      
+<script src="{{ url_for('static', filename = 'graphics.js') }}"></script>
+<script src="{{ url_for('static', filename = 'renderer.js') }}"></script>
+<script src="{{ url_for('static', filename = 'arbor.js') }}"></script>
+<script src="{{ url_for('static', filename = 'arbor-tween.js') }}"></script>
+<script type="text/javascript">
+
+                var sys = arbor.ParticleSystem(1, 1, 1) // create the system with sensible repulsion/stiffness/friction
+                sys.parameters({gravity:true}) // use center-gravity to make the graph settle nicely (ymmv)
+                sys.renderer = Renderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
+
+
+                sys.graft({
+                  {{json | safe}}
+                });
+
+                //parar simulacion 5 segundos despues
+                setTimeout(function(){
+                        sys.parameters({gravity:false, friction:1});
+                        sys.stop();
+                }, 5000);
+
+
+</script>
+
+
+
+
+
+
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <td><a href="{{url_for('indexAdministrarFase')}}/{{proyecto.idProyecto}}" class="btn btn-large btn-success">Atras</a></td>
+        </center>
+    </div>
+</div>
+
+
+</div>
+{% endblock %}

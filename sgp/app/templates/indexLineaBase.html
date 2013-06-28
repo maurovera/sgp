@@ -128,7 +128,7 @@
            
             <!---<td><a class="btn btn-danger" onClick="eliminar({{u.idLB}});">Eliminar</a></td>--->
             {%if u.estado != 1%}
-            	<td><a href="{{url_for('abrirLineaBase')}}/{{u.idLB}}/{{idProyecto}}/{{idFase}}" class="btn btn.danger"><small>abrir</small></a></td>
+            	<td><a href="{{url_for('abrirLineaBase')}}/{{u.idLB}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}" class="btn btn.danger"><small>abrir</small></a></td>
             {%else%}
             	<td></td>
             {%endif%}
@@ -191,7 +191,7 @@
 				<br/>
 
 				<input type="submit" value="Cerrar" class="btn btn-primary" id="btn-accion">
-
+				<input type="hidden"  name="idUsuario" id="idUsuario" value="{{session['idUsuario']}}" >
 			</fieldset>
 		</form>
 		<a onClick="ocultarFormulario();" class="btn">Cancelar</a>

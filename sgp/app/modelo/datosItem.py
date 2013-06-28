@@ -31,6 +31,7 @@ class DatosItem(db.Model):
     idItem = db.Column(db.Integer, primary_key = True)
     version = db.Column( db.Integer, nullable = False)
     complejidad = db.Column(db.Integer)
+    costo = db.Column(db.Integer)
     prioridad = db.Column(db.Integer)
     estado = db.Column(db.String(45))
     

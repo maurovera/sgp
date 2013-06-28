@@ -5,6 +5,7 @@ from app import app
 from app.controlador import ControlItem
 from app.modelo import Item
 from app.modelo import DatosItem
+from app.modelo import HistorialItems
 from contextlib import closing
 
 #---------------------------------------------
@@ -17,12 +18,14 @@ from app.controlador import ControlProyecto
 from app.controlador import ControlRelacion
 from app.controlador import ControlDatosItem
 from app.controlador import ControlLineaBase
+from app.controlador import ControlHistorialItems
 
 from app.modelo import Usuario
 #----------------------------------------------
 controlRelacion =  ControlRelacion()
 control = ControlItem()
 
+controlHistorialItems = ControlHistorialItems()
 controladorDatosItem = ControlDatosItem()
 controlTipoItem = ControlTipoItem()
 controlFase = ControlFase()
@@ -71,8 +74,8 @@ def indexItem(idProyecto=None,idFase=None):
 
 
 @app.route('/item/eliminar')
-@app.route('/item/eliminar/<idProyecto>/<idFase>/<id>')
-def eliminarItem(idProyecto=None,idFase=None,id=None):
+@app.route('/item/eliminar/<idProyecto>/<idFase>/<idUsuario>/<id>')
+def eliminarItem(idProyecto=None,idFase=None, idUsuario = None ,id=None):
     
     item = control.getItemById(id)
     datos = control.getDatoActualByIdItemActual(id)
@@ -90,6 +93,18 @@ def eliminarItem(idProyecto=None,idFase=None,id=None):
         r= control.eliminarItem(item)
         if(r["estado"] == True):
             estadoDeLaFaseAlEliminar(idFase, idProyecto)
+            
+            # parte del historial
+            historial = HistorialItems()
+            historial.idUsuario = idUsuario
+            historial.tipoModificacion = "eliminacion de item"
+            historial.fechaModificacion = str(datetime.date.today())
+            historial.idItem = item.idItemActual
+        
+            controlHistorialItems.nuevoHistorialItems(historial)
+            
+            
+            
             flash("Se elimino con exito el item: " + str( item.numero) )
         else:
             flash("Ocurrio un error: "+ r["mensaje"])
@@ -114,7 +129,7 @@ def nuevoItem():
         idFase = request.form['idFase']
         idTipoItem = request.form['idTipoItem']
         nombreItem = request.form['nombreItem']
-
+        idUsuario = request.form['idUsuario']
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente
         #con un metodo kachiai
@@ -130,15 +145,32 @@ def nuevoItem():
             numero = len( list(fase.items) ) + 1
             item.numero = numero
             item.ultimaVersion = 0
+           
+          
+            
 
 
             r = control.nuevoItem(item)
             if (r["estado"] == True):
                 estadoDeLaFase(idFase, idProyecto)
+                # parte del historial
+                historial = HistorialItems()
+                historial.idUsuario = idUsuario
+                historial.tipoModificacion = "nuevo item"
+                historial.fechaModificacion = str(datetime.date.today())
+                historial.idItem = item.idItemActual
+        
+                controlHistorialItems.nuevoHistorialItems(historial)
+
+                
                     
                 return redirect(url_for('datos', idProyecto = idProyecto, idItemActual = item.idItemActual ))
             else:
                 flash("Ocurrio un error " + r["mensaje"])
+
+
+           
+
 
     return redirect(url_for('indexItem', idProyecto=idProyecto, idFase=idFase))
 
@@ -194,14 +226,35 @@ def modificarItem():
 
 
 @app.route('/item/revivir')
-@app.route('/item/revivir/<idProyecto>/<idFase>/<id>')
-def revivirItem(idProyecto=None, idFase= None ,id=None):
+@app.route('/item/revivir/<idProyecto>/<idFase>/<idUsuario>/<id>')
+def revivirItem(idProyecto=None, idFase= None, idUsuario = None,id=None):
     item = control.getItemById(id)
     item.eliminado = False
     control.modificarItem(item)
+    
+    #historial para revivir
+    historial = HistorialItems()
+    historial.idUsuario = idUsuario
+    historial.tipoModificacion = "revivir item"
+    historial.fechaModificacion = str(datetime.date.today())
+    historial.idItem = item.idItemActual
+    controlHistorialItems.nuevoHistorialItems(historial)
+    
+    
+    
     dato = control.getDatoActualByIdItemActual(id)
     dato.estado = "listo"
     controladorDatosItem.modificarDatosItem(dato)
+    #historial del dato
+    historialN = HistorialItems()
+    historialN.idUsuario = idUsuario
+    historialN.tipoModificacion = "estado de item a listo"
+    historialN.fechaModificacion = str(datetime.date.today())
+    historialN.idItem = item.idItemActual
+    controlHistorialItems.nuevoHistorialItems(historialN)
+    
+    
+    # control para cambiar el estado de la fase y del proyecto
     estadoDeLaFase(idFase, idProyecto)
 
     return redirect(url_for('datos', idProyecto = idProyecto, idItemActual = id ))

@@ -29,7 +29,12 @@
         <h3>Impacto : </h3>
         <p>{{solicitud.impacto}}</p>
 
-
+		<h3>Listado de Items afectados</h3>
+		<ul>
+		{% for item in listadoItem %}
+			<li>{{item}}</li>
+		{% endfor %}
+        </ul>
         <center>
         {% if session['idUsuario'] in votantes %}
             <h4> Usted ya ha votado </h4>

@@ -17,7 +17,8 @@ class Relacion(db.Model):
     
     idSucesor = db.Column(db.Integer, db.ForeignKey('item.idItemActual'))
     idAntecesor = db.Column(db.Integer, db.ForeignKey('item.idItemActual'))
-
+    idProyecto = db.Column(db.Integer, db.ForeignKey('proyecto.idProyecto'))
+    idFase = db.Column(db.Integer, db.ForeignKey('fase.idFase'))
 
 
     #def setNombreArchivosAjuntosItem(self,nombre):

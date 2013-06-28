@@ -150,6 +150,8 @@ def nuevaRelacion(idProyecto, idFase):
         relacion.tipo = tipo
         relacion.idSucesor = idSucesor
         relacion.idAntecesor = idAntecesor
+        relacion.idProyecto = idProyecto
+        relacion.idFase = idFase
         
         r = control.nuevoRelacion(relacion)
         if(r["estado"] == True):

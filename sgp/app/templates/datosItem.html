@@ -101,15 +101,15 @@
                 <td>Version Actual</td>
                 <!--VERSION ACTUAL BOTONES DE CAMBIO DE ESTADO-->
                 {% if f.estado == "inicial" %}
-                    <td><a href="{{url_for('estadoListoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Listo!</a></td>
+                    <td><a href="{{url_for('estadoListoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Listo!</a></td>
                 {% endif %}
 
                 {% if f.estado == "listo" %}
-                    <td><a href="{{url_for('estadoAprobadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Aprobado</a></td>
-                    <td><a href="{{url_for('estadoRechazadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Rechazado</a></td>
+                    <td><a href="{{url_for('estadoAprobadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Aprobado</a></td>
+                    <td><a href="{{url_for('estadoRechazadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Rechazado</a></td>
                 {% endif %}
             {% else %}
-                <td><a href="{{url_for('revertirDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}" class="btn  btn-inverse">Reversion</a></td>
+                <td><a href="{{url_for('revertirDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Reversion</a></td>
             {% endif %}
           </tr>
 
@@ -131,7 +131,7 @@
 
     <div class="span12">
         <center>
-        	<a class="btn btn-primary" onClick="mostrarFormulario();">Asignar datos al item {{item.numero}} </a>
+        	<a class="btn btn-primary" onClick="mostrarFormulario();">Asignar datos al item {{item.nombreItemActual}} </a>
         </center>
     </div>
 </div>
@@ -184,6 +184,8 @@
 
                 <input type="hidden" value="{{item.idItemActual}}" name="idItemActual">
                 <input type="hidden" value="{{item.idTipoItem}}" name= "idTipoItem">
+                <input type="hidden" value="{{session['usuario']}}" name= "idUsuario">
+                
                 <br/>
                 <br/>
 

@@ -15,10 +15,13 @@ from app.controlador import ControlUsuario
 from app.controlador import ControlPermiso
 from app.controlador import ControlTipoItem
 from app.controlador import ControlAtributoDeItem
+from app.controlador import ControlHistorialItems
 from app.modelo import Usuario
+from app.modelo import HistorialItems
 from app.controlador import ControlRelacion
 from app.controlador import ControlFase
 #----------------------------------------------
+controlHistorial = ControlHistorialItems()
 controlRelacion = ControlRelacion()
 control = ControlItem()
 controlFase = ControlFase()
@@ -54,6 +57,7 @@ def nuevaDatosItem(idProyecto):
     #estado = request.form['estado']
     idTipoItem = request.form['idTipoItem']
     idItemActual = request.form['idItemActual']
+    idUsuario = request.form['idUsuario']
 
     if(version and complejidad and prioridad and idItemActual and idTipoItem):
         #anga
@@ -70,7 +74,18 @@ def nuevaDatosItem(idProyecto):
 
         #aqui se utiliza el controlador para agregar el dato
         r = control.agregarDatosItem(item,datos)
-        #print tipoItem.atributo
+        
+        
+        # parte del historial
+        historial = HistorialItems()
+        historial.idUsuario = idUsuario
+        historial.tipoModificacion = "nueva version de item"
+        historial.fechaModificacion = str(datetime.date.today())
+        historial.idItem = item.idItemActual
+        
+        controlHistorial.nuevoHistorialItems(historial)
+            
+        
         if( r["estado"] == True ):
             #flash("Se agrego el dato con exito")
             #Cargamos los atributos
@@ -170,22 +185,34 @@ def returnDatosItem(idProyecto, idFase):
 
 
 @app.route("/item/datos/revertir")
-@app.route("/item/datos/revertir/<idItem>/<idItemActual>/<idProyecto>")
-def revertirDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
+@app.route("/item/datos/revertir/<idItem>/<idItemActual>/<idProyecto>/<idUsuario>")
+def revertirDatosItem(idItem= None, idItemActual = None, idProyecto = None, idUsuario = None ):
     '''Se encarga de modificar datos de un  dato'''
     item = control.getItemById(idItemActual)
     datos = controladorDatosItem.getDatosItemById(idItem)
+    if datos.estado == "final":
+        flash("no se puede revertir un item en estado final")
+    else:    
+        datos.estado = "inicial"
+        item.ultimaVersion = datos.version
 
-    datos.estado = "inicial"
-    item.ultimaVersion = datos.version
-
-    p = control.modificarItem(item)
-    controladorDatosItem.modificarDatosItem(datos)
-
-    if( p["estado"] == True ):
-        flash("Se volvio a esta version de item")
-    else:
-        flash("Ocurrio un error : " + p["mensaje"])
+        p = control.modificarItem(item)
+        controladorDatosItem.modificarDatosItem(datos)
+        
+        if( p["estado"] == True ):
+            
+            # parte del historial
+            historial = HistorialItems()
+            historial.idUsuario = idUsuario
+            historial.tipoModificacion = "reversion de item"
+            historial.fechaModificacion = str(datetime.date.today())
+            historial.idItem = item.idItemActual
+        
+            controlHistorial.nuevoHistorialItems(historial)
+            
+            flash("Se volvio a esta version de item")
+        else:
+            flash("Ocurrio un error : " + p["mensaje"])
 
 
 
@@ -207,8 +234,8 @@ def caducarDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
         flash("Ocurrio un error : " + p["mensaje"])
 
 @app.route("/item/datos/listo")
-@app.route("/item/datos/listo/<idItem>/<idItemActual>/<idProyecto>")
-def estadoListoDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
+@app.route("/item/datos/listo/<idItem>/<idItemActual>/<idProyecto>/<idUsuario>")
+def estadoListoDatosItem(idItem= None, idItemActual = None, idProyecto = None, idUsuario = None ):
     '''Estado Listo : Cuando no vas a tocar y puede ser aprobado o rechazado'''
 
     datos = controladorDatosItem.getDatosItemById(idItem)
@@ -216,6 +243,14 @@ def estadoListoDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
     p= controladorDatosItem.modificarDatosItem(datos)
 
     if( p["estado"] == True ):
+        # parte del historial
+        historial = HistorialItems()
+        historial.idUsuario = idUsuario
+        historial.tipoModificacion = "estado de item a listo"
+        historial.fechaModificacion = str(datetime.date.today())
+        historial.idItem = idItemActual
+        controlHistorial.nuevoHistorialItems(historial)
+        
         flash("El estado del item ha sido modificado")
     else:
         flash("Ocurrio un error : " + p["mensaje"])
@@ -224,8 +259,8 @@ def estadoListoDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
     return redirect(url_for('datos',idItemActual = idItemActual, idProyecto = idProyecto))
 
 @app.route("/item/datos/aprobado")
-@app.route("/item/datos/aprobado/<idItem>/<idItemActual>/<idProyecto>")
-def estadoAprobadoDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
+@app.route("/item/datos/aprobado/<idItem>/<idItemActual>/<idProyecto>/<idUsuario>")
+def estadoAprobadoDatosItem(idItem= None, idItemActual = None, idProyecto = None, idUsuario= None ):
     '''Estado Aprobado '''
     relaciones =  controlRelacion.getItemsAntecesores(idItemActual)
     # si relaciones no tiene ningun antecesor
@@ -237,7 +272,15 @@ def estadoAprobadoDatosItem(idItem= None, idItemActual = None, idProyecto = None
                 p= controladorDatosItem.modificarDatosItem(datos)
 
                 if( p["estado"] == True ):
-                    flash("El estado del item ha sido modificado")
+                    flash("El estado del item ha sido aprobado")
+                    # parte del historial
+                    historialN = HistorialItems()
+                    historialN.idUsuario = idUsuario
+                    historialN.tipoModificacion = "estado de item a aprobado"
+                    historialN.fechaModificacion = str(datetime.date.today())
+                    historialN.idItem = idItemActual
+                    controlHistorial.nuevoHistorialItems(historialN)
+
                 else:
                     flash("Ocurrio un error : " + p["mensaje"])
             else:
@@ -248,7 +291,16 @@ def estadoAprobadoDatosItem(idItem= None, idItemActual = None, idProyecto = None
                     datos = controladorDatosItem.getDatosItemById(idItem)
                     datos.estado = "aprobado"
                     p= controladorDatosItem.modificarDatosItem(datos)
-                    flash("El estado del item ha sido modificado")
+                    flash("El estado del item ha sido aprobado")
+                    
+                    # parte del historial
+                    historial = HistorialItems()
+                    historial.idUsuario = idUsuario
+                    historial.tipoModificacion = "estado de item a aprobado"
+                    historial.fechaModificacion = str(datetime.date.today())
+                    historial.idItem = idItemActual
+                    controlHistorial.nuevoHistorialItems(historial)
+
                 else:
                     flash("tiene solo una relacion Padre-Hijo, no es de la primera Fase y no se puede aprobar")
                  
@@ -260,7 +312,15 @@ def estadoAprobadoDatosItem(idItem= None, idItemActual = None, idProyecto = None
             datos = controladorDatosItem.getDatosItemById(idItem)
             datos.estado = "aprobado"
             p= controladorDatosItem.modificarDatosItem(datos)
-            flash("El estado del item ha sido modificado")
+            flash("El estado del item ha sido aprobado")
+            # parte del historial
+            historialN1 = HistorialItems()
+            historialN1.idUsuario = idUsuario
+            historialN1.tipoModificacion = "estado de item a aprobado"
+            historialN1.fechaModificacion = str(datetime.date.today())
+            historialN1.idItem = idItemActual
+            controlHistorial.nuevoHistorialItems(historialN1)
+
         else:
             flash("No posee antecesores, no puede aprobarse el item")       
 
@@ -268,8 +328,8 @@ def estadoAprobadoDatosItem(idItem= None, idItemActual = None, idProyecto = None
     return redirect(url_for('datos',idItemActual = idItemActual, idProyecto = idProyecto))
 
 @app.route("/item/datos/rechazado")
-@app.route("/item/datos/rechazado/<idItem>/<idItemActual>/<idProyecto>")
-def estadoRechazadoDatosItem(idItem= None, idItemActual = None, idProyecto = None ):
+@app.route("/item/datos/rechazado/<idItem>/<idItemActual>/<idProyecto>/<idUsuario>")
+def estadoRechazadoDatosItem(idItem= None, idItemActual = None, idProyecto = None, idUsuario = None ):
     '''Estado Rechazado'''
 
     datos = controladorDatosItem.getDatosItemById(idItem)
@@ -278,6 +338,14 @@ def estadoRechazadoDatosItem(idItem= None, idItemActual = None, idProyecto = Non
 
     if( p["estado"] == True ):
         flash("El estado del item ha sido modificado")
+        # parte del historial
+        historialN1 = HistorialItems()
+        historialN1.idUsuario = idUsuario
+        historialN1.tipoModificacion = "estado de item a rechazado"
+        historialN1.fechaModificacion = str(datetime.date.today())
+        historialN1.idItem = idItemActual
+        controlHistorial.nuevoHistorialItems(historialN1)
+        
     else:
         flash("Ocurrio un error : " + p["mensaje"])
 

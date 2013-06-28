@@ -22,6 +22,7 @@ class ControlItem():
         """ funcion que filtra solo por las fases """
         retorno = db.session.query(Item).filter(Item.idFase == idFase ).all()
         return retorno
+        
     def nuevoItem(self, item):
         """ funcion nuevoItem """
         resultado = {"estado" : True, "mensaje" : "exito"}
@@ -216,9 +217,49 @@ class ControlItem():
 
         controlLB.modificarLineaBase(lb)
 
+    def calcularImpacto(self,idItemActual):
+        
+        #Acumulador de complejidad
+        complejidad = 0
+        #Acumulador de costo
+        costo = 0
+        #Lista de Items
+        listadoItem = []
+        
+        import crelacion
+        item = self.getItemById(idItemActual)
 
+        print item.nombreItemActual
 
+        #Primero modificamos los item de su LB
+        datoActual = self.getDatoActualByIdItemActual(idItemActual)
+        complejidad += datoActual.complejidad
+        #costo += datoActual.costo
+        
+        listadoItem.append(item.nombreItemActual)
+        
+        antecesores = crelacion.ControlRelacion().getAntecesores(idItemActual)
+        sucesores = crelacion.ControlRelacion().getSucesores(idItemActual)
 
+        for ant in antecesores:
+            idItem = ant
+            item = self.getItemById(idItem)
+            datoActual = self.getDatoActualByIdItemActual(idItem)
+            complejidad += datoActual.complejidad
+            #costo += datoActual.costo
+            listadoItem.append(item.nombreItemActual)
+        for suc in sucesores:
+            idItem = suc
+            item = self.getItemById(idItem)
+            datoActual = self.getDatoActualByIdItemActual(idItem)
+            complejidad += datoActual.complejidad
+            #costo += datoActual.costo
+            listadoItem.append(item.nombreItemActual)
+
+        print "IMPACTO CAMBIO"
+        print [complejidad,costo,listadoItem]
+        
+        return [complejidad,costo,listadoItem]
 
 
 
