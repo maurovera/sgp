@@ -35,7 +35,7 @@
 
 
 <div class="grafo">
-     <canvas id="viewport" width="700" height="600"></canvas>
+     <canvas id="viewport" width="1200" height="400"></canvas>
 </div>      
 <script src="{{ url_for('static', filename = 'graphics.js') }}"></script>
 <script src="{{ url_for('static', filename = 'renderer.js') }}"></script>
@@ -43,7 +43,7 @@
 <script src="{{ url_for('static', filename = 'arbor-tween.js') }}"></script>
 <script type="text/javascript">
 
-                var sys = arbor.ParticleSystem(1, 1, 1) // create the system with sensible repulsion/stiffness/friction
+                var sys = arbor.ParticleSystem(100, 900, 0.5) // create the system with sensible repulsion/stiffness/friction
                 sys.parameters({gravity:true}) // use center-gravity to make the graph settle nicely (ymmv)
                 sys.renderer = Renderer("#viewport") // our newly created renderer will have its .init() method called shortly by sys...
 
@@ -56,7 +56,7 @@
                 setTimeout(function(){
                         sys.parameters({gravity:false, friction:1});
                         sys.stop();
-                }, 5000);
+                }, 2500);
 
 
 </script>

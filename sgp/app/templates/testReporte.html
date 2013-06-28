@@ -1,0 +1,67 @@
+<html>
+<head>
+	<style type="text/css">
+		table, td, th
+		{
+		border:1px solid black;
+		}
+		th
+		{
+			background-color:gray;
+			color:white;
+			text-align : center;
+		}
+		td{
+			text-align : center;
+		}
+		
+		.cabecera{
+			text-align : center;
+			background-color : #ccc;
+			color : #fff;
+		}
+		
+	</style>
+</head>
+<body>
+
+
+	<div class="cabecera">
+	<h1> Informe Listado de Items de Proyecto por Fase </h1>
+	</div>
+
+	<div class="tabla">
+	{% for fase in lista %}
+		<h3> Fase {{fase.nombre}} - Nro. {{fase.numero}}  </h3>
+		<table >
+	          <tr>
+	            <th>Nombre item</th>
+	            <th>Esta Eliminado </th>
+	            <th> Version</th>
+	            <th> Prioridad </th>
+	          </tr>
+	          {% for u in fase["items"] %}
+	          <tr>
+	            <td>{{u['nombre']}}</td>
+	            <td>{{u['eliminado']}}</td>
+	            <td>{{u['version']}}</td>
+	            <td>{{u['prioridad']}}</td>
+	            
+	          </tr>
+	          {% else %}
+	          	<tr>
+	          		NO HAY REGISTROS
+	          	</tr>
+	          {% endfor %}
+	
+	        </table>
+	
+	
+	{% else %}
+	          	
+  		<p>NO HAY REGISTROS</p>
+	          	
+	{% endfor %}        
+	</div>
+</body>
+</html>

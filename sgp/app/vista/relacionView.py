@@ -76,8 +76,9 @@ def listadoItemDeFaseActFasAnt(idProyecto, idFase):
         dato = controlItem.getDatoActualByIdItemActual(i.idItemActual)
         
         if(i.eliminado == False):
-            if dato.estado != 'final':
-                retorno.append(i)
+            if dato != None:
+                if dato.estado != 'final':
+                    retorno.append(i)
     
     return retorno
 

@@ -69,3 +69,7 @@ class ControlFase():
         retorno = db.session.query(Fase).filter(Fase.nombre.ilike("%"+nombre+"%")).all()
         #retorno = db.session.query(rol).filter_by(nombre=nombre).all()
         return retorno
+    
+    def getFasesByIdProyecto(self,idProyecto):
+        """ funcion getMensaje """
+        return Fase.query.order_by(Fase.numeroFase.asc()).filter(Fase.idProyecto == idProyecto).all()
