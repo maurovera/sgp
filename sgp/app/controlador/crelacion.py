@@ -105,7 +105,31 @@ class ControlRelacion():
                 if( isgte == iant):
                     r = True
                     break
+        
+        # no detecta cuando es a uno mismo
+        # entonces hacemos eso aca
+        if idAntecesor == idSucesor:
+            r = True
+        
+        # tampoco detecta cuando es 
+        # antecesor->sucesor     Sucesor->antecesor
+        #entonces hacemos eso aca
+        # si sucesor tiene un antecesor igual al antecesor
+        #ciclo
+        
+        for ante in a:
+            if ante == idSucesor:
+                r = True
+                
+                
+                 
+        
+        
         return r
+
+
+        
+
         
     
 #     def eliminarRelacionPorItem(self, idItemActual):

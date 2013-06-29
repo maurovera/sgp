@@ -139,7 +139,7 @@ def nuevaRelacion(idProyecto, idFase):
     # acaaaaaaaaaa va el algoritmo de deteccion
     #--------------------------------------------------------------------
     # tiraria el mensaje con flash
-    
+     
     #---------------------------------------------------------------------
     
             

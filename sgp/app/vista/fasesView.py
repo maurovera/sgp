@@ -93,25 +93,13 @@ def mostrarProyecto():
 def indexAdministrarFase(idProyecto):
     
     '''Se encarga de dar inicio a un proyecto '''
+    
+    # aqui deberia haber un control de cambio 
+    
     p = controlador.getProyectoById(idProyecto)
     return render_template('indexAdministrarFases.html', proyecto = p )
 
-#@app.route("/admfases/administrar/administrarTipoItem")
-#@app.route("/admfases/administrar/administrarTipoItem/<idProyecto>/<idFase>")
-#def administrarTipoItem(idProyecto=None,idFase=None):
-    
-    
-#    return redirect(url_for('indexTipoItem'))
 
-
-#def administrarItem():
-    
-#@app.route("/proyecto/fase/eliminar")
-#@app.route("/proyecto/fase/eliminar/<idProyecto>/<idFase>")
-#def administrarItem(idProyecto,idFase):
-   
-
-    #return redirect(url_for('iniciarProyecto', idProyecto= idProyecto))
 
 
 def FinalProyecto(idProyecto):
@@ -226,7 +214,8 @@ def pruebaReporte(idProyecto):
             items.append({"nombre": item.nombreItemActual,
                           "eliminado": item.eliminado,
                           "version": item.ultimaVersion,
-                          "prioridad" :  datoItem.prioridad })
+                           })
+                          #"prioridad" :  datoItem.prioridad })
         
         listadoFinal.append ({"nombre": f.nombre,
                              "numero": f.numeroFase,
