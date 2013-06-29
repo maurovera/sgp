@@ -116,11 +116,14 @@ class ControlRelacion():
         #entonces hacemos eso aca
         # si sucesor tiene un antecesor igual al antecesor
         #ciclo
+      
         
         for ante in a:
-            if ante == idSucesor:
+            print "antecesores de 2"
+            print ante
+            if str(ante) == str(idSucesor):
                 r = True
-                
+                break
                 
                  
         
