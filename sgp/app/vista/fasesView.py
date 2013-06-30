@@ -12,11 +12,14 @@ from app import app
 from app.controlador import ControlProyecto
 from app.modelo import Proyecto
 from app.modelo import Fase
+from app.modelo import Rol
 
 from app.controlador import ControlFase
 from app.controlador import ControlTipoItem
 from app.controlador import ControlRelacion
 from app.controlador import ControlItem
+from app.controlador import ControlRol
+from app.controlador import ControlUsuario
 from app.modelo import Usuario
 from contextlib import closing
 
@@ -25,6 +28,8 @@ controlFase = ControlFase()
 controlTipoIndex =  ControlTipoItem()
 controlRelacion = ControlRelacion()
 controlItem = ControlItem()
+controlRol = ControlRol()
+controlUsuario = ControlUsuario()
 
 def busquedaPorNombre(nombre):
     ''' Devuelve un listado de los proyectos que coincidan con un nombre '''
@@ -46,12 +51,31 @@ def listadoProyectos():
         flash("Error. Lista no devuelta")
     return lista
 
-
+def listaProyectoPorRoles(idUsuario):
+    lista = None
+    #El usario logeado
+    usuario = controlUsuario.getUsuarioById(idUsuario)
+    #todo los proyectos del sistema
+    proyectos = controlador.getProyectos()
+    
+    print "lista de roles"
+    for r in usuario.roles:
+        
+        print r.idProyecto
+    print "********"
+        
+    return lista
 
 @app.route('/admfases')
-def indexFase():
+@app.route('/admfases/<idUsuario>')
+def indexFase(idUsuario= None):
     ''' Devuelve los datos de un proyecto en Concreto '''
+    ''' devuelve los proyectos que seran desarrollados '''
+    
     proyectos = listadoProyectos();
+    p = listaProyectoPorRoles(idUsuario);
+        
+    
     
     return render_template('indexfases.html', proyectos = proyectos)
 
@@ -59,7 +83,8 @@ def indexFase():
 
 @app.route("/admfases/principal", methods=['GET','POST'])
 def mostrarProyecto():
-    
+    ''' recibe el proyecto seleccionado y lo redirecciona a la funcion indexAdministrarFase '''
+    # id del proyecto seleccionado
     id = request.form["idProyecto"]
     print id
     if FinalProyecto(id):
@@ -72,20 +97,11 @@ def mostrarProyecto():
         controlador.modificarProyecto(proyecto)    
         
     
-    #nombre de la funcion y los parametros
-    return redirect(url_for('indexAdministrarFase', idProyecto = id))
-    #return render_template('indexAdministrarFases.html', idProyecto = id )
-
-#@app.route('/admfases/recibeId')
-#@app.route('/admfases/recibeId/<id>')
-#def recibeId(id = None):
- #   proyectoF = controlador.getProyectoById(id)
-  #  return redirect(url_for('iniciarProyecto', proyecto = proyectoF))    
-        
     
-#--------------------------aca van a ir los vistas de administrar fases--------
-# jajaja ---------------------------------------------------------------------- 
-#------------------------------------------------------------------------------
+    return redirect(url_for('indexAdministrarFase', idProyecto = id))
+    
+
+
 
 #-------------- aqui inicia la parte de fases jajaja.....................
 @app.route("/admfases/administrar")
@@ -93,7 +109,7 @@ def mostrarProyecto():
 def indexAdministrarFase(idProyecto):
     
     '''Se encarga de dar inicio a un proyecto '''
-    
+    ''' este renderea el tema de las fases de un proyecto '''
     # aqui deberia haber un control de cambio 
     
     p = controlador.getProyectoById(idProyecto)
@@ -201,7 +217,7 @@ def create_pdf(pdf_data):
 @app.route("/informe/listadoitem/<idProyecto>")
 @app.route("/informe/listadoitem/")
 def pruebaReporte(idProyecto):
-    
+    '''  genera un reporte  '''
     proyecto = controlador.getProyectoById(idProyecto)
     fases = controlFase.getFasesByIdProyecto(idProyecto)
     listadoFinal = [];

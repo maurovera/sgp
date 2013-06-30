@@ -148,7 +148,11 @@
 
 	<div class="span12">
 		<center>
+		{% if (1) in session['permisos'] %}
 		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Usuario</a>
+		{%else%}
+		<td></td>
+		{%endif%}
 		</center>
 	</div>
 </div>

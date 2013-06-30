@@ -48,9 +48,10 @@
 	</center>
 	<br>
 	<center>
-	<h2> Modulo de Desarrollo y Gestion de Cambio </h2>
 	{% if (19 or 18 or 29) in session['permisos'] %}
-		<a href="{{ url_for('indexFase') }}" class="btn">
+	<h2> Modulo de Desarrollo y Gestion de Cambio </h2>
+	
+		<a href="{{ url_for('indexFase') }}/{{session['idUsuario']}}" class="btn">
 		<img src="{{ url_for('static', filename = 'img/project.png') }}" >
 		<br/>Administración de fases de un proyecto
 		</a>
@@ -60,9 +61,10 @@
 	<hr>
 	
 	<center>
+	{% if (19 or 18 or 29) in session['permisos'] %}
 	<h3> Historial </h3>
 	
-	{% if (19 or 18 or 29) in session['permisos'] %}
+	
 		<a href="{{ url_for('indexHistorialLineaBase') }}" class="btn">
 		<img src="{{ url_for('static', filename = 'img/project.png') }}" >
 		<br/>Historial de LB
