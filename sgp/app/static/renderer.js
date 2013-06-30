@@ -89,7 +89,8 @@
           ctx.restore()
 
           // draw an arrowhead if this is a -> style edge
-        //edge.data.directed  
+        //edge.data.directed 
+	//true  
 	if (true){
             ctx.save()
               // move to the head position of the edge we just drew

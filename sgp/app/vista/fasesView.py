@@ -150,19 +150,7 @@ def grafoProyecto(idProyecto):
     relaciones = controlRelacion.getRelacionesByIdProyecto(idProyecto)
     print relaciones
     
-    ''' 
-                nodes:{
-                     ${grafo['nodos']}
-                   },
-
-                   edges:{
-                     ${grafo['aristas']}
-                   }
-        
-        str(p_item.id_item_actual) + " : {'color': '#333', 'shape': 'box', 'label': '" +\
-                           self.codigo + "(" + str(p_item.complejidad) + ")'},\n"
-    '''
-    
+    ''' se genera conjunto de nodes y aristas para el arbor '''    
     json = "nodes: {"
     
     for i in listadoItem:
@@ -175,17 +163,31 @@ def grafoProyecto(idProyecto):
         json = json + nodo
     
     json = json + "},\n"
-    
     json = json + "edges:{"
     
-    for r in relaciones:
-        '''bar:{foo:{similarity:0},
-              baz:{similarity:.666}'''
-        arista = str(r.idAntecesor) + ":{" + str(r.idSucesor) + " : {similarity:666, pointSize:3, length: 10, color : '#f00' } },\n"
-        json = json + arista
+    #for r in relaciones:
+        #arista = str(r.idAntecesor) + ":{ " + str(r.idSucesor) + " : {} },\n"
+        #json = json + arista
     
-    json = json + "}"
+    json = json + arista(idProyecto) +" }"
     print json
+    '''
+    # json de prueba jajajja
+    # prueba con otros valores jajaja
+    #post = "nodes:{\n"
+    #joe = "joe:{'color':'orange','shape':'dot','label':'joe'},\n"
+    
+    #fido = "fido:{'color':'green','shape':'dot','label':'fido'},\n"
+    #fluffy=  "fluffy:{'color':'blue','shape':'dot','label':'fluffy'}\n },"
+    #ed = "edges:{\n"
+    #rel1 = "dog:{ fido:{} },\n"
+    #rel2=  "cat:{ fluffy:{} },\n"
+    #rel3 =    "joe:{ fluffy:{},fido:{} }\n }"
+    #rel4 =    "fluffy:{ fido:{} },\n"
+    #envio = post + joe + fido + fluffy + ed+ rel4 +rel3  
+    #print envio
+
+    ''' 
     
     return render_template('indexGrafo.html', proyecto = proyecto, json=json )
 
@@ -234,3 +236,50 @@ def pruebaReporte(idProyecto):
     '''
     return render_template('testReporte.html', lista = listadoFinal)
     '''
+
+
+
+
+
+
+
+def arista(idProyecto):
+    '''' arista del grafo'''
+    # todas las relaciones del proyecto
+    relaciones = controlRelacion.getRelacionesByIdProyecto(idProyecto)
+    
+    #quitar los antecesores
+    antecesores = []
+    for ant in relaciones:
+        antecesores.append(ant.idAntecesor)
+        
+    #quitamos los repetidos antecesores     
+    listaDeAntecesores = []
+    for i in antecesores:
+        if i not in listaDeAntecesores:
+            listaDeAntecesores.append(i) 
+    
+    
+    # se genera las aristas del grafo
+    arista =  ""
+    for cabecera in listaDeAntecesores:
+        arista = arista + str( cabecera)+":{ "
+        sucesores = controlRelacion.getItemsSucesores(cabecera)
+        for suc in sucesores:
+            post = suc.idSucesor
+            arista= arista + str(post)+":{},"
+        
+        arista = arista + "},\n"
+        
+         
+    
+    print "esta es la arista"
+    print arista
+    print "*************************"
+    
+        
+       
+            
+    
+   
+    return arista

@@ -29,12 +29,12 @@ controlDatos = ControlDatosItem()
 #    print lista
 #    return lista
 
-def listadoRelaciones():
+def listadoRelaciones(idProyecto):
     ''' Devuelve un listado de las Relaciones '''
     lista = None
     r = True
     if(r):
-        lista = control.getRelaciones()
+        lista = control.getRelacionesByIdProyecto(idProyecto)
     else:
         flash("Error. Lista no devuelta")
     return lista
@@ -86,7 +86,7 @@ def listadoItemDeFaseActFasAnt(idProyecto, idFase):
 @app.route('/item/relacion/<idProyecto>/<idFase>')
 def indexRelacion(idProyecto, idFase):
     ''' Devuelve los datos de una Relacion en Concreto '''
-    relaciones = listadoRelaciones();
+    relaciones = listadoRelaciones(idProyecto);
     items = listadoItems();
     itemsFiltro = listadoItemDeFaseActFasAnt(idProyecto, idFase);
     #print idProyecto
@@ -134,13 +134,14 @@ def nuevaRelacion(idProyecto, idFase):
         tipo = "Padre-Hijo"
     else:
         tipo = "Antecesor-Sucesor"    
-    #---------------------------------------------------------------------
-    # aca iria el algoritmo de deteccion de ciclos jejeje
-    # acaaaaaaaaaa va el algoritmo de deteccion
-    #--------------------------------------------------------------------
-    # tiraria el mensaje con flash
-     
-    #---------------------------------------------------------------------
+  
+    
+    
+    #solucion = detectarRepeticion(item2.idItemActual, item1.idItemActual, idProyecto)
+    if detectarRepeticion(idAntecesor, idSucesor, idProyecto) : 
+        flash("ya exite esta relacion en el proyecto")    
+        return redirect(url_for('indexRelacion',idProyecto= idProyecto, idFase = idFase))
+         
     
             
 #         print "Estoy aca adentro del form..."
@@ -161,6 +162,32 @@ def nuevaRelacion(idProyecto, idFase):
             flash("Ocurrio un error : " + r["mensaje"])
                     
     return redirect(url_for('indexRelacion',idProyecto= idProyecto, idFase = idFase))
+
+
+
+def detectarRepeticion(idAntecesor, idSucesor, idProyecto):
+    ''' detectar relaciones repetidas al meter una nueva relacion '''
+    r =  False
+    
+    relaciones = control.getRelacionesByIdProyecto(idProyecto)
+    for rel in relaciones:
+        
+        if str(idAntecesor) ==  str(rel.idAntecesor):
+            #si es igual, vemos que el sucesor tambien sea igual
+            if str(idSucesor) == str(rel.idSucesor):
+                r = True
+                break
+            
+            
+    
+    return r
+
+
+
+
+
+
+
 
 @app.route('/item/relacion/modificar')
 @app.route('/item/relacion/modificar/<idProyecto>/<idFase>', methods=['GET','POST'])

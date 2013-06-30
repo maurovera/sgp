@@ -18,6 +18,11 @@ class ControlRelacion():
         retorno = list(db.session.query(Relacion).filter(Relacion.idSucesor == idItem ).all())
         return retorno
     
+    def getItemsSucesores(self,idItem):
+        
+        retorno = list(db.session.query(Relacion).filter(Relacion.idAntecesor == idItem ).all())
+        return retorno
+    
     def nuevoRelacion(self, relacion):
         """ funcion nuevoRelacion """
         resultado = {"estado" : True, "mensaje" : "exito"}
@@ -92,6 +97,7 @@ class ControlRelacion():
         return sucesores
     
     def detectarCiclo(self, idAntecesor, idSucesor):
+        ''' funcion para detectar ciclos entre los items dados '''
         #Se busca los sucesores del sucesor, y los 
         #antecesores del antecesor, si se encuentra alguna coincidencia
         #se retorna true
@@ -131,7 +137,7 @@ class ControlRelacion():
         return r
 
 
-        
+
 
         
     
