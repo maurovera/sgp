@@ -112,39 +112,65 @@
             <td>{{p.complejidadTotal}}</td>
             <td>{{p.estado}}</td>
 
-            {% if 10 in permisos[p.idProyecto] %}
+			<!-- si tiene permiso para eliminar un proyecto -->
+            {% if 10 in session['permisos'] %}
+            	<!-- Si el proyecto no esta eliminado -->
             	{% if not p.estado == 'eliminado' %}
-                	<td><a class="btn btn-danger" onClick="eliminar({{p.idProyecto}});">Eliminar</a></td>
+            		<td><a class="btn btn-danger" onClick="eliminar({{p.idProyecto}});">Eliminar</a></td>
             	{% endif %}
+            	
             {%else%}
             <td></td>
             {% endif %}
 
+            <!-- Si el proyecto esta en un estado no iniciado -->
             {% if p.estado == 'no iniciado' %}
+				
+				<!-- Si tiene permiso para modificar un proyecto -->
+				<!--  en la descripcion del permiso 8 dice conf proyecto -->		
+            	<!-- se dejo de usar esto permisos[p.idProyecto] -->
+            	{% if 8 in session['permisos'] %}
+            		<td><a class="btn" onClick="habilitarModificar('{{p.idProyecto}}','{{p.nombre}}','{{p.descripcion}}')">
+            		Modificar</a>
+            	{%else%}
+            		<td></td>
+            	{% endif %}
 
-
-
-            {% if 8 in permisos[p.idProyecto] %}
-            <td><a class="btn" onClick="habilitarModificar('{{p.idProyecto}}','{{p.nombre}}','{{p.descripcion}}')">
-            Modificar</a>
-            {%else%}
-            <td></td>
-            {% endif %}
-
-            {% if 9 in permisos[p.idProyecto] %}
-            <td><a href="{{url_for('iniciarProyecto')}}/{{p.idProyecto}}" class="btn btn-info"><small>Iniciar Proyecto</small></a></td>
-            {%else%}
-            <td></td>
-            {% endif %}
-
-						
-			<td><a href="{{url_for('indexMiembroProyectoFase')}}/{{p.idProyecto}}" class="btn btn-success"><small>Usuarios</small></a></td>
-            <td><a href="{{url_for('indexRolesPorProyecto')}}/{{p.idProyecto}}" class="btn btn-success"><small>Roles Del Proyecto</small></a></td>
-            <td><a href="{{url_for('indexComite')}}/{{p.idProyecto}}" class="btn btn-success"><small>Comite</small></a></td>
+            	<!-- Si tiene permiso para iniciar un proyecto -->
+            	{% if 9 in session['permisos'] %}
+            		<td><a href="{{url_for('iniciarProyecto')}}/{{p.idProyecto}}" class="btn btn-info"><small>Iniciar Proyecto</small></a></td>
+            	{%else%}
+            		<td></td>
+                {% endif %}
+                
             {% else %}
-            <td></td>
-            <td></td>
+            	<td></td>
+            	<td></td>
             {% endif %}
+            
+            <!-- si el proyecto es eliminado -->
+            {% if p.estado == 'eliminado' %} 
+            	<td></td>
+            	<td></td>
+            	<td></td>
+            <!--  si no es eliminado y es iniciado o no iniciado -->	
+            {%else%}
+            
+            	<!-- si tiene permiso para asignar miembros al proyecto -->
+				{% if 28 in session['permisos'] %}
+					<td><a href="{{url_for('indexMiembroProyectoFase')}}/{{p.idProyecto}}" class="btn btn-success"><small>Usuarios</small></a></td>
+            	{%else%}
+            		<td></td>
+                {% endif %}
+                
+                {% if (5 in session['permisos']) or (6 in session['permisos'] ) or (4 in session['permisos']) %}
+            	<td><a href="{{url_for('indexRolesPorProyecto')}}/{{p.idProyecto}}" class="btn btn-success"><small>Roles Del Proyecto</small></a></td>
+            	{%endif%}
+            	<td><a href="{{url_for('indexComite')}}/{{p.idProyecto}}" class="btn btn-success"><small>Comite</small></a></td>
+			
+			
+			{%endif%}            
+            
           </tr>
 
           {% else %}

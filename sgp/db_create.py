@@ -33,7 +33,7 @@ u = Usuario()
 r = Rol()
 pro = Proyecto()
 f = Fase()
-nombresPermisos = [' Crear Usuario ', ' Modificar Usuario ', ' Eliminar Usuario ', ' Crear Roles ', ' Modificar Roles ',' Eliminar Roles ', ' Crear Proyectos ', ' Modificar Proyectos ', ' Configurar Proyectos ', ' Eliminar Proyectos ', ' Crear Fases ', ' Ver Fases ', ' Crear Item ', ' Modificar Item ', ' Configurar Item ', ' Aprobar-Rechazar Item ', ' Eliminar Item ', ' Crear Tipo Item ', ' Modificar Tipo Item ', ' Eliminar Tipo Item ', ' Crear Linea Base ', ' Liberar-Cerrar Linea Base ', ' Eliminar Linea Base ', ' Informes Solicitar ', 'votar']
+nombresPermisos = [' Crear Usuario ', ' Modificar Usuario ', ' Eliminar Usuario ', ' Crear Roles ', ' Modificar Roles ',' Eliminar Roles ', ' Crear Proyectos ', ' Modificar Proyectos ', ' Configurar Proyectos ', ' Eliminar Proyectos ', ' Crear Fases ', ' Ver Fases ', ' Crear Item ', ' Modificar Item ', ' Configurar Item ', ' Aprobar-Rechazar Item ', ' Eliminar Item ', ' Crear Tipo Item ', ' Modificar Tipo Item ', ' Eliminar Tipo Item ', ' Crear Linea Base ', ' Liberar-Cerrar Linea Base ', ' Eliminar Linea Base ', ' Informes Solicitar ', 'votar', 'Asignar-Desasignar rol a Usuario', 'Asignar-Desasignar usuario a comite', 'asignar-desasignar  usuario a proyecto', 'crear Solicitud', 'Modificar solicitud', 'eliminar solicitud', 'enviar solicitud']
 
 print nombresPermisos
 
@@ -167,4 +167,18 @@ controlFase.nuevaFase(f3)
 #-------------------------------------------
 
 
-
+def rolxDefecto():
+    # creamos el rol y le cargamos su permiso
+    rol = Rol()
+    rol.nombre = "RolPorDefecto"
+    rol.descripcion = "Rol por defecto"
+    controlrol.nuevoRol(rol)
+    # permiso ver fases
+    permiso = controlpermisos.buscarPorValor(12)
+    rol.permisos.append(permiso)
+    controlrol.nuevoRol(rol)
+  
+  
+  
+  
+rolxDefecto()

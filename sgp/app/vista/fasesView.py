@@ -52,19 +52,33 @@ def listadoProyectos():
     return lista
 
 def listaProyectoPorRoles(idUsuario):
-    lista = None
-    #El usario logeado
+    ''' lista de proyectos por roles de usuario ''' 
+    # el usuario logeado
     usuario = controlUsuario.getUsuarioById(idUsuario)
-    #todo los proyectos del sistema
-    proyectos = controlador.getProyectos()
     
-    print "lista de roles"
-    for r in usuario.roles:
+    #quitar los id de proyecto de todo los roles del usuario
+    proRepetidos = []
+    for rol in usuario.roles:
+        if rol.idProyecto != None:
+            proRepetidos.append(rol.idProyecto)
         
-        print r.idProyecto
-    print "********"
-        
-    return lista
+    #quitamos los repetidos y cargamos lo que no son repetidos en proyectos    
+    proyectos = []
+    for a in proRepetidos:
+        if a not in proyectos:
+            proyectos.append(a)
+            
+    proyectosN = []
+    for a in proyectos:
+        b =  controlador.getProyectoById(a)   
+        proyectosN.append(b)
+    
+    for a in proyectosN:
+        print str(a.idProyecto) + " : " + a.nombre
+    
+    
+    return proyectos
+
 
 @app.route('/admfases')
 @app.route('/admfases/<idUsuario>')
@@ -72,12 +86,11 @@ def indexFase(idUsuario= None):
     ''' Devuelve los datos de un proyecto en Concreto '''
     ''' devuelve los proyectos que seran desarrollados '''
     
-    proyectos = listadoProyectos();
-    p = listaProyectoPorRoles(idUsuario);
-        
+    p = listadoProyectos();
+    proyectos = listaProyectoPorRoles(idUsuario);
     
     
-    return render_template('indexfases.html', proyectos = proyectos)
+    return render_template('indexfases.html', proyectos = p)
 
 
 
@@ -85,20 +98,20 @@ def indexFase(idUsuario= None):
 def mostrarProyecto():
     ''' recibe el proyecto seleccionado y lo redirecciona a la funcion indexAdministrarFase '''
     # id del proyecto seleccionado
-    id = request.form["idProyecto"]
-    print id
-    if FinalProyecto(id):
-        proyecto = controlador.getProyectoById(id)
+    i = request.form["idProyecto"]
+    print i
+    if FinalProyecto(i):
+        proyecto = controlador.getProyectoById(i)
         proyecto.estado = 'finalizado'
         controlador.modificarProyecto(proyecto)
     else:
-        proyecto = controlador.getProyectoById(id)
+        proyecto = controlador.getProyectoById(i)
         proyecto.estado = 'iniciado'
         controlador.modificarProyecto(proyecto)    
         
     
     
-    return redirect(url_for('indexAdministrarFase', idProyecto = id))
+    return redirect(url_for('indexAdministrarFase', idProyecto = i))
     
 
 
@@ -287,15 +300,9 @@ def arista(idProyecto):
         
         arista = arista + "},\n"
         
-         
-    
     print "esta es la arista"
     print arista
     print "*************************"
-    
-        
-       
-            
-    
-   
     return arista
+
+

@@ -135,6 +135,13 @@ class ControlRol():
                 print "--------ENTRO Y RETORNA EL PROYECTO " + r.nombre
                 return r
 
+    def getRolxDefecto(self):
+        lista = self.getRoles()
+        for rolBuscado in lista:
+            if rolBuscado.nombre == "RolPorDefecto":
+                return rolBuscado
+                    
+
 
     def getMiembrosComite(self,idProyecto):
         '''Retorna la lista de Miembros del Comite de un Proyecto'''

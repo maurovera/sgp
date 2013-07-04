@@ -104,10 +104,30 @@
             <td>{{r.nombre}}</td>
             <td>{{r.descripcion}}</td>
             <td>{{r.idProyecto}}</td>
-            <td><a class="btn btn-danger" onClick="eliminar({{r.idRol}});">Eliminar</a></td>
-            <td><a class="btn" onClick="habilitarModificar('{{r.idRol}}','{{r.nombre}}','{{r.descripcion}}');">
+
+			<!-- Si tiene permiso para eliminar un rol  -->
+			{% if 6 in session['permisos'] %}
+            	<td><a class="btn btn-danger" onClick="eliminar({{r.idRol}});">Eliminar</a></td>
+            {%else%}
+				<td></td>
+			{%endif%}
+            
+            <!-- Si tiene permiso para modificar un rol -->
+            {% if 5 in session['permisos'] %}
+            	<td><a class="btn" onClick="habilitarModificar('{{r.idRol}}','{{r.nombre}}','{{r.descripcion}}');">
             Modificar</a>
-            <td><a class="btn btn-info" href="{{url_for('permisosRol')}}/{{r.idRol}}"><small>Administrar Permisos</small></a></td>
+            {%else%}
+				<td></td>
+			{%endif%}
+			
+			<!-- Si tiene permiso para asignar y desasignar permisos -->
+			<!-- Obs: 4 es un permiso solo para crear rol -->
+			{% if 4 in session['permisos'] %}
+            	<td><a class="btn btn-info" href="{{url_for('permisosRol')}}/{{r.idRol}}"><small>Administrar Permisos</small></a></td>
+          	{%else%}
+				<td></td>
+			{%endif%}
+			
           </tr>
 
           {% else %}
@@ -135,7 +155,13 @@
 
 	<div class="span12">
 		<center>
-		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Rol</a>
+		<!-- Si tiene permiso para crear un rol -->
+		{% if 4 in session['permisos'] %}	
+			<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Rol</a>
+		{%else%}
+			<td></td>
+		{%endif%}
+		
 		</center>
 	</div>
 </div>

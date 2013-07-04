@@ -117,10 +117,30 @@
             <td>{{u.email}}</td>
             <td>{{u.CI}}</td>
             <td>{{u.contrasena}}</td>
-            <td><a class="btn btn-danger" onClick="eliminar({{u.idUsuario}});">Eliminar</a></td>
+            
+            <!-- Si tiene permiso para eliminar usuario -->
+            {% if 3 in session['permisos'] %}
+            	<td><a class="btn btn-danger" onClick="eliminar({{u.idUsuario}});">Eliminar</a></td>
+            {%else%}
+				<td></td>
+			{%endif%}
+            
+            <!-- Si tiene permiso para modificar usuario -->
+            {% if 2 in session['permisos'] %}
             <td><a class="btn" onClick="habilitarModificar('{{u.idUsuario}}','{{u.nombreUsuario}}','{{u.nombre}}','{{u.apellido}}','{{u.CI}}','{{u.email}}','{{u.contrasena}}','{{u.telefono}}');">
             Modificar</a></td>
+            {%else%}
+				<td></td>
+			{%endif%}
+            
+            <!-- Si tiene permiso para asignar y desasignar roles a usuarios -->
+            {%if 26 in session['permisos'] %}
             <td><a class="btn btn-info" href="{{url_for('rolesUsuario')}}/{{u.idUsuario}}">Roles</a></td>
+          	{%else%}
+				<td></td>
+			{%endif%}
+            
+          	
           </tr>
 
           {% else %}
@@ -148,7 +168,9 @@
 
 	<div class="span12">
 		<center>
-		{% if (1) in session['permisos'] %}
+		<!-- si tiene permiso para crear usuarios -->
+		
+		{% if 1 in session['permisos'] %}
 		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Usuario</a>
 		{%else%}
 		<td></td>
@@ -167,7 +189,7 @@
 	<div class="span12">
 		<center>
 
-		<form action="{{ url_for('nuevoUsuario') }}" method="post" class="form-horizontal" id="formulario">
+	<form action="{{ url_for('nuevoUsuario') }}" method="post" class="form-horizontal" id="formulario">
 			<fieldset>
 
 				<label>Nombre de Usuario:</label>

@@ -2,10 +2,16 @@
 from flask import render_template, flash, redirect, request, session, g, url_for, abort
 from app import app
 from app.controlador import ControlUsuario
+from app.controlador import ControlRol
+from app.controlador import ControlPermiso
 from app.modelo import Usuario
 from contextlib import closing
+from app.modelo import Rol
+from app.modelo import Permiso
 
 control = ControlUsuario()
+controlRol = ControlRol()
+controlPermiso = ControlPermiso()
 
 
 
@@ -100,8 +106,15 @@ def nuevoUsuario():
             
             
             r = control.nuevoUsuario(usuario)
+            
+            
             if(r["estado"] == True):
-                flash("Exito, se creo un nuevo usuario")    
+                flash("Exito, se creo un nuevo usuario")
+                
+                '''asignamos un rol por defecto '''
+                rol = controlRol.getRolxDefecto()
+                control.agregarRol(usuario, rol)    
+            
             else :
                 flash("Ocurrio un error : " + r["mensaje"])
                     
