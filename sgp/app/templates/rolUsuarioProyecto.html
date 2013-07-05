@@ -104,16 +104,18 @@
             <th>Proyecto</th>
             <th>Desasignar</th>
           </tr>
-          {% for r in usuario.roles %}
+          {% for r in lista %}
        
           <tr>
             <td>{{r.idRol}}</td>
             <td>{{r.nombre}}</td>
             <td>{{r.descripcion}}</td>
             <td>{{r.idProyecto}}</td>
-            
+			{%if r.nombre != "Administrador Proyecto " + proyecto.nombre %}            
             	<td><a class="btn btn-danger" onClick="eliminar({{r.idRol}});">Desasignar</a></td>	
-    
+    		{%else%}
+    			<td></td>
+    		{%endif%}
           </tr>
 			
           {% else %}

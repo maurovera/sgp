@@ -67,8 +67,10 @@ def indexRolesPorProyecto(idProyecto):
 def eliminarRolesPorProyecto(idProyecto, id=None):
     
     rol = control.getRolById(id)
+    
+     
     if(rol):
-        r= control.eliminarRolSinAvisar(rol)
+        r= control.eliminarRolSinAvisar(rol, idProyecto)
         if(r["estado"] == True):
             flash("Se elimino con exito el rol: " + rol.nombre + " : " + rol.descripcion)
         else:

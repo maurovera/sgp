@@ -7,6 +7,11 @@ from app.modelo import Rol
 from app import db
 from cproyecto import ControlProyecto
 from cusuario import ControlUsuario
+from cpermiso import ControlPermiso
+controlPermiso = ControlPermiso()
+controlProyecto = ControlProyecto()
+controlUsuario = ControlUsuario()
+
 class ControlRol():
     """ clase control rol """
     def getRolById(self,id):
@@ -27,10 +32,16 @@ class ControlRol():
         """ funcion nuevoRol """
         resultado = {"estado" : True, "mensaje" : "exito"}
         try:
+            #agregamos siempre un permiso que es el verfases
+            permiso = controlPermiso.buscarPorValor(12)
+            rol.permisos.append(permiso)
+            
+            
             db.session.add(rol)
             #print "Hice el add"
             db.session.commit()
             #print "Hice el commit"
+            
         except Exception, error :
             #print "Capturo exp" + str(error)
             resultado = {"estado" : False, "mensaje" : str(error)}
@@ -50,6 +61,19 @@ class ControlRol():
                     """Si esta asociado pasamos avisamos que no es posible eliminar"""
                     resultado = {"estado" : False, "mensaje" : "No se puede eliminar un rol asociado a un proyecto no eliminado"}
                     return resultado
+                
+            
+            if rol.nombre == "RolPorDefecto":
+                resultado = {"estado" : False, "mensaje" : "No se puede eliminar el rol por defecto"}
+                return resultado
+                    
+            if rol.nombre == "Administrador Sistema":
+                resultado = {"estado" : False, "mensaje" : "No se puede eliminar el rol Administrador de sistema"}
+                return resultado
+            
+            
+            
+            
             """ hacemos un delete de rol """
             db.session.delete(rol)
             """ se comitea el cambio """
@@ -61,15 +85,43 @@ class ControlRol():
 
         return resultado
 
-    def eliminarRolSinAvisar(self, rol):
+    def eliminarRolSinAvisar(self, rol, idProyecto):
         """ funcion eliminarrol """
+        proyecto = controlProyecto.getProyectoById(idProyecto)
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
             """Comprobamos que el rol no tenga asociado un proyecto"""
             if (rol.idProyecto ):
                 cp = ControlProyecto()
                 p = cp.getProyectoById(rol.idProyecto)
-
+            ''' que no sea el rol por defecto '''
+            if rol.nombre == "RolPorDefecto":
+                resultado = {"estado" : False, "mensaje" : "No se puede eliminar el rol por defecto"}
+                return resultado
+            
+            if rol.nombre == "Administrador Sistema":
+                resultado = {"estado" : False, "mensaje" : "No se puede eliminar el rol Administrador de sistema"}
+                return resultado
+           
+            comite = "MiembroComite " + proyecto.nombre
+            if rol.nombre == comite:
+                resultado = {"estado" : False, "mensaje" : "No se puede eliminar el rol comite"}
+                return resultado
+    
+            admin = "Administrador Proyecto " + proyecto.nombre       
+            if rol.nombre == admin:
+                resultado = {"estado" : False, "mensaje" : "No se puede eliminar el rol Administrador de un proyecto"}
+                return resultado
+            
+            # deberia de haber un no se puede eliminar un rol asociado aun usuario
+            
+            usuarios = rol.usuarios
+            if usuarios == None:
+                resultado = {"estado" : False, "mensaje" : "No se puede eliminar el rol asociado a un usuario"}
+                return resultado 
+            
+            
+            
             """ hacemos un delete de rol """
             db.session.delete(rol)
             """ se comitea el cambio """
@@ -86,6 +138,10 @@ class ControlRol():
         """ funcion modificarrol """
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
+            ''' no se puede modificar el rol por defecto '''
+            if rol.nombre == "RolPorDefecto":
+                resultado = {"estado" : False, "mensaje" : "No se puede modificar  el rol por defecto"}
+                return resultado
             """ hacemos un merge de rol """
             db.session.merge(rol)
             """ se comitea el cambio """
@@ -109,9 +165,19 @@ class ControlRol():
         return list(rol.permisos)
 
     def quitarPermiso(self,rol,permiso):
-        rol.permisos.remove(permiso)
-        return self.modificarRol(rol)
-
+        ''' quitar un rol '''
+        lista = rol.permisos
+        if len(lista) > 1:
+            rol.permisos.remove(permiso)
+            return self.modificarRol(rol)
+        else:
+            resultado = {"estado" : False, "mensaje" : "El permiso no se puede eliminar, "
+                         + "El rol tiene que tener al menos un permiso"}
+            return resultado
+        
+        
+        
+        
     def agregarPermiso(self,rol,permiso):
         nohay = True
         for p in rol.permisos :

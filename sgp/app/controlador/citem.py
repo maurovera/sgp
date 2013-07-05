@@ -253,7 +253,7 @@ class ControlItem():
             item = self.getItemById(idItem)
             datoActual = self.getDatoActualByIdItemActual(idItem)
             complejidad += datoActual.complejidad
-            #costo += datoActual.costo
+            costo += datoActual.costo
             listadoItem.append(item.nombreItemActual)
 
         print "IMPACTO CAMBIO"

@@ -1,6 +1,7 @@
 from app.modelo import Usuario
 from app import db
 
+
 class ControlUsuario():
     """ clase control usuario """
     def getUsuarioById(self,id):
@@ -29,9 +30,30 @@ class ControlUsuario():
         resultado = {"estado": True, "mensaje" : "exito"}
         try:
             """ hacemos un delete de usuario """
-            db.session.delete(usuario)
-            """ se comitea el cambio """
-            db.session.commit()
+            
+            if usuario.nombreUsuario == "root" :
+                resultado = {"estado" : False, "mensaje" :  "el usuario root no se puede eliminar"}
+                return resultado
+        
+            ''' lista de roles '''
+            import crol
+            controlRol = crol.ControlRol()
+            lista = controlRol.buscarPorNombre("Administrador")
+            siTengoUnAdmin = False
+            for rol in lista:
+                if rol in usuario.roles:
+                    siTengoUnAdmin = True
+                    break
+                
+            # si la lista tiene al menos un admin no se borra
+            if(siTengoUnAdmin):
+              resultado = {"estado" : False, "mensaje" :  "no se puede eliminar un usuario que es Admin en un Proyecto dado"}       
+              return resultado
+          
+            else:
+                db.session.delete(usuario)
+                """ se comitea el cambio """
+                db.session.commit()
         except Exception, error:
             """ se captura el error con un exception """
             resultado = {"estado" : False, "mensaje" :  str(error)}
@@ -85,9 +107,17 @@ class ControlUsuario():
             return resultado
 
     def quitarRol(self,usuario,rol):
-        usuario.roles.remove(rol)
-        return self.modificarUsuario(usuario)
-
+        ''' quitamos un rol '''
+        
+        lista = usuario.roles
+        if len(lista) > 1:
+            usuario.roles.remove(rol)
+            return self.modificarUsuario(usuario)
+        else:
+            resultado = {"estado" : False, "mensaje" : "El rol no se puede eliminar, el usuario tiene que tener al menos un rol"}
+            return resultado
+            
+        
     def getPermisos(self,usuario) :
         ''' Retorna una lista con todos los "valores/codigo"
             de permisos que posee un usuari '''
@@ -148,4 +178,11 @@ class ControlUsuario():
             if rol in usuario.roles :
                 retorno.append( usuario )
             
-        return retorno        
+        return retorno 
+    
+    def esUsuarioRoot(self, usuario):
+        
+        if usuario.nombreUsuario == "root":
+            return True
+        else:
+            return False  

@@ -34,7 +34,13 @@ def busquedaPorNombre(nombre):
     print lista
     return lista
 
+def listaMiembros(idProyecto):
+    
+    miembros = controlRol.getMiembrosComite(idProyecto)
+    
+    return miembros
 
+    
 
 def listadoSolicitudes():
     ''' Devuelve un listado de las sol '''
@@ -99,8 +105,10 @@ def indexSolicitud(idProyecto, idFase):
     ''' Devuelve los datos de una sol en Concreto '''
     solicitudes = listadoSolicitudesByFase(idFase)
     #items = listadoItem();
+    usuario = controlUsuario.getUsuarioById(session['idUsuario'])
     items = listadoItemFinal(idFase)
-    return render_template('indexSolicitud.html', solicitudes = solicitudes, items =  items, idProyecto = idProyecto, idFase = idFase)
+    miembros = listaMiembros(idProyecto)
+    return render_template('indexSolicitud.html',usuario = usuario,  solicitudes = solicitudes, items =  items, idProyecto = idProyecto, idFase = idFase, miembros = miembros)
 
 
 @app.route('/solicitud/eliminar')

@@ -46,6 +46,20 @@ def listadoUsuariosPorRoles(idProyecto):
             if(not (usuario in retorno) ):    
                 retorno.append(usuario) 
     return retorno
+
+def listadoRolesByProyectoUsuario(idProyecto, idUsuario):
+    retorno = []
+    #usuario
+    usuario = control.getUsuarioById(idUsuario)
+    
+    listadoPorProyecto = listadoRoles(idProyecto)
+    for rol in listadoPorProyecto:
+        if rol in usuario.roles:
+            retorno.append(rol)
+            
+    return retorno
+
+
     
 def listadoRoles(idProyecto):
     lista = controlRol.getRolPorProyecto(idProyecto)
@@ -117,48 +131,93 @@ def agregarMiembro(idProyecto):
 @app.route('/proyecto/miembro/quitarMiembro')
 @app.route('/proyecto/miembro/quitarMiembro/<idProyecto>/<idUsuario>', methods=['GET','POST'])
 def quitarMiembro(idProyecto, idUsuario):
-    
-    print "este el id de proyecto y el id usuario"
-    print idProyecto
-    print idUsuario
-    print "LO QUE ME LLEGA DE ELIMINAR ROL USUARIO"
-    print idUsuario
-    
+    ''' quitar un miembro del proyecto '''
     usu = control.getUsuarioById(idUsuario)
     usu.roles
-    print "esto te tiene que traer solo los roles asociados al proyecto"
-    for t in usu.roles:
-        if str(t.idProyecto) == str(idProyecto):
-            print "se removio este rol"
-            print t
-            control.quitarRol(usu,t)
-            print usu.roles
     
-    for t in usu.roles:
-        if str(t.idProyecto) == str(idProyecto):
-            print "se removio este rol"
-            print t
-            control.quitarRol(usu,t)
-            print usu.roles
-                
+    ''' si existe mas de un usuario admin entonces borrar '''
+    existe = existeMasDeUnUsuario(idProyecto, idUsuario) 
+    if ( existe ):
         
-
+        print "esto te tiene que traer solo los roles asociados al proyecto"
+        for t in usu.roles:
+            if str(t.idProyecto) == str(idProyecto):
+                print "se removio este rol"
+                print t
+                control.quitarRol(usu,t)
+                print usu.roles
+    
+        for t in usu.roles:
+            if str(t.idProyecto) == str(idProyecto):
+                print "se removio este ultimo rol"
+                print t
+                control.quitarRol(usu,t)
+                print usu.roles
+    
+    ''' si solo hay un solo usuario admin no se puede borrar '''
+    if( existe == False ):
+        flash("No puede quitarse el Unico Administador, el proyecto necesita al menos uno")
+        
+        
+         
+        
+        
+        
     return redirect(url_for('indexMiembroProyectoFase', idProyecto = idProyecto))
 
 
 
 
-# esta seccion es para asignar roles a usuarios 
+def existeMasDeUnUsuario(idProyecto, idUsuario):
+    ''' comprueba que haya mas de un usuario Administrador en un proyecto '''
+    hayUnoMas = False
+    # usuario actual
+    usu = control.getUsuarioById(idUsuario)
+    # este es el listado de usuarios del proyecto
+    listadoUsuario = listadoUsuariosPorRoles(idProyecto)
+    
+    # este es el proyecto
+    proyecto = controlProyecto.getProyectoById(idProyecto)
+    
+    # si el listado de usuarios de proyecto es mayor a uno
+    if len(listadoUsuario) > 1 :
+        for usuarioProyecto in listadoUsuario:
+            
+            #listado de roles del usuario
+            listadoRoles = usuarioProyecto.roles
+            for roles in listadoRoles:
+                nombreDePro = "Administrador Proyecto "+ proyecto.nombre
+                # si el nombre es igual a un administrador de proyecto
+                if roles.nombre == nombreDePro:
+                    #y si no es el mismo usuario que se quiere quitar 
+                    if str(usu.idUsuario) != str(usuarioProyecto.idUsuario) :
+                        print "hay un usuario mas que es admin"
+                        hayUnoMas = True
+    
+    # si el listado de usuarios de proyecto es mayor a uno
+    elif len(listadoUsuario) == 1:
+        hayUnoMas = False
+    
+
+    return hayUnoMas
+
+# esta seccion es para asignar roles a usuarios dentro de un proyecto 
 @app.route("/proyecto/miembro/rol")
 @app.route("/proyecto/miembro/rol/<idProyecto>/<idUsuario>")
 def rolesUsuarioProyecto(idProyecto, idUsuario ):
-    '''Administra los roles de un usuario en especifico'''
+    
+    '''Administra los roles de un usuario  dentro de un proyecto'''
+    ''' roles de asignar usuarios a proyecto '''
 
     u = control.getUsuarioById(idUsuario)
     
+    lista = listadoRolesByProyectoUsuario(idProyecto, idUsuario)
+    
     roles = listadoRoles(idProyecto)
+    
+    proyecto = controlProyecto.getProyectoById(idProyecto)
 
-    return render_template('rolUsuarioProyecto.html', roles= roles, usuario = u, idProyecto = idProyecto)
+    return render_template('rolUsuarioProyecto.html', roles= roles, usuario = u, idProyecto = idProyecto, proyecto = proyecto, lista = lista)
 
 @app.route("/proyecto/miembro/rol/nuevo")
 @app.route("/proyecto/miembro/rol/nuevo/<idProyecto>", methods=['GET', 'POST'])
@@ -198,6 +257,7 @@ def eliminarRolUsuarioProyecto(idProyecto, idUsuario,idRol):
     print idRol
 
     if ( idRol and idUsuario):
+        
         u = control.getUsuarioById(idUsuario)
         rolRemover = controlRol.getRolById(idRol)
         r = control.quitarRol(u,rolRemover)

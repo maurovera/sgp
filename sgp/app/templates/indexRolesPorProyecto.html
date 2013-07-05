@@ -95,8 +95,11 @@
             <td>{{r.nombre}}</td>
             <td>{{r.descripcion}}</td>
             <td>{{r.idProyecto}}</td>
-            <td>{{r.idFase}}</td>
-            	
+			{%if r.idFase != None %}
+            	<td>{{r.idFase}}</td>
+            {%else%}
+            	<td>Todos</td>
+            {%endif%}		
             <td><a class="btn btn-danger" onClick="eliminar({{r.idRol}});">Eliminar</a></td>
             <td><a class="btn" onClick="habilitarModificar('{{r.idRol}}','{{r.nombre}}','{{r.descripcion}}');">
             Modificar</a>
@@ -138,7 +141,7 @@
 				
 				<label>Fase:</label>
                 <select name="idFase">
-                    <option value="None">Ninguno</option>
+                    <option value="None">Todos</option>
                     {% for f in proyectos.fases %}
                     <option value="{{f.idFase}}">{{f.nombre}}</option>
                     {% endfor %}

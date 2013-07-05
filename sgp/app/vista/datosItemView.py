@@ -58,17 +58,18 @@ def nuevaDatosItem(idProyecto):
     idTipoItem = request.form['idTipoItem']
     idItemActual = request.form['idItemActual']
     idUsuario = request.form['idUsuario']
-
-    if(version and complejidad and prioridad and idItemActual and idTipoItem):
+    costo = request.form['costo']
+    if(version and complejidad and prioridad and idItemActual and idTipoItem and costo):
         #anga
         item = control.getItemById(idItemActual)
         datos = DatosItem()
         datos.version = version
         datos.complejidad = complejidad
         datos.prioridad = prioridad
+        datos.costo = costo
         datos.estado = "inicial"
         datos.idItemActual = idItemActual
-
+        
 #------------------------------- modificamos la version = ultversion en item
         item.ultimaVersion = version
 

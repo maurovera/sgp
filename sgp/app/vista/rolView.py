@@ -12,6 +12,7 @@ from app.controlador import ControlUsuario
 from app.controlador import ControlPermiso
 from app.controlador import ControlProyecto
 from app.controlador import ControlFase
+from app.controlador import ControlUsuario
 
 from app.modelo import Usuario
 from contextlib import closing
@@ -21,6 +22,7 @@ controlusuario = ControlUsuario()
 controlpermisos = ControlPermiso()
 controlProyecto = ControlProyecto()
 controlFase = ControlFase()
+controlUsuario = ControlUsuario()
 
 def busquedaPorNombre(nombre):
     ''' Devuelve un listado de los rols que coincidan con un nombre '''
@@ -210,7 +212,7 @@ def eliminarRolUsuario(idUsuario,idRol):
     print "LO QUE ME LLEGA DE ELIMINAR ROL USUARIO"
     print idUsuario
     print idRol
-
+    
     if ( idRol and idUsuario):
         u = controlusuario.getUsuarioById(idUsuario)
         rolRemover = control.getRolById(idRol)
@@ -225,6 +227,10 @@ def eliminarRolUsuario(idUsuario,idRol):
 
     return redirect(url_for('rolesUsuario', idUsuario= idUsuario))
 #------------------------------Fin de asignacion  de roles a usuarios------------------
+
+
+
+
 
 
 #----------inicio de permisos a roles----------------------------------------------------

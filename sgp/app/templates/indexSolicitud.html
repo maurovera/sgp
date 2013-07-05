@@ -183,7 +183,12 @@
 
 	<div class="span12">
 		<center>
-		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nueva Solicitud</a>
+		<!-- Si el usuario logeado es miembros del comite -->
+		{%if usuario in miembros %}
+			<td></td>
+		{%else%}
+			<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nueva Solicitud</a>
+		{%endif%}
 		</center>
 	</div>
 </div>

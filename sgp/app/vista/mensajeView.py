@@ -25,7 +25,7 @@ def listadoMensaje():
     lista = None
     r = True
     if(r):
-        lista = controlMensaje.getMensaje()
+        lista = controlMensaje.getMensajePorUsuario(session['idUsuario'])
     else:
         flash("Error. Lista no devuelta")
     return lista

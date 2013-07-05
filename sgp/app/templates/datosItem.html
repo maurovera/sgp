@@ -89,6 +89,7 @@
             <td>{{f.version}}</td>
             <td>{{f.complejidad}}</td>
             <td>{{f.prioridad}}</td>
+            <td>{{f.costo}}</td>
             <td>{{f.estado}}</td>
             {% for aDeItem in f.atributosDeItem %}
                 <td>{{aDeItem.valor}}</td>
@@ -158,7 +159,11 @@
                 <input type="number" name="complejidad" id="complejidad" placeholder="Complejidad del dato">
                 <label>Prioridad:</label>
                 <input type="number" name="prioridad" id="prioridad" placeholder="Prioridad del dato">
-
+				<label>Costo:</label>
+                <input type="number" name="costo" id="costo" placeholder="Costo">
+				
+				
+				
                 {% for a in atributos %}
                     <label>{{a.nombre}}</label>
 

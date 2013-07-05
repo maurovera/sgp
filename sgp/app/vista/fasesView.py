@@ -54,8 +54,8 @@ def listadoProyectos():
 def listaProyectoPorRoles(idUsuario):
     ''' lista de proyectos por roles de usuario ''' 
     # el usuario logeado
-    usuario = controlUsuario.getUsuarioById(idUsuario)
-    
+    usuario = controlUsuario.getUsuarioById(session['idUsuario'])
+    #usuario = idUsuario
     #quitar los id de proyecto de todo los roles del usuario
     proRepetidos = []
     for rol in usuario.roles:
@@ -80,6 +80,19 @@ def listaProyectoPorRoles(idUsuario):
     return proyectos
 
 
+def usuarioRootVeTodo():
+    usuario = controlUsuario.getUsuarioById(session['idUsuario'])
+    if usuario.nombreUsuario == "root":
+        retorno = []
+        lista = controlador.getProyectos()
+        for proyecto in lista:
+            if proyecto.estado != False:
+               retorno.append(proyecto)
+               
+    return retorno 
+        
+         
+
 @app.route('/admfases')
 @app.route('/admfases/<idUsuario>')
 def indexFase(idUsuario= None):
@@ -88,9 +101,9 @@ def indexFase(idUsuario= None):
     
     p = listadoProyectos();
     proyectos = listaProyectoPorRoles(idUsuario);
+    proyectosRoot = usuarioRootVeTodo();
     
-    
-    return render_template('indexfases.html', proyectos = p)
+    return render_template('indexfases.html', proyectos = p, proyectosRoot = proyectosRoot)
 
 
 
@@ -113,6 +126,91 @@ def mostrarProyecto():
     
     return redirect(url_for('indexAdministrarFase', idProyecto = i))
     
+
+
+def listadoFasesAutorizadas(idProyecto):
+    #es el proyecto seleccionado
+    proyecto = controlador.getProyectoById(idProyecto)
+    # el usuario logeado
+    usuario = controlUsuario.getUsuarioById(session['idUsuario'])
+    
+    #buscamos todo los roles del proyecto
+    ''' trae los roles del usuario asociado al proyecto '''
+    roles = controlRol.getRolPorProyecto(idProyecto)
+    listaDeRoles = []
+    for rol in roles:
+        # si este rol tiene el usuario entonces meter
+        if rol in usuario.roles:
+            #esta es la lista de los roles que el usuario tiene en este proyecto 
+            listaDeRoles.append(rol)
+    
+    
+    
+    
+    
+    # si el usuario logeado es root
+    if controlUsuario.esUsuarioRoot(usuario) :
+        return proyecto.fases
+   
+   
+    # si no es root
+    else:
+        
+        
+        hayUnGeneral = Fase
+        # solo controla que haya un none osea que tenga todo los permisos
+        for fase in listaDeRoles:
+            if fase.idFase == None:
+                hayUnGeneral = True
+                break
+     
+        #si tiene fases none puede ver toda las fases
+        # osea si tiene en el rol idproyecto = proyecto actual y rol.idFase = none
+        # es un admin o lo que fuere 
+        if hayUnGeneral == True:
+            return proyecto.fases
+        # si no tiene fases none entonces trae toda las fases
+        # tiene fases especificas
+        else:
+            RepetidoFaseId = []
+            #quita los id de fase repetidos
+            for repetido in listaDeRoles:
+                if repetido.fase != None:
+                    RepetidoFaseId.append(repetido.idFase)
+            #quita los id de fase no repetidos        
+            noRepetidoFaseId = []
+            for noRepetido in RepetidoFaseId:
+                if noRepetido  not in  noRepetidoFaseId:
+                    noRepetidoFaseId.append(noRepetido)
+                    
+            #quita las fases en si 
+            retorno = []
+            for f in noRepetidoFaseId:
+                fase = controlFase.getFaseById(f)
+                retorno.append(fase)
+
+            return retorno
+            
+                    
+                
+            
+            
+            
+            
+    
+    
+    
+    
+            
+    
+    
+    
+    fases = proyecto.fases
+    
+    
+        
+        
+
 
 
 

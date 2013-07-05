@@ -106,13 +106,19 @@
             <td>{{f.nombre}}</td>
             <td>{{f.numeroFase}}</td>
             <td>{{f.descripcion}}</td>
-            <td>{{f.estado}}
+            <td>{{f.estado}}</td> 
           	{% if proyecto.estado == 'no iniciado' %}
-            <td><a class="btn btn-danger" onClick="eliminar({{f.idFase}});">Eliminar</a></td>
+            
+            	}
+            	<td><a class="btn btn-danger" onClick="eliminar({{f.idFase}});">Eliminar</a></td>
           	
-          	<td><a class="btn" onClick="habilitarModificar('{{f.idFase}}','{{f.nombre}}','{{f.descripcion}}');">
-            Modificar</a></td>
-          	{% endif %}
+          		<td><a class="btn" onClick="habilitarModificar('{{f.idFase}}','{{f.nombre}}','{{f.descripcion}}');">
+            	Modificar</a></td>
+          	
+          	{% else %}
+          		<td></td>
+          		<td></td>
+          	{%endif%}
           </tr>
 
           {% else %}
@@ -183,6 +189,15 @@
     <center>
         <a href="{{url_for('inicializarProyecto')}}/{{proyecto.idProyecto}}" class="btn btn-large btn-success">INICIAR PROYECTO!</a>
         </center>
+    </div>
+</div>
+
+<hr>
+<div class="row">
+    <div class="span12">
+    <center>
+        <a href="{{url_for('indexProyecto')}}" class="btn btn-large btn-success">Atras!</a>
+      </center>
     </div>
 </div>
 
