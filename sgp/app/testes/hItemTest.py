@@ -38,7 +38,7 @@ class TestHlb(unittest.TestCase):
             self.assertEqual(r["estado"], False ) #modif este 
             print "Creamos historial nuevo de items: doscientos " + str(self.HDistinto.idHistorialItems)
             r = self.controlador.nuevoHistorialItems(self.HDistinto)
-            self.assertEqual(r["estado"], True )
+            self.assertEqual(r["estado"], False )
             print "Se guardan ambos con exito"
             self.contador = 3
             

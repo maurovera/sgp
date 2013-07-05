@@ -38,7 +38,7 @@ class TestHlb(unittest.TestCase):
             self.assertEqual(r["estado"], False ) #modif este 
             print "Creamos una Hlb nueva: doscientos " + str(self.HlbDistinto.idHistorialLB)
             r = self.controlador.nuevoHistorialLineaBase(self.HlbDistinto)
-            self.assertEqual(r["estado"], True )
+            self.assertEqual(r["estado"], False )
             print "Se guardan ambos con exito"
             self.contador = 3
             

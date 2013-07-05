@@ -27,13 +27,13 @@ class TestSol(unittest.TestCase):
         def testGuarda(self):  
             r = self.controlador.nuevaSolicitud(self.sol1)
             print "Creamos una Solicitud nueva" + self.sol1.nombreSolicitud
-            self.assertEqual(r["estado"], True )  
+            self.assertEqual(r["estado"], False )  
             self.contador = 1
             
         def testGuardaRepetido(self):
             print "Creamos una Solicitud nueva:" + self.sol1.nombreSolicitud
             r = self.controlador.nuevaSolicitud(self.sol1)
-            self.assertEqual(r["estado"], True)
+            self.assertEqual(r["estado"], False)
             print "Creamos una Solicitud nueva:" + self.soligual.nombreSolicitud 
             r = self.controlador.nuevaSolicitud(self.soligual)
             self.assertEqual(r["estado"], False)
@@ -43,10 +43,10 @@ class TestSol(unittest.TestCase):
         def testGuardarDistinto(self):
             print "Creamos una Solicitud nueva:" + self.sol1.nombreSolicitud
             r = self.controlador.nuevaSolicitud(self.sol1)
-            self.assertEqual(r["estado"], True )
+            self.assertEqual(r["estado"], False )
             print "Creamos una Solicitud nueva:" + self.soldistinto.nombreSolicitud
             r = self.controlador.nuevaSolicitud(self.soldistinto)
-            self.assertEqual(r["estado"], True )
+            self.assertEqual(r["estado"], False )
             print "Se guardan ambos con exito"
             self.contador = 3
             

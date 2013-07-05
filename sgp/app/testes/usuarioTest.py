@@ -54,3 +54,4 @@ class TestUsuarios(unittest.TestCase):
                 self.controlador.eliminarUsuario(self.usuario1)
                 print "Eliminamos el usuario nuevo" + self.usuariodistinto.nombreUsuario
                 self.controlador.eliminarUsuario(self.usuariodistinto)
+              

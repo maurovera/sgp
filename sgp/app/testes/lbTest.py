@@ -23,26 +23,26 @@ class TestesItCuatro(unittest.TestCase):
         def testGuarda(self):  
             r = self.controlador.nuevaLineaBase(self.lbPrincipal)
             print "Creamos una lb nueva: debe ser cien " + str(self.lbPrincipal.numero)
-            self.assertEqual(r["estado"], True )  
+            self.assertEqual(r["estado"], False )  
             self.contador = 1
             
         def testGuardaRepetido(self):
             print "Creamos un usuario nuevo:" + str(self.lbPrincipal.numero)
             r = self.controlador.nuevaLineaBase(self.lbPrincipal)
-            self.assertEqual(r["estado"], True)
+            self.assertEqual(r["estado"], False)
             print "Creamos un usuario nuevo:" + str(self.lbIgual.numero) 
             r = self.controlador.nuevaLineaBase(self.lbIgual)
-            self.assertEqual(r["estado"], True) #modifiqu este 
+            self.assertEqual(r["estado"], False ) #modifiqu este 
             print "No deberia guardar porque son iguales" 
             self.contador = 2
              
         def testGuardarDistinto(self):
             print "Creamos una lb nueva:cien  " + str(self.lbPrincipal.numero)
             r = self.controlador.nuevaLineaBase(self.lbPrincipal)
-            self.assertEqual(r["estado"], True )
+            self.assertEqual(r["estado"], False )
             print "Creamos una lb nueva: doscientos " + str(self.lbDistinto.numero)
             r = self.controlador.nuevaLineaBase(self.lbDistinto)
-            self.assertEqual(r["estado"], True )
+            self.assertEqual(r["estado"], False )
             print "Se guardan ambos con exito"
             self.contador = 3
             
@@ -58,3 +58,6 @@ class TestesItCuatro(unittest.TestCase):
                 self.controlador.eliminarLineaBase(self.lbPrincipal)
                 print "Eliminamos una lb nueva: doscientos  " + str(self.lbDistinto.numero)
                 self.controlador.eliminarLineaBase(self.lbDistinto)
+                
+# if __name__ == '__main__':
+#     unittest.main()
