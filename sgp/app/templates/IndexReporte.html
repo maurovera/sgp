@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<script>
+	function mostrarFormulario(){
+		$("#formulario-div").show("slow");
+		$("#boton-mostrar-formulario").hide();
+	}
+	function ocultarFormulario(){
+		$("#formulario-div").hide("slow");
+		$("#boton-mostrar-formulario").show();
+		$("#formulario")[0].reset();
+
+	}
+	
+	function mostrarFormularioSol(){
+		$("#formulario-divSol").show("slow");
+		$("#boton-mostrar-formulario").hide();
+	}
+	function ocultarFormularioSol(){
+		$("#formulario-divSol").hide("slow");
+		$("#boton-mostrar-formulario").show();
+		$("#formularioSol")[0].reset();
+
+	}
+	
+	
+	function mostrarFormularioHis(){
+		$("#formulario-divHis").show("slow");
+		$("#boton-mostrar-formulario").hide();
+	}
+	function ocultarFormularioHis(){
+		$("#formulario-divHis").hide("slow");
+		$("#boton-mostrar-formulario").show();
+		$("#formularioHis")[0].reset();
+
+	}
+	
+	
+</script>
+
+
+
+<div class="row">
+    <div class="span12">
+        <center>
+        <h1> Reportes </h1>
+        <hr>
+        </center>
+    </div>
+</div>
+
+<hr>
+
+
+<!-- boton para mostrar formulario -->
+
+<div class="row" id="boton-mostrar-formulario">
+	
+	<div class="span12">
+		<center>
+		<h3>Generar reporte de item de un proyecto por fase </h3>
+		<!-- si tiene permiso para crear usuarios -->
+		
+		{% if 24 in session['permisos'] %}
+			<a class="btn btn-primary" onClick="mostrarFormulario();">Generar</a>
+		{%else%}
+			<td></td>
+		{%endif%}
+			
+		
+		<h3>Generar reporte solicitudes de un proyecto dado </h3>
+		<!-- si tiene permiso para crear usuarios -->
+		
+		{% if 24 in session['permisos'] %}
+			<a class="btn btn-primary" onClick="mostrarFormularioSol();">Generar</a>
+		{%else%}
+			<td></td>
+		{%endif%}
+		
+		
+		<h3>Generar reporte de Historial de un item dado </h3>
+		<!-- si tiene permiso para crear usuarios -->
+		
+		{% if 24 in session['permisos'] %}
+			<a class="btn btn-primary" onClick="mostrarFormularioHis();">Generar</a>
+		{%else%}
+			<td></td>
+		{%endif%}
+		
+		</center>
+	</div>
+</div>
+
+
+<!-- Este es el formulario para generar reportes de items de un proyecto dado --> 
+<div class="row hide" id="formulario-div">
+
+	<div class="span12">
+		<center>
+
+	<form action="{{ url_for('pruebaReporte') }}" method="post" class="form-horizontal" id="formulario">
+			<fieldset>
+
+				<label>Proyectos:</label>
+					<select name="idProyecto">                	
+                		{% for p in proyectos %}
+          					<option value="{{p.idProyecto}}">{{p.nombre}}</option>
+            			{% endfor %}
+				</select>		
+				<br/>
+				<br/>
+
+				<input type="submit" value="Generar" class="btn btn-primary" id="btn-accion">
+
+			</fieldset>
+		</form>
+		<a onClick="ocultarFormulario();" class="btn">Cancelar</a>
+		</center>
+
+	</div>
+</div>
+<!-- fin  -->
+
+
+<!-- Este es el formulario para generar informes de solicitud dado --> 
+<div class="row hide" id="formulario-divSol">
+
+	<div class="span12">
+		<center>
+
+	<form action="{{ url_for('informeSolicitud') }}" method="post" class="form-horizontal" id="formularioSol">
+			<fieldset>
+
+				<label>Elija el Proyectos del cual quiere las solicitudes:</label>
+					<select name="idProyecto">                	
+                		{% for p in proyectos %}
+          					<option value="{{p.idProyecto}}">{{p.nombre}}</option>
+            			{% endfor %}
+				</select>		
+				<br/>
+				<br/>
+
+				<input type="submit" value="Generar" class="btn btn-primary" id="btn-accion">
+
+			</fieldset>
+		</form>
+		<a onClick="ocultarFormularioSol();" class="btn">Cancelar</a>
+		</center>
+
+	</div>
+</div>
+<!-- fin  -->
+
+
+
+<!-- Este es el formulario para generar informes de solicitud dado --> 
+<div class="row hide" id="formulario-divHis">
+
+	<div class="span12">
+		<center>
+
+	<form action="{{ url_for('elejirItem') }}" method="post" class="form-horizontal" id="formularioHis">
+			<fieldset>
+
+				<label>Elija el proyecto del cual quiere un historial de item:</label>
+					<select name="idProyecto">                	
+                		{% for p in proyectos %}
+          					<option value="{{p.idProyecto}}">{{p.nombre}}</option>
+            			{% endfor %}
+				</select>		
+				<br/>
+				<br/>
+
+				<input type="submit" value="Generar" class="btn btn-primary" id="btn-accion">
+
+			</fieldset>
+		</form>
+		<a onClick="ocultarFormularioHis();" class="btn">Cancelar</a>
+		</center>
+
+	</div>
+</div>
+<!-- fin  -->
+
+
+
+
+{% endblock %}

@@ -128,9 +128,10 @@
 			<td>{{listaEstado[u.estado]["estado"]}}</td>
            
             <!---<td><a class="btn btn-danger" onClick="eliminar({{u.idLB}});">Eliminar</a></td>--->
-            {%if u.estado != 1%}
+            {%if u.estado == -1 or u.estado == 1 %}
             	<!-- si tiene permiso para abrir y cerrar linea base -->
             	{% if 22 in session['permisos'] %}
+            		
             		<td><a href="{{url_for('abrirLineaBase')}}/{{u.idLB}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}" class="btn btn.danger"><small>abrir</small></a></td>
             	{%else%}
             		<td></td>
@@ -139,7 +140,7 @@
             {%else%}
             	<td></td>
             {%endif%}
-			<!-- solo se abilita si la lb esta en estado no valido para volver a cerrar -->            
+			<!-- solo se habilita si la lb esta en estado no valido para volver a cerrar -->            
             {%if u.estado == -1%}
             	<!-- si tiene permiso para abrir y cerrar linea base -->
             	{% if 22 in session['permisos'] %}

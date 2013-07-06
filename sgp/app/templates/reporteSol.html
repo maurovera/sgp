@@ -36,23 +36,24 @@
 	            <th>Codigo</th>
 	            <th>Nombre Solicitud </th>
 	            <th>Usuario Creador</th>
-	            <th> Estado </th>
 	            <th> Votantes </th>
+	            <th> Estado </th>
 	            <th> Linea Base Afectada </th>
 	          </tr>
-	          {% for u in sol %}
+	          {% for u in solicitudDic %}
 	          <tr>
-	            <td>{{u.idSolicitud}}</td>
-	            <td>{{u.nombreSolicitud}}</td>
+	            <td>{{u['codigo']}}</td>
+	            <td>{{u['nombre']}}</td>
 	            {%for e in usuarioLista %}
-	            	{% if e.idUsuario == u.idUsuario%}	
+	            	{% if e.idUsuario == u['usuario'] %}	
 	            		<td>{{e.nombreUsuario}}</td>
 	            	{%endif%}
 	            {%endfor%}
-	            		
-	            <td>{{u.estado}}</td>
-	            <td>{{u.votantes}}</td>
-	            <td>{{u.impacto}}</td>
+	            <td>{{u['votantes']}}</td>
+	            <td>{{u['estado']}}</td>
+	            <td>{{u['LB Afectada']}}</td>
+	          
+
 	            
 	          </tr>
 	          {% else %}

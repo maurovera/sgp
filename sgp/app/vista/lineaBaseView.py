@@ -85,12 +85,13 @@ def indexLineaBase(idProyecto= None, idFase=None):
     if len(listaItem) == 0:
         vacio = True
     
+    
         
     print idProyecto
     print idFase
     print "listaItem"
     print listaItem
-    return render_template('indexLineaBase.html',vacio = vacio, lineaBases = lineaBases, idProyecto=idProyecto, idFase=idFase, listaItem = listaItem, listaEstado = listaEstado)
+    return render_template('indexLineaBase.html', vacio = vacio, lineaBases = lineaBases, idProyecto=idProyecto, idFase=idFase, listaItem = listaItem, listaEstado = listaEstado)
 
 
 @app.route('/lineaBase/eliminar')
@@ -116,52 +117,62 @@ def eliminarLineaBase(id=None, idFase=None, idProyecto = None):
 def abrirLineaBase(id=None, idFase=None, idProyecto = None, idUsuario = None):
     ''' pasa todo los estados de los items a estado aprobado menos los que estan en revision '''
     lb = control.getLineaBaseById(id)
-    #pasa a un estado liberado estado igual a 1
-    lb.estado = 1
-    control.modificarLineaBase(lb)
     
-    # se pasa todo los items en estado final a aprobado
-    lista = lb.items
-    paHistorial = ""
-    for d in lista:
-        dato = controlItem.getDatoActualByIdItemActual(d.idItemActual)
-        itA = controlItem.getItemById(d.idItemActual)
-        paHistorial = paHistorial + " " + itA.nombreItemActual + "," 
-        if dato.estado != "revision":
-            dato.estado = "aprobado"
-            # aca guau le dessigno de esta mierda
-            dato.itemLB.remove(lb)
-            controlDatos.modificarDatosItem(dato)
-            
-            
-            # parte del historial items
-            
-            historialN = HistorialItems()
-            historialN.idUsuario = idUsuario
-            historialN.tipoModificacion = "estado de item a aprobado"
-            historialN.fechaModificacion = str(datetime.date.today())
-            historialN.idItem = d.idItemActual
-            controlHistorialItems.nuevoHistorialItems(historialN)
-            #---------------------------------------------------------------
-    
-    # parte del historial de lb
-    historial = HistorialLineaBase()
-    historial.tipoOperacion = "linea base liberado: " + paHistorial
-    historial.fechaModificacion = str(datetime.date.today())
-    historial.idLB = lb.idLB
-    historial.idUsuario = idUsuario
-    controlHistorial.nuevoHistorialLineaBase(historial)
-    # ----------------------------------------------------------
-    
-    
-    
-    flash("Se abrio con exito la Linea Base ")
-    # CORROBORAMOS QUE TENGA ALMENOS UNA LB
-    estadoDeLaFaseAlEliminar(idFase, idProyecto)                
-       
-    # pregunta es necesario desligar a todo los items de la lb base liberada
+    datosDeLinea  = lb.items
+    if len(list(datosDeLinea) ) > 0 :
+        
+        
+        
+        #pasa a un estado liberado estado igual a 1
+        lb.estado = 1
+        control.modificarLineaBase(lb)
         
     
+        
+        
+        # se pasa todo los items en estado final a aprobado
+        lista = lb.items
+        paHistorial = ""
+        for d in lista:
+            dato = controlItem.getDatoActualByIdItemActual(d.idItemActual)
+            itA = controlItem.getItemById(d.idItemActual)
+            paHistorial = paHistorial + " " + itA.nombreItemActual + "," 
+            if dato.estado != "revision":
+                dato.estado = "aprobado"
+                # aca guau le dessigno de esta mierda
+                dato.itemLB.remove(lb)
+                controlDatos.modificarDatosItem(dato)
+                
+                
+                # parte del historial items
+                
+                historialN = HistorialItems()
+                historialN.idUsuario = idUsuario
+                historialN.tipoModificacion = "estado de item a aprobado"
+                historialN.fechaModificacion = str(datetime.date.today())
+                historialN.idItem = d.idItemActual
+                controlHistorialItems.nuevoHistorialItems(historialN)
+                #---------------------------------------------------------------
+        
+        # parte del historial de lb
+        historial = HistorialLineaBase()
+        historial.tipoOperacion = "linea base liberado: " + paHistorial
+        historial.fechaModificacion = str(datetime.date.today())
+        historial.idLB = lb.idLB
+        historial.idUsuario = idUsuario
+        controlHistorial.nuevoHistorialLineaBase(historial)
+        # ----------------------------------------------------------
+        
+        
+        
+        flash("Se abrio con exito la Linea Base ")
+        # CORROBORAMOS QUE TENGA ALMENOS UNA LB
+        estadoDeLaFaseAlEliminar(idFase, idProyecto)                
+           
+        # pregunta es necesario desligar a todo los items de la lb base liberada
+            
+    else:
+        flash("Ya esta abierta la linea Base")
     
     
     return redirect(url_for('indexLineaBase', idProyecto = idProyecto, idFase=idFase))

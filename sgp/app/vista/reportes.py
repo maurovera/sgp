@@ -16,6 +16,7 @@ from app.controlador import ControlItem
 from app.controlador import ControlRol
 from app.controlador import ControlUsuario
 from app.controlador import ControlSolicitud
+from app.controlador import ControlLineaBase
 from app.modelo import Usuario
 from contextlib import closing
 
@@ -27,12 +28,16 @@ controlItem = ControlItem()
 controlRol = ControlRol()
 controlUsuario = ControlUsuario()
 controlSolicitud = ControlSolicitud()
+controlLineaBase = ControlLineaBase()
 
 
 
 
-
-
+@app.route('/indexReporte')
+def indexReportes():
+    proyectos = controlador.getProyectos()
+    
+    return render_template('IndexReporte.html', proyectos = proyectos )
 
 
 
@@ -43,10 +48,14 @@ def create_pdf(pdf_data):
 
 
 # esta es la que hace la lista de los item por fase
-@app.route("/informe/listadoitem/<idProyecto>")
-@app.route("/informe/listadoitem/")
-def pruebaReporte(idProyecto):
+#@app.route("/informe/listadoitem/<idProyecto>")
+#@app.route("/informe/listadoitem/")
+@app.route('/informe/listadoItem', methods=['GET','POST'])
+def pruebaReporte():
     '''  genera un reporte  '''
+    
+    idProyecto = request.form['idProyecto']
+    
     proyecto = controlador.getProyectoById(idProyecto)
     fases = controlFase.getFasesByIdProyecto(idProyecto)
     listadoFinal = [];
@@ -83,11 +92,33 @@ def pruebaReporte(idProyecto):
     return render_template('testReporte.html', lista = listadoFinal)
     '''
 
-
-@app.route("/informe/historialItem/<idItemActual>")
-@app.route("/informe/historialItem/")
-def historialDeItem(idItemActual):
+def itemPorProyecto(idProyecto):
+    ''' Devuelve un listado de todo los item de un proyecto '''
     
+    proyecto = controlador.getProyectoById(idProyecto)
+    itemsPro = []
+    for f in proyecto.fases:
+        lista =  controlItem.getItemByFase(f.idFase)
+        for i in lista:
+            itemsPro.append(i)
+
+    return itemsPro
+
+
+@app.route('/informe/pasoMedio', methods=['GET','POST'])
+def elejirItem():
+    idProyecto = request.form['idProyecto']
+    items = itemPorProyecto(idProyecto);
+    
+    return render_template('pasoMedioReporte.html', items = items)
+
+
+
+#@app.route("/informe/historialItem/<idItemActual>")
+#@app.route("/informe/historialItem/")
+@app.route('/informe/pasoMedio/listadoItem', methods=['GET','POST'])
+def historialDeItem():
+    idItemActual = request.form['idItemActual']
     '''  genera un reporte  '''
     item = controlItem.getItemById(idItemActual)
     
@@ -98,9 +129,12 @@ def historialDeItem(idItemActual):
                     status=200,
                     mimetype="application/pdf")
     return resp
-    '''
-    return render_template('testReporte.html', lista = listadoFinal)
-    '''
+    
+
+
+
+
+
 
 def listadoSolicitudesByProyecto(idProyecto):
     ''' Devuelve un listado de las sol '''
@@ -117,37 +151,50 @@ def listadoSolicitudesByProyecto(idProyecto):
                     listaNueva.append(ls)
                     soles.append(ls)
         
-        
-        
-        #soles.append(listaNueva)
-
+    
 
     return soles
 
 
 
 
-@app.route("/informe/solicitud/<idProyecto>")
-@app.route("/informe/solicitud/")
-def informeSolicitud(idProyecto):
-    
+@app.route('/informe/solicitud', methods=['GET','POST'])
+def informeSolicitud():
+    idProyecto = request.form['idProyecto']
     '''  genera un reporte  '''
     sol = listadoSolicitudesByProyecto(idProyecto)
     print "solicitudes"
     print sol
     usuarioLista = controlUsuario.getUsuarios()
     
+    solicitudDic = []    
+    for s in sol:
+        dato = controlItem.getDatoActualByIdItemActual(s.idItem)
+        lbAfectada = dato.itemLB
+        print "son las lb afectadas"
+        #print lbAfectada.idItemActual
+        for a in lbAfectada:
+            #lb =  controlLineaBase.getLineaBaseById(a)
+            #print lb
+            print a.idLB
+            solicitudDic.append({   "codigo": s.idSolicitud,
+                                "nombre": s.nombreSolicitud,                          
+                                "usuario": s.idUsuario,
+                                "votantes": s.votantes,
+                                "estado": s.estado,
+                                "LB Afectada": a.idLB,
+                            })
+        
     
     
     
-    pdf = create_pdf(render_template('reporteSol.html', sol = sol, usuarioLista = usuarioLista))
+    
+    
+    pdf = create_pdf(render_template('reporteSol.html', sol = sol, usuarioLista = usuarioLista, solicitudDic = solicitudDic))
     resp = Response(response=pdf.getvalue(),
                     status=200,
                     mimetype="application/pdf")
     return resp
-    '''
-    return render_template('testReporte.html', lista = listadoFinal)
-    '''
 
 
 
