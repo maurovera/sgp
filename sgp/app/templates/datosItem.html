@@ -49,7 +49,7 @@
 <div class="row">
     <div class="span12">
         <center>
-        <h1> datos de <br> {{item.numero}}</h1>
+        <h1> datos de <br> {{item.nombreItemActual}}</h1>
         <hr><b>
         Complete el formulario para agregar datos al item:<br>
         *Para crear un dato por primera ves solo se asigna el dato<br>
@@ -67,13 +67,14 @@
 
 <div class="row">
       <div class="span10">
-        <h2> Listado de datos de {{item.numero}} </h2>
+        <h2> Listado de datos de {{item.nombreItemActual}} </h2>
         <table class="table table-striped">
           <tr>
             <th>Id</th>
             <th>version</th>
             <th>complejidad </th>
             <th>prioridad</th>
+			<th>Costo</th>
             <th>estado</th>
             {% for a in atributos %}
                 <th> {{a.nombre}} </th>
@@ -106,10 +107,17 @@
                 {% endif %}
 
                 {% if f.estado == "listo" %}
-                    <td><a href="{{url_for('estadoAprobadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Aprobado</a></td>
-                    <td><a href="{{url_for('estadoRechazadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Rechazado</a></td>
+                	<!-- si tiene permiso para aprobar -desaprobar el usuario -->
+                	{% if 16 in session['permisos'] %}
+                    	<td><a href="{{url_for('estadoAprobadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Aprobado</a></td>
+                    	<td><a href="{{url_for('estadoRechazadoDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Rechazado</a></td>
+                	{% else %}
+                		<td></td>
+                		<td></td>
+                	{% endif%}	
                 {% endif %}
             {% else %}
+            
                 <td><a href="{{url_for('revertirDatosItem')}}/{{f.idItem}}/{{item.idItemActual}}/{{idProyecto}}/{{session['idUsuario']}}" class="btn  btn-inverse">Reversion</a></td>
             {% endif %}
           </tr>

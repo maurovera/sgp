@@ -118,6 +118,7 @@
             <!---<th>Eliminar</th>--->
             <!---<th>Modificar</th>--->
             <th>Abrir</th>
+            <th>Cerrar</th>
             <th>Mostrar</th>
           </tr>
           {% for u in lineaBases %}
@@ -128,10 +129,29 @@
            
             <!---<td><a class="btn btn-danger" onClick="eliminar({{u.idLB}});">Eliminar</a></td>--->
             {%if u.estado != 1%}
-            	<td><a href="{{url_for('abrirLineaBase')}}/{{u.idLB}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}" class="btn btn.danger"><small>abrir</small></a></td>
+            	<!-- si tiene permiso para abrir y cerrar linea base -->
+            	{% if 22 in session['permisos'] %}
+            		<td><a href="{{url_for('abrirLineaBase')}}/{{u.idLB}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}" class="btn btn.danger"><small>abrir</small></a></td>
+            	{%else%}
+            		<td></td>
+            	{%endif%}
+            
             {%else%}
             	<td></td>
             {%endif%}
+			<!-- solo se abilita si la lb esta en estado no valido para volver a cerrar -->            
+            {%if u.estado == -1%}
+            	<!-- si tiene permiso para abrir y cerrar linea base -->
+            	{% if 22 in session['permisos'] %}
+            		<td><a href="{{url_for('cerrarLineaBase')}}/{{u.idLB}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}" class="btn btn.danger"><small>Cerrar</small></a></td>
+            	{%else%}
+            		<td></td>
+            	{%endif%}
+            
+            {%else%}
+            	<td></td>
+            {%endif%}
+            
             <td><a href="{{url_for('listaItemLB')}}/{{u.idLB}}/{{idProyecto}}/{{idFase}}" class="btn"><small>mostrar</small></a></td>
           </tr>
 
@@ -160,7 +180,16 @@
 
 	<div class="span12">
 		<center>
-		<a class="btn btn-primary" onClick="mostrarFormulario();">Crear Linea Base</a>
+		<!-- tiene permiso para crear una lb -->
+		{% if 21 in session['permisos'] %}
+			{%if vacio == False %}
+				<a class="btn btn-primary" onClick="mostrarFormulario();">Crear Linea Base</a>
+			{%else %}
+				<td> Por favor corrobore que exista un item en estado aprobado</td>
+			{%endif%}	
+		{% else %}
+			<td></td>
+		{% endif %}	
 		</center>
 	</div>
 </div>
@@ -179,14 +208,16 @@
 			<fieldset>
 
 
-				<label>Numero:</label>
-				<input type="number" placeholder="Numero de LB" name="numero" id="numero">
 				<!--<label>Estado:</label>-->
 				<input type="hidden" placeholder="Estado" name="estado" id="estado">
 				<label>Items</label>
-				{% for i in listaItem %}
-					<input type="checkbox" name="item" value="{{i.idItemActual}}">Item : {{i.nombreItemActual}}<br>
-				{% endfor %}
+				{% if vacio == False %}
+					{% for i in listaItem %}
+						<input type="checkbox" name="item" value="{{i.idItemActual}}">Item : {{i.nombreItemActual}}<br>
+					{% endfor %}
+				{% else%}
+					<td>No exite un item en estado aprobado, por favor apruebe uno</td>
+				{%endif%}		
 				<br/>
 				<br/>
 

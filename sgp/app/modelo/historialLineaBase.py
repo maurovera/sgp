@@ -10,7 +10,7 @@ from app import db
 
 class HistorialLineaBase(db.Model):
     idHistorialLB = db.Column(db.Integer, primary_key = True)
-    tipoOperacion = db.Column( db.String(45), nullable = False)
+    tipoOperacion = db.Column( db.String(300), nullable = False)
     fechaModificacion = db.Column(db.Date)
 
     #Relaciones

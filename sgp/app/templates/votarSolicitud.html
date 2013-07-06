@@ -39,8 +39,15 @@
         {% if session['idUsuario'] in votantes %}
             <h4> Usted ya ha votado </h4>
         {% else %}
-          <a href="{{url_for('votarPositivo')}}/{{solicitud.idSolicitud}}" class="btn">Aprobar</a>
-          <a href="{{url_for('votarNegativo')}}/{{solicitud.idSolicitud}}" class="btn">Rechazar</a>
+        		<!-- si tiene permiso para votar una solicitud -->
+				{% if 25 in session['permisos'] %}
+          			<a href="{{url_for('votarPositivo')}}/{{solicitud.idSolicitud}}" class="btn">Aprobar</a>
+          			<a href="{{url_for('votarNegativo')}}/{{solicitud.idSolicitud}}" class="btn">Rechazar</a>
+        		{% else %}
+        			<td></td>
+        			<td></td>
+        		{%endif%}
+        
         {% endif %}
         </center>
     </div>

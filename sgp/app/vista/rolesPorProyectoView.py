@@ -101,7 +101,7 @@ def agregar(idProyecto):
             print "entre acaaaa es noneeeeeeeeeeeeeeeeeeeeeee"
             fase = None
             
-   
+        idFase = request.form['idFase']    
             
         print "Estoy aca adentro del form..."
         #Si esta todo completo (Hay que hacer una verificacion probablemente
@@ -111,7 +111,7 @@ def agregar(idProyecto):
             rol.nombre = nombre
             rol.descripcion = descripcion
             rol.idProyecto = idProyecto
-            rol.idFase = fase
+            rol.idFase = idFase
             #else: sino no carga nadaaaaaaaaaaaaaaaaaaaaaaaaa carajo    
             r = control.nuevoRol(rol)
             if(r["estado"] == True):

@@ -50,17 +50,43 @@
             <th>Administrar Linea Base</th>
             <th>Solicitudes</th>
           </tr>
-          {% for f in proyecto.fases %}
+          <!-- aca antes estaba siempre todos las fases del proyecto -->
+          <!-- ahora va las fases filtradas por sus roles -->
+          {% for f in lista %}
           <tr>
             <td>{{f.idFase}}</td>
             <td>{{f.nombre}}</td>
             <td>{{f.numeroFase}}</td>
             <td>{{f.descripcion}}</td>
             <td>{{f.estado}}
-          	<td><a href="{{url_for('indexTipoItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Tipo Item</a></td>
-          	<td><a href="{{url_for('indexItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Item</a></td>
-          	<td><a href="{{url_for('indexLineaBase')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Linea Base</a></td>
-          	<td><a href="{{url_for('indexSolicitud')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Solicitudes</a></td>
+            <!-- si tiene permiso para crear o modificar o eliminar tipo item puede entrar -->
+            {% if (18 in session['permisos']) or (19 in session['permisos'] ) or (20 in session['permisos']) %}	
+          		<td><a href="{{url_for('indexTipoItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Tipo Item</a></td>
+          	{%else%}
+				<td></td>
+			{%endif%}
+          	
+          	
+          	<!-- si tiene permiso para crear o modificar o eliminar item puede entrar -->
+            {% if (13 in session['permisos']) or (14 in session['permisos'] ) or (17 in session['permisos']) %}
+          		<td><a href="{{url_for('indexItem')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Item</a></td>
+          	{%else%}
+				<td></td>
+			{%endif%}
+          	
+          	<!-- si tiene permiso para crear o modificar o eliminar linea base puede entrar -->
+            {% if (21 in session['permisos']) or (22 in session['permisos'] ) or (23 in session['permisos']) %}
+          		<td><a href="{{url_for('indexLineaBase')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Administrar Linea Base</a></td>
+          	{%else%}
+				<td></td>
+			{%endif%}
+			<!-- si tiene permiso para crear o modificar o eliminar solicitud puede entrar -->
+			{% if (29 in session['permisos']) or (30 in session['permisos'] ) or (31 in session['permisos']) or (32 in session['permisos']) %}
+          		<td><a href="{{url_for('indexSolicitud')}}/{{proyecto.idProyecto}}/{{f.idFase}}" class="btn btn-large btn-success">Solicitudes</a></td>
+          	{%else%}
+				<td></td>
+			{%endif%}
+			
           </tr>
 
           {% else %}

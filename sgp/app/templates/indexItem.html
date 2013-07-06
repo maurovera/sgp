@@ -107,7 +107,13 @@
 		
 
 	            {% if not u.eliminado == True %}
-	            	<td><a class="btn btn-danger" onClick="eliminar({{u.idItemActual}});">Eliminar</a></td>
+	            	<!-- si tiene permiso de eliminar un item -->
+	            	{% if 17 in session['permisos'] %}
+	            		<td><a class="btn btn-danger" onClick="eliminar({{u.idItemActual}});">Eliminar</a></td>
+	            	{%else%}
+						<td></td>
+					{%endif%}
+	            
 	            {% else %}
 	            <td></td>
 	            {% endif %}
@@ -121,14 +127,27 @@
 	            {% endif %}
 
 	            {% if not u.eliminado == True %}
-	           <td><a href="{{url_for('datos')}}/{{u.idItemActual}}/{{idProyecto}}" class="btn btn-info"><small>Datos Item</small></a></td>
+	            	
+	            	<!-- si tiene permiso de modificar datos o configurar datos item -->
+	            	{% if (14 in session['permisos']) or (15 in session['permisos'] ) %}
+	           			<td><a href="{{url_for('datos')}}/{{u.idItemActual}}/{{idProyecto}}" class="btn btn-info"><small>Datos Item</small></a></td>
+	            	{% else %}
+	            		<td></td>
+	            	{% endif %}
+	            
 	            {% else %}
 	            <td></td>
 	            {% endif %}
 
 
 	            {% if u.eliminado == True %}
-	            <td><a href="{{url_for('revivirItem')}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}/{{u.idItemActual}}" class="btn"><small>Revivir</small></a></td>
+	                <!-- si tiene permiso para modificar o crear un item tiene permiso pare revivir un item -->
+	                {% if (14 in session['permisos']) or (13 in session['permisos']) %}
+	            		<td><a href="{{url_for('revivirItem')}}/{{idProyecto}}/{{idFase}}/{{session['idUsuario']}}/{{u.idItemActual}}" class="btn"><small>Revivir</small></a></td>
+	            	{% else %}
+	            		<td></td>
+	            	{% endif %}
+	            
 	            {% else %}
 	            <td></td>
 	            {% endif %}
@@ -158,7 +177,16 @@
 
 	<div class="span12">
 		<center>
-		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Item</a>
+		<!--  si tiene permiso para crear un item -->	
+		{% if 14 in session['permisos'] %}
+			{% if vacio == False %}
+				<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo Item</a>
+			{% else %}
+ 				<td> No exite tipo Item Por favor Cree uno</td>
+ 			{% endif %}
+		{%else%}
+			<td></td>
+		{%endif%}
 		</center>
 	</div>
 </div>
@@ -182,9 +210,15 @@
          -->
         Seleccione el tipo de Item :<br/>
 				<select name="idTipoItem" id="idTipoItem">
-          {% for tipoItem in tipoItems %}
-          <option value="{{tipoItem.idTipoItem}}"> {{tipoItem.nombre}} </option>
-          {% endfor %}
+         {% if vacio == False %}
+          	{% for tipoItem in tipoItems %}
+          		<option value="{{tipoItem.idTipoItem}}"> {{tipoItem.nombre}} </option>
+          	{% endfor %}
+          	
+ 		{% else %}
+ 			<td> No exite tipo Item Por favor Cree uno</td>
+ 		{% endif %}	
+ 				
         </select>
         <br/>
         Nombre del Item: <br/>
@@ -211,7 +245,11 @@
 <div class="row">
     <div class="span12">
     <center>
-        <a href="{{url_for('indexRelacion')}}/{{idProyecto}}/{{idFase}}" class="btn btn-large btn-success">ADM Relaciones</a>
+		{% if (13 in session['permisos']) or (14 in session['permisos']) or (17 in session['permisos']) %}
+        	<a href="{{url_for('indexRelacion')}}/{{idProyecto}}/{{idFase}}" class="btn btn-large btn-success">ADM Relaciones</a>
+    	{%else%}
+    		<td></td>
+    	{%endif%}
     </center>
     </div>
 </div>

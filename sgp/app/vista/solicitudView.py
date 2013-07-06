@@ -108,7 +108,12 @@ def indexSolicitud(idProyecto, idFase):
     usuario = controlUsuario.getUsuarioById(session['idUsuario'])
     items = listadoItemFinal(idFase)
     miembros = listaMiembros(idProyecto)
-    return render_template('indexSolicitud.html',usuario = usuario,  solicitudes = solicitudes, items =  items, idProyecto = idProyecto, idFase = idFase, miembros = miembros)
+    
+    vacio = False
+    if len(items)== 0:
+        vacio = True
+        
+    return render_template('indexSolicitud.html',vacio = vacio, usuario = usuario,  solicitudes = solicitudes, items =  items, idProyecto = idProyecto, idFase = idFase, miembros = miembros)
 
 
 @app.route('/solicitud/eliminar')

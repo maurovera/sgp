@@ -97,5 +97,7 @@ class ControlLineaBase():
                 
                 return r
         return resultado
+    
+    
         
             

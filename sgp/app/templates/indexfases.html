@@ -52,34 +52,20 @@
 
         <form action="{{ url_for('mostrarProyecto') }}" method="post" class="form-horizontal" id="formulario">
             <fieldset>
-                <label>Proyectos:</label>
-				
-			<!-- si el usuario logeado no es root -->	
-			{% if proyectos == None %}
-                <select name="idProyecto">
-                
-                	{% for p in proyectosRoot %}
-          				{% if not p.estado == 'eliminado' and not p.estado == 'no iniciado' %}     
-            				<option value="{{p.idProyecto}}">{{p.nombre}}</option>
-            			{% endif %}
-          			{% endfor %}
-				</select>
-			<!-- si el usuario logeado es root puede ver todo -->	
-			{% else %}
-				<select name="idProyecto">
-                
-                	{% for p in proyectos %}
-          				{% if not p.estado == 'eliminado' and not p.estado == 'no iniciado' %}     
-            				<option value="{{p.idProyecto}}">{{p.nombre}}</option>
-            			{% endif %}
-          			{% endfor %}
-				</select>
-			{%endif%}	
-                <br/>
-                <br/>
-				   
-                			<input type="submit" value="Ir a fases" class="btn btn-primary" id="btn-accion">
-				          		
+             	
+             	{% if vacio == False %}
+             		<label>Proyectos:</label>
+					<select name="idProyecto">                	
+                		{% for p in listaVerdad %}
+          					<option value="{{p.idProyecto}}">{{p.nombre}}</option>
+            			{% endfor %}
+					</select>					
+			    	<br/>
+                	<br/>
+				   	<input type="submit" value="Ir a fases" class="btn btn-primary" id="btn-accion">
+				{% else %}
+					<td>No hay ningun proyecto habilitado</td>
+				{%endif%}          		
             </fieldset>
         </form>
         

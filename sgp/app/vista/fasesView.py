@@ -55,35 +55,60 @@ def listaProyectoPorRoles(idUsuario):
     ''' lista de proyectos por roles de usuario ''' 
     # el usuario logeado
     usuario = controlUsuario.getUsuarioById(session['idUsuario'])
-    #usuario = idUsuario
-    #quitar los id de proyecto de todo los roles del usuario
-    proRepetidos = []
-    for rol in usuario.roles:
-        if rol.idProyecto != None:
-            proRepetidos.append(rol.idProyecto)
+    
+    # si es root
+    if usuario.nombreUsuario == "root":
+        print usuario.nombreUsuario
+        retorno = []
+        lista = controlador.getProyectos()
+        for p in lista:
+            noini = "no iniciado"
+            eli = "eliminado"
+            if p.estado != noini and p.estado != eli:
+                    retorno.append(p)
         
-    #quitamos los repetidos y cargamos lo que no son repetidos en proyectos    
-    proyectos = []
-    for a in proRepetidos:
-        if a not in proyectos:
-            proyectos.append(a)
+        
+        
             
-    proyectosN = []
-    for a in proyectos:
-        b =  controlador.getProyectoById(a)   
-        proyectosN.append(b)
+        return retorno
     
-    for a in proyectosN:
-        print str(a.idProyecto) + " : " + a.nombre
-    
-    
-    return proyectos
+    #si no es root
+    else:
+        print "entreeeeeeeeeeeeeeeeeeeeeeeee"
+        #usuario = idUsuario
+        #quitar los id de proyecto de todo los roles del usuario
+        proRepetidos = []
+        for rol in usuario.roles:
+            if rol.idProyecto != None:
+                proRepetidos.append(rol.idProyecto)
+            
+        #quitamos los repetidos y cargamos lo que no son repetidos en proyectos    
+        proyectos = []
+        for a in proRepetidos:
+            if a not in proyectos:
+                proyectos.append(a)
+                
+        proyectosN = []
+        for a in proyectos:
+            b =  controlador.getProyectoById(a)   
+            proyectosN.append(b)
+        
+        retorno = []
+        for p in proyectosN:
+            noini = "no iniciado"
+            eli = "eliminado"
+            if p.estado != noini and p.estado != eli:  
+                retorno.append(p) 
+        
+        
+        return retorno
 
 
 def usuarioRootVeTodo():
     usuario = controlUsuario.getUsuarioById(session['idUsuario'])
+    retorno = []
     if usuario.nombreUsuario == "root":
-        retorno = []
+        
         lista = controlador.getProyectos()
         for proyecto in lista:
             if proyecto.estado != False:
@@ -103,7 +128,15 @@ def indexFase(idUsuario= None):
     proyectos = listaProyectoPorRoles(idUsuario);
     proyectosRoot = usuarioRootVeTodo();
     
-    return render_template('indexfases.html', proyectos = p, proyectosRoot = proyectosRoot)
+    listaVerdad = listaProyectoPorRoles(idUsuario);
+    print "esta es la listaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    print listaVerdad
+    vacio = False
+    if len(list(listaVerdad) ) == 0:
+        vacio = True 
+    
+    
+    return render_template('indexfases.html',vacio = vacio, proyectos = p, proyectosRoot = proyectosRoot, listaVerdad = listaVerdad)
 
 
 
@@ -112,6 +145,9 @@ def mostrarProyecto():
     ''' recibe el proyecto seleccionado y lo redirecciona a la funcion indexAdministrarFase '''
     # id del proyecto seleccionado
     i = request.form["idProyecto"]
+ 
+    
+    
     print i
     if FinalProyecto(i):
         proyecto = controlador.getProyectoById(i)
@@ -122,6 +158,7 @@ def mostrarProyecto():
         proyecto.estado = 'iniciado'
         controlador.modificarProyecto(proyecto)    
         
+    
     
     
     return redirect(url_for('indexAdministrarFase', idProyecto = i))
@@ -175,7 +212,7 @@ def listadoFasesAutorizadas(idProyecto):
             RepetidoFaseId = []
             #quita los id de fase repetidos
             for repetido in listaDeRoles:
-                if repetido.fase != None:
+                if repetido.idFase != None:
                     RepetidoFaseId.append(repetido.idFase)
             #quita los id de fase no repetidos        
             noRepetidoFaseId = []
@@ -205,7 +242,6 @@ def listadoFasesAutorizadas(idProyecto):
     
     
     
-    fases = proyecto.fases
     
     
         
@@ -222,9 +258,9 @@ def indexAdministrarFase(idProyecto):
     '''Se encarga de dar inicio a un proyecto '''
     ''' este renderea el tema de las fases de un proyecto '''
     # aqui deberia haber un control de cambio 
-    
+    listadoDeFases = listadoFasesAutorizadas(idProyecto)
     p = controlador.getProyectoById(idProyecto)
-    return render_template('indexAdministrarFases.html', proyecto = p )
+    return render_template('indexAdministrarFases.html', proyecto = p, lista = listadoDeFases )
 
 
 
@@ -317,52 +353,6 @@ def grafoProyecto(idProyecto):
     ''' 
     
     return render_template('indexGrafo.html', proyecto = proyecto, json=json )
-
-
-
-def create_pdf(pdf_data):
-    pdf = StringIO()
-    pisa.CreatePDF(StringIO(pdf_data), pdf)
-    return pdf
-
-@app.route("/informe/listadoitem/<idProyecto>")
-@app.route("/informe/listadoitem/")
-def pruebaReporte(idProyecto):
-    '''  genera un reporte  '''
-    proyecto = controlador.getProyectoById(idProyecto)
-    fases = controlFase.getFasesByIdProyecto(idProyecto)
-    listadoFinal = [];
-    #Recorre las fases del proyecto
-    for f in fases:
-        items = []
-        lista = list(f.items)
-        #Recolectamos los items de la fase
-        for item in lista:
-            datoItem = controlItem.getDatoActualByIdItemActual(item.idItemActual)
-            #items.append(item)
-            items.append({"nombre": item.nombreItemActual,
-                          "eliminado": item.eliminado,
-                          "version": item.ultimaVersion,
-                           })
-                          #"prioridad" :  datoItem.prioridad })
-        
-        listadoFinal.append ({"nombre": f.nombre,
-                             "numero": f.numeroFase,
-                             "items": list(items),
-                             })
-        
-    
-    print listadoFinal
-    
-    
-    pdf = create_pdf(render_template('testReporte.html', lista = listadoFinal))
-    resp = Response(response=pdf.getvalue(),
-                    status=200,
-                    mimetype="application/pdf")
-    return resp
-    '''
-    return render_template('testReporte.html', lista = listadoFinal)
-    '''
 
 
 

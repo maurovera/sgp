@@ -31,4 +31,4 @@ class Item(db.Model):
     #     self.nombre = nombre
 
     def __repr__(self):
-         return '<item %r>' % (self.numero)
+         return '<item %r>' % (self.nombreItemActual)

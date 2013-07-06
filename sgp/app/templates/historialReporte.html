@@ -27,25 +27,27 @@
 
 
 	<div class="cabecera">
-	<h1> Informe Listado de Items de Proyecto por Fase </h1>
+	<h1> Informe Listado de Historial de Items </h1>
 	</div>
 
 	<div class="tabla">
-	{% for fase in lista %}
-		<h3> Fase {{fase.nombre}} - Nro. {{fase.numero}}  </h3>
-		<table >
+			<table >
 	          <tr>
-	            <th>Numero item</th>
-	            <th>Nombre </th>
-	            <th> Version</th>
+	            <th>Codigo</th>
+	            <th>version </th>
+	            <th>Complejidad</th>
+	            <th> Costo </th>
 	            <th> Prioridad </th>
+	            <th> Estado </th>
 	          </tr>
-	          {% for u in fase["items"] %}
+	          {% for u in item.datos %}
 	          <tr>
-	            <td>{{u['numero']}}</td>
-	            <td>{{u['nombre']}}</td>
-	            <td>{{u['version']}}</td>
-	            <td>{{u['prioridad']}}</td>
+	            <td>{{u.idItem}}</td>
+	            <td>{{u.version}}</td>
+	            <td>{{u.complejidad}}</td>
+	            <td>{{u.costo}}</td>
+	            <td>{{u.prioridad}}</td>
+	            <td>{{u.estado}}</td>
 	            
 	          </tr>
 	          {% else %}
@@ -54,14 +56,10 @@
 	          	</tr>
 	          {% endfor %}
 	
-	        </table>
+	     </table>
 	
 	
-	{% else %}
-	          	
-  		<p>NO HAY REGISTROS</p>
-	          	
-	{% endfor %}        
+	       
 	</div>
 </body>
 </html>

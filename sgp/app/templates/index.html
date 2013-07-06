@@ -48,7 +48,8 @@
 	</center>
 	<br>
 	<center>
-	{% if (19 or 18 or 29) in session['permisos'] %}
+	<!-- Este permiso es para configurar un proyecto o si puede ver fases que todos tienen nose que--> 
+	{% if (12 in session['permisos']) or (9 in session['permisos'] ) %}
 	<h2> Modulo de Desarrollo y Gestion de Cambio </h2>
 	
 		<a href="{{ url_for('indexFase') }}/{{session['idUsuario']}}" class="btn">

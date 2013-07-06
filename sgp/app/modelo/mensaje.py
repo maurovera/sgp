@@ -16,6 +16,7 @@ class Mensaje(db.Model):
     fecha = db.Column(db.Date)
     estado = db.Column(db.String(45), nullable = False)
 
+    
 
     def __repr__(self):
         return '<Mensaje %r>' % (self.titulo)

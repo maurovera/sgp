@@ -133,13 +133,26 @@
             <td>{{u.nombre}}</td>
             <td>{{u.codigo}}</td>
             <td>{{u.descripcion}}</td>
-            
-            <td><a class="btn btn-danger" onClick="eliminar({{u.idTipoItem}});">Eliminar</a></td>
-            <td><a class="btn" onClick="habilitarModificar('{{u.idTipoItem}}','{{u.nombre}}','{{u.codigo}}','{{u.descripcion}}','{{idProyecto}}','{{idFase}}');">
+            {% if 20 in session['permisos'] %}
+            	<td><a class="btn btn-danger" onClick="eliminar({{u.idTipoItem}});">Eliminar</a></td>
+            {%else%}
+				<td></td>
+			{%endif%}
+			
+			{% if 19 in session['permisos'] %}
+            	<td><a class="btn" onClick="habilitarModificar('{{u.idTipoItem}}','{{u.nombre}}','{{u.codigo}}','{{u.descripcion}}','{{idProyecto}}','{{idFase}}');">
             Modificar</a></td>
-            
-           <td><a href="{{url_for('atributo')}}/{{u.idTipoItem}}" class="btn btn-info"><small>Atributos Tipo Item</small></a></td>
-		   
+            {%else%}
+				<td></td>
+			{%endif%}
+			
+			
+			{% if 18 in session['permisos'] %}
+           		<td><a href="{{url_for('atributo')}}/{{u.idTipoItem}}" class="btn btn-info"><small>Atributos Tipo Item</small></a></td>
+		   	{%else%}
+				<td></td>
+			{%endif%}
+			
 		   	            
           </tr>
 
@@ -168,7 +181,12 @@
 
 	<div class="span12">
 		<center>
-		<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo TipoItem</a>
+		{% if 18 in session['permisos'] %}	
+			<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nuevo TipoItem</a>
+		{%else%}
+			<td></td>
+		{%endif%}
+		
 		</center>
 	</div>
 </div>
@@ -179,7 +197,12 @@
 
 	<div class="span12">
 		<center>
-		<a class="btn btn-primary" onClick="mostrarFormulario1();">Importar</a>
+		{% if 18 in session['permisos'] %}		
+			<a class="btn btn-primary" onClick="mostrarFormulario1();">Importar</a>
+		{%else%}
+			<td></td>
+		{%endif%}
+		
 		</center>
 	</div>
 </div>

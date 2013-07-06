@@ -19,6 +19,8 @@ class ControlMensaje():
         """ funcion que filtra los roles por el id del Proyecto """
         retorno = db.session.query(Mensaje).filter(Mensaje.idUsuario == idUsuario ).all()
         return retorno
+    
+
 
 
 

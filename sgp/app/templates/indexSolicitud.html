@@ -137,20 +137,39 @@
             <td>{{u.impacto}}</td>
             <td>{{u.accionSol}}</td>
             {%if u.estado != "pendiente"%}
-            	<td><a class="btn btn-danger" onClick="eliminar({{u.idSolicitud}});">Eliminar</a></td>
+            	 <!-- si tiene permiso para eliminar una solicitud -->
+            	 {% if 31 in session['permisos'] %}
+            		<td><a class="btn btn-danger" onClick="eliminar({{u.idSolicitud}});">Eliminar</a></td>
+            	{% else %} 
+            		<td></td>
+            	{%endif%}	
+            
             {%else %}
             <td></td>
             {%endif%}
 
             {%if u.estado != "pendiente"%}
-            	<td><a class="btn" onClick="habilitarModificar('{{u.idSolicitud}}','{{u.nombreSolicitud}}','{{u.descripcion}}','{{u.estado}}');">
-            Modificar</a></td>
+            	<!-- si tiene permiso para modificar una solicitud -->
+            	{% if 30 in session['permisos'] %}
+            		<td><a class="btn" onClick="habilitarModificar('{{u.idSolicitud}}','{{u.nombreSolicitud}}','{{u.descripcion}}','{{u.estado}}');">
+            		Modificar</a></td>
+            	{% else %} 
+            		<td></td>
+            	{%endif%}	
+            
+            
             {%else %}
             <td></td>
             {%endif%}
 
             {%if u.estado != "pendiente"%}
-            	<td><a class="btn "onClick="enviarSol({{u.idSolicitud}});">Enviar</a></td>
+            	<!-- si tiene permiso para enviar una solicitud -->
+            	{% if 32 in session['permisos'] %}
+            		<td><a class="btn "onClick="enviarSol({{u.idSolicitud}});">Enviar</a></td>
+            	{% else %}
+            		<td></td>
+            	{%endif%}	
+            
             {%else %}
             <td></td>
             {%endif%}
@@ -185,9 +204,21 @@
 		<center>
 		<!-- Si el usuario logeado es miembros del comite -->
 		{%if usuario in miembros %}
-			<td></td>
+			<td>Es usuario del comite no puede crear una solicitud</td>
 		{%else%}
-			<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nueva Solicitud</a>
+				<!-- si tiene permiso para crear una solicitud -->
+				{% if 29 in session['permisos'] %}
+					
+					{% if vacio == False %}	
+						<a class="btn btn-primary" onClick="mostrarFormulario();">Agregar Nueva Solicitud</a>
+					{% else %}
+						<td> No hay ningun item en una Linea Base </td>
+					{% endif %}
+				
+				{% else %}
+					<td></td>
+				{% endif %}
+		
 		{%endif%}
 		</center>
 	</div>
@@ -212,12 +243,17 @@
 				<label>Descripcion de solicitud:</label>
 				<input type="text" placeholder="descripcion" name="descripcion" id="descripcion">
 				<label>Item a cambiar:</label>
-				<select name="idItem">
+				{%if vacio == False%}	
+					<select name="idItem">
+				
                 	{% for p in items %}
           				<option value="{{p.idItemActual}}">{{p.nombreItemActual}}- IdFase {{p.idFase}}</option>
             		{% endfor %}
-          		</select>
-
+            		
+          			</select>
+				{%else%}
+            		<td> No hay item en linea Base</td>
+            	{%endif%}
           		<label>Tipo de Accion:</label>
 				<select name="accionSol">
                 	<option value="eliminar"> Eliminar </option>

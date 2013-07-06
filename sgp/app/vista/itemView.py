@@ -19,8 +19,9 @@ from app.controlador import ControlRelacion
 from app.controlador import ControlDatosItem
 from app.controlador import ControlLineaBase
 from app.controlador import ControlHistorialItems
-
+from app.controlador import ControlAtributoDeItem
 from app.modelo import Usuario
+from app.modelo import AtributoDeItem
 #----------------------------------------------
 controlRelacion =  ControlRelacion()
 control = ControlItem()
@@ -32,6 +33,7 @@ controlFase = ControlFase()
 controlProyecto = ControlProyecto()
 controladorusuario = ControlUsuario()
 controlLineaBase = ControlLineaBase()
+controlAtributoDeItem = ControlAtributoDeItem()
 
 def listadoItem(idFase):
     ''' Devuelve un listado de los tipo item '''
@@ -69,8 +71,11 @@ def indexItem(idProyecto=None,idFase=None):
     
     #esta es la ultima modificacion            
     #estadoDeLaFase(idFase, idProyecto)
-       
-    return render_template('indexItem.html', items = items, idProyecto = idProyecto, idFase = idFase, tipoItems = tipoItems, nombresTipoItem = nombresTipoItem, estadosItem = estadosItem)
+    vacio = False
+    if len(tipoItems) == 0:
+        vacio = True
+           
+    return render_template('indexItem.html', items = items, idProyecto = idProyecto, idFase = idFase, tipoItems = tipoItems, nombresTipoItem = nombresTipoItem, estadosItem = estadosItem, vacio = vacio)
 
 
 @app.route('/item/eliminar')
@@ -162,6 +167,8 @@ def nuevoItem():
         
                 controlHistorialItems.nuevoHistorialItems(historial)
 
+                # se crea un dato item si o si para evitar dramas
+                datoPorDefault(item, idTipoItem)
                 
                     
                 return redirect(url_for('datos', idProyecto = idProyecto, idItemActual = item.idItemActual ))
@@ -173,6 +180,38 @@ def nuevoItem():
 
 
     return redirect(url_for('indexItem', idProyecto=idProyecto, idFase=idFase))
+
+
+def datoPorDefault(item, idTipoItem):
+        datos = DatosItem()
+        datos.version = 1
+        datos.complejidad = 0
+        datos.prioridad = 0
+        datos.costo = 0
+        datos.estado = "inicial"
+        datos.idItemActual = item.idItemActual
+        
+
+        item.ultimaVersion = datos.version
+
+        
+        control.agregarDatosItem(item,datos)
+        
+        #Cargamos los atributos
+        print "Empezamos a meter los atributos por item"
+        tipoItem = controlTipoItem.getTipoItemById(idTipoItem)
+        atributos = list(tipoItem.atributosPorTipoItem)
+        #Recorremos los atributos que pertenecen al tipo
+        for atributo in atributos :
+            valor = "vacio"
+            atributoDeItem = AtributoDeItem()
+            atributoDeItem.valor = valor
+            atributoDeItem.idAtributoPorTipoItem = atributo.idAtributosPorTipoItem
+            controlAtributoDeItem.nuevoAtributoDeItem(atributoDeItem)
+            controladorDatosItem.agregarAtributoDeItem(datos, atributoDeItem)
+       
+
+
 
 
 @app.route('/item/modificar', methods=['GET','POST'])

@@ -124,16 +124,21 @@ def nuevoProyecto():
 
 
 
-
+                
             if(r["estado"] == True):
                 #Creamos el rol con los permisos para el proyecto.
+                
                 u = controladorusuario.getUsuarioById(idUsuario)
                 rolNuevo = crearRolProyecto(proyecto)
                 rolComite = crearRolComiteProyecto(proyecto)
                 e = controladorusuario.agregarRol(u,rolComite)
                 r2 = controladorusuario.agregarRol(u,rolNuevo)
+                
+                
                 if(r2["estado"] == True ):
                     flash("Exito, se creo un nuevo proyecto")
+                    # se crea un fase por default
+                    fasePorDefault(proyecto)
                 else:
                     flash("Ocurrio un error : " + r2["mensaje"])
             else :
@@ -141,6 +146,16 @@ def nuevoProyecto():
 
     return redirect(url_for('indexProyecto'))
 
+
+def fasePorDefault(proyecto):
+    proyecto
+    fase = Fase()
+    fase.nombre = "Fase1"
+    fase.numeroFase = len( list(proyecto.fases) ) + 1
+    fase.descripcion = "Es una fase por Default"
+    fase.idProyecto = proyecto.idProyecto
+    fase.estado = "no iniciado"
+    controlador.agregarFase(proyecto,fase)
 
 @app.route('/proyecto/modificar', methods=['GET','POST'])
 def modificarProyecto():
@@ -223,19 +238,49 @@ def nuevaFaseProyecto():
         #anga
         proyecto = controlador.getProyectoById(idProyecto)
         fase = Fase()
-        fase.nombre = nombre
-        # aca hacemos el auto incremento para fases.
-        fase.numeroFase = len( list(proyecto.fases) ) + 1
-        fase.descripcion = descripcion
-        fase.idProyecto = idProyecto
-        fase.estado = "no iniciado"
         
-        r = controlador.agregarFase(proyecto,fase)
-        print proyecto.fases
-        if( r["estado"] == True ):
-            flash("Se agrego la fase con exito")
+        # si hay mas una fase
+        
+        
+        if len(list(proyecto.fases)) >  0:
+            siHayNombreIgual = False
+            
+            for f in proyecto.fases:
+                if f.nombre == nombre:
+                    siHayNombreIgual = True
+                    flash("Ocurrio un error, No puede haber fases con nombres iguales")
+                    break
+            
+            if(siHayNombreIgual == False):
+                fase.nombre = nombre
+                # aca hacemos el auto incremento para fases.
+                fase.numeroFase = len( list(proyecto.fases) ) + 1
+                fase.descripcion = descripcion
+                fase.idProyecto = idProyecto
+                fase.estado = "no iniciado"
+        
+                r = controlador.agregarFase(proyecto,fase)
+                print proyecto.fases
+                if( r["estado"] == True ):
+                    flash("Se agrego la fase con exito")
+                else:
+                    flash("Ocurrio un error : " + r["mensaje"])
+
+                    
         else:
-            flash("Ocurrio un error : " + r["mensaje"])
+            fase.nombre = nombre
+            # aca hacemos el auto incremento para fases.
+            fase.numeroFase = len( list(proyecto.fases) ) + 1
+            fase.descripcion = descripcion
+            fase.idProyecto = idProyecto
+            fase.estado = "no iniciado"
+        
+            r = controlador.agregarFase(proyecto,fase)
+            print proyecto.fases
+            if( r["estado"] == True ):
+                flash("Se agrego la fase con exito")
+            else:
+                flash("Ocurrio un error : " + r["mensaje"])
 
 
     else :

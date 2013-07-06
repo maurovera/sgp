@@ -1,0 +1,70 @@
+<html>
+<head>
+	<style type="text/css">
+		table, td, th
+		{
+		border:1px solid black;
+		}
+		th
+		{
+			background-color:gray;
+			color:white;
+			text-align : center;
+		}
+		td{
+			text-align : center;
+		}
+		
+		.cabecera{
+			text-align : center;
+			background-color : #ccc;
+			color : #fff;
+		}
+		
+	</style>
+</head>
+<body>
+
+
+	<div class="cabecera">
+	<h1> Informe Solicitudes de un Proyecto </h1>
+	</div>
+
+	<div class="tabla">
+			<table >
+	          <tr>
+	            <th>Codigo</th>
+	            <th>Nombre Solicitud </th>
+	            <th>Usuario Creador</th>
+	            <th> Estado </th>
+	            <th> Votantes </th>
+	            <th> Linea Base Afectada </th>
+	          </tr>
+	          {% for u in sol %}
+	          <tr>
+	            <td>{{u.idSolicitud}}</td>
+	            <td>{{u.nombreSolicitud}}</td>
+	            {%for e in usuarioLista %}
+	            	{% if e.idUsuario == u.idUsuario%}	
+	            		<td>{{e.nombreUsuario}}</td>
+	            	{%endif%}
+	            {%endfor%}
+	            		
+	            <td>{{u.estado}}</td>
+	            <td>{{u.votantes}}</td>
+	            <td>{{u.impacto}}</td>
+	            
+	          </tr>
+	          {% else %}
+	          	<tr>
+	          		NO HAY REGISTROS
+	          	</tr>
+	          {% endfor %}
+	
+	     </table>
+	
+	
+	       
+	</div>
+</body>
+</html>
